@@ -1,13 +1,12 @@
+import { configureStore } from '@reduxjs/toolkit';
+import ProfileSlice from './state/ProfileSlice';
+import ProfileManager from './components/ProfileManager/ProfileManager';
 
-type color = {
-    primary: string,
-    secondary: string
-};
+export const store = configureStore({
+    reducer: ProfileSlice.reducer
+})
 
-const ob = {
-    primary: 'red',
-    secondary: 'blue'
-} as color;
+export type RootState = ReturnType<typeof store.getState>;
 
-console.log('yo')
-console.log(ob);
+const gui = new ProfileManager([['dd', 'dds'], ['sdsd', 'sdsds'], ['sdsd', 'sdsds']], 'type');
+console.log(gui);
