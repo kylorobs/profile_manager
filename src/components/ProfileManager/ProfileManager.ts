@@ -1,24 +1,29 @@
-import Column  from '../Column/Column';
-// import Render from '../Render/Render';
+import List from '../List/List';
+import DropArea from '../DropArea/DropArea'
+import Render from '../Render/Render';
 import { ColumnInfo } from '../../types/types';
 
 
 class ProfileManager {
 
-    private columns: ColumnInfo[];
+    private areas: ColumnInfo[];
+    private list: List;
+
 
     constructor(c: ColumnInfo[], f: string){
-        this.columns = c;
-        console.log(f)
-        this.setupColumns();
+        this.areas = c;
+        console.log(f);
+        this.list = new List()
+        this.setupAreas();
     }
 
-    setupColumns(){
-        const cols = this.columns.map((col: string[]) => {
-            return new Column(col[0], col[1]);
+    setupAreas(){
+        const areas = this.areas.map((col: string[]) => {
+            return new DropArea(col[0], col[1]);
         })
-        console.log(cols)
-        // Render.renderColumns(cols)
+        console.log(areas)
+        console.log(this.list)
+        Render.renderAreas(areas)
     }
 }
 

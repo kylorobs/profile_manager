@@ -25,13 +25,17 @@ module.exports = {
                 exclude: /node_modules/
             },
             {
-                test: /\.css$/i,
-                use: [MiniCssExtractPlugin.loader, 'css-loader'],
-            },
+                test: /\.(css|scss)$/i,
+                use: [
+                        MiniCssExtractPlugin.loader,
+                        'css-loader',
+                        'sass-loader',
+                ]
+            }
         ]
     },
     resolve: {
-        extensions: ['.ts', '.js']
+        extensions: ['.ts', '.js', '.scss']
     },
     plugins: [
         new HtmlWebpackPlugin({
