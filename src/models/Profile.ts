@@ -2,10 +2,12 @@
 export interface Profile {
     type: string;
     name: string;
-    sub: string;
+    description: string;
     instagram: string;
     facebook: string;
-    wesite: string;
+    twitter: string;
+    website: string;
     upcomingevent: string;
-    image: string;
+    url: string;
+    id: string;
 }

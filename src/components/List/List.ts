@@ -2,7 +2,9 @@
 import { Profile } from '../../models/Profile';
 import { store } from '../../app';
 // import Render from '../Render/Render';
-
+// import Render from '../Render/Render';
+import Card from '../Card/Card';
+import {BindThis} from '../../decorators/bindthis';
 
 
 class List {
@@ -13,19 +15,28 @@ class List {
     constructor(){
         this.title = 'All Artists';
         this.filterval = '';
-        this.profiles = [];
+        this.profiles = store.getState().profiles;
         this.filterProfiles();
+        store.subscribe(this.filterProfiles)
     }
 
-    filterProfiles():void{
-        this.profiles = store.getState().profiles.filter((profile: Profile) => profile.type === this.filterval);
-        this.renderProfiles();
+    @BindThis
+    filterProfiles():Card[]{
+        this.clearList();
+        this.profiles = store.getState().profiles;
+        return this.profiles.map(prof=> {
+            return new Card(prof.name, prof.id, prof.url, false)
+        })
     }
 
-    renderProfiles(): void{
-        // const gridCol = document.getElementById(this.filterval);
-        // Render.renderProfiles(this.profiles, )
+    clearList(){
+        const parent = document.querySelector('.list')!;
+        parent.innerHTML ='';
     }
+
 }
 
 export default List;
+
+
+  

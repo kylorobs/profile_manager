@@ -18,19 +18,28 @@ class Render {
         })
     }
 
-    static renderProfiles(ar: Profile[], id: string){
-        const parent = document.getElementById(id)!;
+    static renderProfiles(ar: Profile[]){
+        const parent = fetchParent('.list')!;
+        console.log('RENDERING PROFILES')
+        console.log(ar)
         const cards = ar.map((profile: Profile) => {
             const label: HTMLLabelCardElement = document.createElement('label-card');
-            label.title = profile.name;
-            label.image = profile.image;
-            // label.
+            label.cardtitle = profile.name;
+            label.image = profile.url;
+            label.margin = '1em 0';
+            label.cardwidth = '85%';
+            return label;
         });
+        console.log(cards)
        cards.forEach((card:any) => parent.appendChild(card));
     }
     static renderLogin(){}
     static editor(){
-
+        const form = fetchParent('#form') as HTMLFormElement;
+        console.log(form)
+    }
+    static renderList(){
+        // const data = 
     }
 }
 
