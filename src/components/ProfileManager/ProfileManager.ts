@@ -1,7 +1,8 @@
 import List from '../List/List';
 import DropArea from '../DropArea/DropArea'
 import Render from '../Render/Render';
-import { ColumnInfo } from '../../types/types';
+import Form from '../Form/Form';
+import { Categories } from '../../types/types';
 import {store} from '../../app';
 import {fetchProfiles} from '../../state/ProfileSlice';
 
@@ -9,16 +10,17 @@ import {fetchProfiles} from '../../state/ProfileSlice';
 
 class ProfileManager {
 
-    private areas: ColumnInfo[];
+    private areas: Categories[];
     private list: List;
 
 
-    constructor(c: ColumnInfo[], f: string){
+    constructor(c: Categories[], f: string){
         store.dispatch(fetchProfiles());
         this.areas = c;
         console.log(f);
         this.list = new List()
         this.setupAreas();
+        new Form();
         // Render.renderList
     }
 

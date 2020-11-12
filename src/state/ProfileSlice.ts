@@ -87,8 +87,6 @@ const profileSlice = createSlice({
     fetchProfiles: (state: RootState) => {
       console.log('fetching profiles')
       const data = dummydata as any;
-      console.log('dummy data');
-      console.log(data)
       const profiles = data.artists.map((artist: Profile): Profile => {
         return {
           name: artist.name,

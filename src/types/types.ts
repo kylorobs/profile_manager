@@ -1,2 +1,2 @@
 
-export type ColumnInfo = [string, string];
+export type Categories = [string, string];
