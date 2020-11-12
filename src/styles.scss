@@ -67,12 +67,13 @@ form {
     align-items: flex-start;
 
     & .profile {
-        width: 300px;
+        width: 100%;
         height: auto;
         margin-right: 1em;
         
-        & .profile-image{
-            width: 300px;
+        & #profileimage{
+            width: 60%;
+            height: 300px;
             margin: auto;
             margin-bottom: 1em;
         }

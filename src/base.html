@@ -14,6 +14,7 @@
         <div class="area">
             <h1>Project X Profile Manager</h1>
             <div class="droparea"></div>
+            <kclsu-button small center margin="0" purple emitid="addNew">Add New Profile</kclsu-button>
         </div>
         <div class="list"></div>
         <div class="editor">
@@ -22,7 +23,7 @@
                     <div>
                         <input class="val-field" val="" id="name" placeholder="Name.." required>
                     </div>
-                    <div class="profile-image">
+                    <div id="profileimage">
                         <lazy-image image="https://res.cloudinary.com/kclsu-media/image/upload/v1605106869/website_uploads/MISC/EM_u4q3mg.png"></lazy-image>
                     </div>
                     <label>Profile Image</label>
@@ -60,7 +61,7 @@
                     </div>
                     <div>
                         <label>Event</label>
-                        <input class="val-field" val="" id="upcoming-event" placeholder="Upcoming Event link...">
+                        <input class="val-field" val="" id="upcomingevent" placeholder="Upcoming Event link...">
                     </div>
                 </div>
             </form>

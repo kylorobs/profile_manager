@@ -110,8 +110,8 @@ const profileSlice = createSlice({
       return state;
     },
     edit: (state: RootState, action) => {
-      state.editing = true;
-      state.editing_id = action.payload;
+      state.editing = !state.editing;
+      state.editing_id = action.payload || null;
     }
   }
 }) as any;

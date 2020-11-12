@@ -27,7 +27,7 @@ class Card {
         const label: HTMLLabelCardElement = document.createElement('label-card');
         label.cardtitle = this.title;
         label.image = this.image;
-        label.margin = '1em 0';
+        label.margin = '1em 0 1em 15px';
         label.cardwidth = '85%';
         return label;
     }
