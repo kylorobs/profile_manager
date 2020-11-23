@@ -12,7 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "@reduxjs/toolkit": "^1.4.0",
-    "kclsu-components": "^0.1.3"
+    "class-validator": "^0.12.2",
+    "kclsu-components": "^0.1.3",
+    "validator": "^13.1.17"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",

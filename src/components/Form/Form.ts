@@ -1,11 +1,14 @@
 
-// import {Categories} from '../../types/types';
+
 import {store} from '../../app';
 import {edit} from '../../state/ProfileSlice';
 import {BindThis} from '../../decorators/bindthis';
 import {Profile} from '../../models/Profile';
+import validator from 'validator';
+
 
 class Form {
+
     private category: HTMLSelectElement;
     private name: HTMLInputElement;
     private description: HTMLTextAreaElement;
@@ -16,9 +19,10 @@ class Form {
     private upcomingevent: HTMLInputElement;
     private imageupload: HTMLInputElement;
     private image: HTMLDivElement;
-    private id: HTMLInputElement;
+    private id: HTMLInputElement | null;
     private editid: string | null;
     private error: boolean;
+    private modal: HTMLKclsuModalElement;
 
     constructor(){
         this.category = document.getElementById('category')! as HTMLSelectElement;
@@ -32,16 +36,18 @@ class Form {
         this.imageupload = document.getElementById('imageupload')! as HTMLInputElement;
         // this.image = document.querySelector('.profile lazy-image')! as HTMLLazyImageElement
         this.image = document.getElementById('profileimage') as HTMLDivElement;
-        this.id = document.getElementById('category')! as HTMLInputElement;
+        this.id = null;
         this.editid = store.getState().editing_id || null;
         this.error = false;
-
+        this.modal = document.querySelector('kclsu-modal')! as HTMLKclsuModalElement;
+        document.addEventListener('exitModal', this.closeErrorModal)
         this.configure();
         store.subscribe(this.configure);
     }
 
     @BindThis
     configure(){
+        console.log(this.id);
         this.editid = store.getState().editing_id || null;
         if (this.editid) this.setValues();
         else this.clearForm();
@@ -52,8 +58,6 @@ class Form {
     configureButtons(){
         const btnContainer = document.querySelector('form .profile flex-container')! as HTMLFlexContainerElement;
         btnContainer.innerHTML ='';
-        console.log(this.id);
-        console.log(this.imageupload)
         //console.log(this.image, this.imageupload, this.category, this.name, this.description, this.editid, this.facebook, this.instagram, this.twitter, this.website, this.id, this.upcomingevent);
         const div = document.createElement('div');
         if(this.editid) div.innerHTML = `<kclsu-button small emitid="updatebaby"> Update </kclsu-button><kclsu-button purple small emitid="deletebaby">Delete</kclsu-button>`;
@@ -78,7 +82,7 @@ class Form {
     }
 
     submitForm(){
-        this.fetchValues();
+        this.validateValues();
     }
 
     clearForm(){
@@ -98,10 +102,6 @@ class Form {
         
     }
 
-    fetchValues(){
-
-    }
-
     setValues(){
         console.log(this.image);
        // const imagetemp ='https://res.cloudinary.com/kclsu-media/image/upload/v1605106869/website_uploads/MISC/EM_u4q3mg.png'
@@ -119,8 +119,91 @@ class Form {
         this.website.value = profile.website;
     }
 
+    @BindThis
     validateValues(){
+        let inValid = false;
+        const erstrings= [];
+        const invalidProps = [];
+        if (this.instagram.value && !validator.contains(this.instagram.value, 'instagram.com')){
+            inValid = true;
+            erstrings.push('Instagram: must include "instagram.com"');
+            invalidProps.push(this.instagram);
+        }
+        if (validator.isEmpty(this.name.value)){
+            inValid = true;
+            erstrings.push('Name: Name must not be empty')
+            invalidProps.push(this.instagram);
+        } 
+        if (this.website.value && !validator.isURL(this.website.value)){
+            inValid = true;
+            erstrings.push('Website: This is not a valid website URL');
+            invalidProps.push(this.website);
+        }
+        if (this.facebook.value && !validator.contains(this.facebook.value, 'facebook.com')){
+            inValid = true;
+            erstrings.push('Facebook: must include "facebook.com"');
+            invalidProps.push(this.facebook);
+        }
 
+        if (this.twitter.value && !validator.contains(this.twitter.value, 'twitter.com')){
+            inValid = true;
+            erstrings.push('Twitter: must include "twitter.com"');
+            invalidProps.push(this.twitter);
+        }
+
+        if (validator.isEmpty(this.imageupload.value)){
+            inValid = true;
+            erstrings.push('Image Upload: You have not uploaded an image');
+        }
+        
+        if (validator.isEmpty(this.description.value)){
+            inValid = true;
+            erstrings.push('Description: You have not provided a short description.');
+        }
+        
+        if (!validator.isURL(this.upcomingevent.value)){
+            inValid = true;
+            erstrings.push('Upcoming Event Url: This is not a valid website URL');
+            invalidProps.push(this.upcomingevent);
+        }
+        
+        if (inValid) this.renderErrorMessages(erstrings)
+        else this.packageData()
+    }
+
+    renderErrorMessages(erstrings: string[]){
+        const div = document.createElement('ul') as any;
+        erstrings.forEach(str =>{
+            const li = document.createElement('li');
+            li.innerText = str
+            div.appendChild(li)
+        })
+        div.classList.add('errorblock');
+        this.modal.append(div);
+        this.modal.show = true;
+    }
+
+    packageData(){
+        const profilePackage:Profile = {
+            name: this.name.value,
+            description: this.description.value,
+            facebook: this.facebook.value,
+            id: '43324',
+            instagram: this.instagram.value,
+            twitter: this.twitter.value,
+            type: this.category.value,
+            upcomingevent: this.upcomingevent.value,
+            url: this.imageupload.value,
+            website: this.website.value
+        }
+        console.log('ready to send');
+        console.log(profilePackage)
+    }
+
+    @BindThis
+    closeErrorModal(){
+        this.modal.innerHTML = '';
+        this.modal.show = false;
     }
 
 

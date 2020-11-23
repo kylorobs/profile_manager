@@ -10,5 +10,58 @@ export const store = configureStore({
 
 export type RootState = ReturnType<typeof store.getState>;
 
-const gui = new ProfileManager([['Xhibit', 'xhibit'], ['Feautured', 'featured'], ['Artists', 'artists'], ['Performers', 'performers']], 'type');
+
+const gui = new ProfileManager({
+    categories: [['Xhibit', 'xhibit'], ['Feautured', 'featured'], ['Artists', 'artists'], ['Performers', 'performers']],
+    categoryKeyName: 'type',
+    keyMapping: [
+        { 
+            keyName: 'name',
+            inputTitle: 'Name',
+            inputDefaultText: 'Full name...',
+            type: 'string'
+        },
+        { 
+            keyName: 'image',
+            inputTitle: 'Profile Image',
+            inputDefaultText: '',
+            type: 'file'
+        },
+        { 
+            keyName: 'description',
+            inputTitle: 'Description',
+            inputDefaultText: 'A short description...',
+            type: 'string'
+        },
+        { 
+            keyName: 'facebook',
+            inputTitle: 'Facebook',
+            inputDefaultText: 'Facebook full url...',
+            type: 'string'
+        },
+        { 
+            keyName: 'twitter',
+            inputTitle: 'Twitter',
+            inputDefaultText: 'Twitter full url...',
+            type: 'string'
+        },
+        { 
+            keyName: 'website',
+            inputTitle: 'Website',
+            inputDefaultText: '',
+            type: 'string'
+        },
+        { 
+            keyName: 'upcomingevent',
+            inputTitle: 'Website',
+            inputDefaultText: 'The kclsu upcoming event url....',
+            type: 'string'
+        },
+    ]
+
+});
 console.log(gui);
+
+//NOTES
+//IF CATEGORIES.LENGTH > 0, THEN WILL AUTOMATICALLY CREATE A SELECT INPUT FROM THOSE CATEGORIES. 
+// OTHERWISE THERE WILL BE NO DROP AREAS, AND NO SELECT DROP DOWN

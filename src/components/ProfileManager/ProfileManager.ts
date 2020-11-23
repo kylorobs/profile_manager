@@ -5,8 +5,7 @@ import Form from '../Form/Form';
 import { Categories } from '../../types/types';
 import {store} from '../../app';
 import {fetchProfiles} from '../../state/ProfileSlice';
-
-
+import { ManagerInit } from '../../models/InputKeys';
 
 class ProfileManager {
 
@@ -14,10 +13,9 @@ class ProfileManager {
     private list: List;
 
 
-    constructor(c: Categories[], f: string){
+    constructor(Manager: ManagerInit){
         store.dispatch(fetchProfiles());
-        this.areas = c;
-        console.log(f);
+        this.areas = Manager.categories;
         this.list = new List()
         this.setupAreas();
         new Form();

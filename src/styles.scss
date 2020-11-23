@@ -83,7 +83,8 @@ form {
         width: 100%;
         padding: 1em;
         & div {
-            display: flex; 
+            display: flex;
+            position: relative; 
             & label, input {
                 display: block;
                 font-size: 17px;
@@ -117,3 +118,15 @@ form {
 }
 
 
+.errorblock {
+    display: block;
+    & li {
+        font-size: 16px;
+        margin: 0;
+        padding: 0;
+
+        &::first-letter {
+            text-transform: capitalize;
+        }
+    }
+}
