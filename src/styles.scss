@@ -84,6 +84,7 @@ form {
         padding: 1em;
         & div {
             display: flex;
+            justify-content: space-between;
             position: relative; 
             & label, input {
                 display: block;
@@ -93,7 +94,7 @@ form {
 
         
             & input {
-                width: 90%;
+                width: 60%;
                 border: none;
                 border-bottom: 2px solid teal;
             }

@@ -3,35 +3,36 @@ import { KeyMap } from '../../../models/InputKeys';
 import {BindThis} from '../../../decorators/bindthis';
 import { validateInput } from '../../../utility/utility';
 
+//  interface IIndexable {
+//     [key: string]: any;
+//   }
 
-class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement>{
-    constructor(private parentId: string, public type: string, private keymap: KeyMap, protected valid: boolean = false){
-        super('', parentId, null);
-        this.createElement();
+class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement> {
+
+    constructor(public parentId: string, private keymap: KeyMap, protected valid: boolean = false, public title: any = ''){
+        super('', { value: 'unset' });
+        this.title = keymap.keyName;
+        this.appendToDOM(this.createElement(), this.keymap.inputTitle, parentId);
     }
 
     createElement(){
         let el;
         const keymap = this.keymap;
-        switch(this.type){
+        switch(keymap.type){
             case 'input' :
                 el = document.createElement('input') as HTMLInputElement;
-            case 'text':
+            case 'textarea':
                 el = document.createElement('textarea') as HTMLTextAreaElement;
                 el.cols = 22;
                 el.rows = 8;
             default: el = document.createElement('input') as HTMLInputElement;
         }
-        
+
         el.id = keymap.keyName;
         el.placeholder = keymap.inputDefaultText;
         el.addEventListener('change', this.changeHandler);
-
-        const label = document.createElement('label') as HTMLLabelElement;
-        label.innerText = keymap.inputTitle;
-        label.appendChild(el);
         this.el = el;
-        return label;
+        return el;
     }
 
     @BindThis
@@ -41,14 +42,11 @@ class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement>{
         this.keymap.validationTypes.forEach(type => {
             if(!validateInput(e.target.value, type)) isValid = false
         })
+        console.log(isValid)
         if (isValid) this.valid = true;
         else this.valid = false;
     }
 
-    // updateValue(val: string){
-    //     this.value = val;
-    //     this.el.
-    // }
 
 }
 

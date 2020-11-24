@@ -19,43 +19,57 @@ const gui = new ProfileManager({
             keyName: 'name',
             inputTitle: 'Name',
             inputDefaultText: 'Full name...',
-            type: 'string'
+            type: 'input',
+            validationErrorMsg: 'Wrong!',
+            validationTypes: ['isNotEmpty']
         },
         { 
             keyName: 'image',
             inputTitle: 'Profile Image',
             inputDefaultText: '',
-            type: 'file'
+            type: 'file',
+            validationErrorMsg: 'Wrong!',
+            validationTypes: ['isNotEmpty']
         },
         { 
             keyName: 'description',
             inputTitle: 'Description',
             inputDefaultText: 'A short description...',
-            type: 'string'
+            type: 'textarea',
+            validationErrorMsg: 'Wrong!',
+            validationTypes: ['isNotEmpty']
         },
         { 
             keyName: 'facebook',
             inputTitle: 'Facebook',
             inputDefaultText: 'Facebook full url...',
-            type: 'string'
+            type: 'input',
+            validationErrorMsg: 'Wrong!',
+            validationTypes: ['isNotEmpty']
         },
         { 
             keyName: 'twitter',
             inputTitle: 'Twitter',
             inputDefaultText: 'Twitter full url...',
-            type: 'string'
+            type: 'input',
+            validationErrorMsg: 'Wrong!',
+            validationTypes: ['isNotEmpty']
         },
         { 
             keyName: 'website',
             inputTitle: 'Website',
             inputDefaultText: '',
-            type: 'string'
+            type: 'input',
+            validationErrorMsg: 'Wrong!',
+            validationTypes: ['isNotEmpty']
         },
         { 
             keyName: 'upcomingevent',
-            inputTitle: 'Website',
+            inputTitle: 'Upcoming Event',
             inputDefaultText: 'The kclsu upcoming event url....',
-            type: 'string'
+            type: 'input',
+            validationErrorMsg: 'Wrong!',
+            validationTypes: ['isNotEmpty']
         },
     ]
 

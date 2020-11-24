@@ -1,7 +1,7 @@
 import List from '../List/List';
 import DropArea from '../DropArea/DropArea'
 import Render from '../Render/Render';
-import Form from '../Form/Form';
+import Form2 from '../Form/Form2';
 import { Categories } from '../../types/types';
 import {store} from '../../app';
 import {fetchProfiles} from '../../state/ProfileSlice';
@@ -18,7 +18,7 @@ class ProfileManager {
         this.areas = Manager.categories;
         this.list = new List()
         this.setupAreas();
-        new Form();
+        new Form2(Manager.keyMapping);
         // Render.renderList
     }
 
