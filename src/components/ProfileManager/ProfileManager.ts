@@ -5,7 +5,8 @@ import Form2 from '../Form/Form2';
 import { Categories } from '../../types/types';
 import {store} from '../../app';
 import {fetchProfiles} from '../../state/ProfileSlice';
-import { ManagerInit } from '../../models/InputKeys';
+import { ManagerInit, KeyMap } from '../../models/InputKeys';
+
 
 class ProfileManager {
 
@@ -16,19 +17,25 @@ class ProfileManager {
     constructor(Manager: ManagerInit){
         store.dispatch(fetchProfiles());
         this.areas = Manager.categories;
-        this.list = new List()
+        this.list = new List();
         this.setupAreas();
-        new Form2(Manager.keyMapping);
-        // Render.renderList
+        this.createForms(Manager.keyMapping);
+    }
+
+    createForms(keyMapping: KeyMap[]){
+        new Form2(keyMapping);
     }
 
     setupAreas(){
+        //CREATE DRAG AND DROP AREAS
         const areas = this.areas.map((col: string[]) => {
             return new DropArea(col[0], col[1]);
         })
         Render.renderAreas(areas);
         console.log(this.list)
     }
+
+
 }
 
 export default ProfileManager;

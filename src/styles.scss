@@ -66,22 +66,23 @@ form {
     display: flex;
     align-items: flex-start;
 
-    & .profile {
-        width: 100%;
+    & #fileinputs {
+        width: 40%;
         height: auto;
-        margin-right: 1em;
+        padding: 15px;
         
-        & #profileimage{
-            width: 60%;
-            height: 300px;
+        & #thumbnail{
+            width: 100%;
+            height: auto;
             margin: auto;
             margin-bottom: 1em;
         }
     }
 
-    & .textinputs, .profile {
-        width: 100%;
+    & #textinputs {
+        width: 60%;
         padding: 1em;
+        
         & div {
             display: flex;
             justify-content: space-between;
@@ -94,13 +95,13 @@ form {
 
         
             & input {
-                width: 60%;
+                width: 70%;
                 border: none;
                 border-bottom: 2px solid teal;
             }
 
             & textarea {
-                width: 95%;
+                width: 70%;
                 font-size: 17px;
                 border-top: none;
                 border-right: none;

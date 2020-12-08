@@ -77,7 +77,7 @@ class Form {
                 break;
             case 'addNew' : store.dispatch(edit());
                 break;
-            default: console.log('button click error')
+            default: console.log('button click error');
         }
     }
 

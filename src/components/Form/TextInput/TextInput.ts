@@ -9,9 +9,10 @@ import { validateInput } from '../../../utility/utility';
 
 class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement> {
 
-    constructor(public parentId: string, private keymap: KeyMap, protected valid: boolean = false, public title: any = ''){
+    constructor(public parentId: string, public keymap: KeyMap, protected valid: boolean = false, public title: any = ''){
         super('', { value: 'unset' });
         this.title = keymap.keyName;
+        this.keymap = keymap;
         this.appendToDOM(this.createElement(), this.keymap.inputTitle, parentId);
     }
 
@@ -21,10 +22,13 @@ class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement> {
         switch(keymap.type){
             case 'input' :
                 el = document.createElement('input') as HTMLInputElement;
+            break;
             case 'textarea':
+                console.log('correct')
                 el = document.createElement('textarea') as HTMLTextAreaElement;
                 el.cols = 22;
                 el.rows = 8;
+            break;
             default: el = document.createElement('input') as HTMLInputElement;
         }
 

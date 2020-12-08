@@ -1,32 +1,35 @@
 
 
 import {store} from '../../app';
-import {edit} from '../../state/ProfileSlice';
+// import {edit} from '../../state/ProfileSlice';
 import {BindThis} from '../../decorators/bindthis';
 import {Profile} from '../../models/Profile';
 import { KeyMap } from '../../models/InputKeys';
 import TextInput from './TextInput/TextInput';
+import ImageUpload from './ImageUpload/ImageUpload';
+import ButtonHandler from '../../models/ButtonHandler';
 
+type Inputs = TextInput | ImageUpload;
 
-class Form {
+class Form2 {
     private editid: string | null;
     private error: boolean;
-    private modal: HTMLKclsuModalElement;
-    private formInputs: TextInput[];
+    private formInputs: Inputs[];
+    private formControls: HTMLDivElement;
 
-    constructor(keyMappings: KeyMap[], categoryKey: string){
+    constructor(keyMappings: KeyMap[]){
         this.editid = store.getState().editing_id || null;
         this.error = false;
-        this.modal = document.querySelector('kclsu-modal')! as HTMLKclsuModalElement;
-        document.addEventListener('exitModal', this.closeErrorModal);
         
+        //CREATE INPUTS, SEPARATING FILE INPUTS AND TEXT/SELECT INPUTS
         const inputs = keyMappings.map((map: KeyMap) =>{
-            if (map.type === 'file') return new TextInput('textinput', map);
-            if (map.keyName !== categoryKey) return new TextInput('textinput', map);
-            else return new TextInput('textinput', map);
+            if (map.type === 'file') return new ImageUpload('fileinputs', false, map, 'url');
+            else return new TextInput('textinputs', map);
         });
-
+ 
         this.formInputs = inputs;
+        this.formControls = document.createElement('div');
+        document.getElementById('textinputs')?.appendChild(this.formControls);
         
         this.configure();
         store.subscribe(this.configure);
@@ -42,69 +45,82 @@ class Form {
 
     @BindThis
     configureButtons(){
-        const btnContainer = document.querySelector('form .profile flex-container')! as HTMLFlexContainerElement;
+        this.formControls.innerHTML = '';
+        const container = document.createElement('div');
+        container.id = 'controls';
+        container.innerHTML = '';
+        const btnContainer = document.createElement('flex-container') as HTMLFlexContainerElement;
         btnContainer.innerHTML ='';
+        btnContainer.wrap = true;
 
         const div = document.createElement('div');
-        if(this.editid) div.innerHTML = `<kclsu-button small emitid="updatebaby"> Update </kclsu-button><kclsu-button purple small emitid="deletebaby">Delete</kclsu-button>`;
+        if (this.editid){
+            div.innerHTML = `<kclsu-button small emitid="update"> Update </kclsu-button><kclsu-button purple small emitid="delete">Delete</kclsu-button>`;
+            
+            const top = document.createElement('flex-container') as HTMLFlexContainerElement;
+            top.alignx = 'flex-end';
+            top.innerHTML = '<kclsu-button verysmall center margin="4em" purple emitid="addNew">Switch to New Entry</kclsu-button>';
+            document.getElementById('textinputs')?.prepend(top);
+        } 
         else div.innerHTML = `<kclsu-button emitid="add" small center> Add Profile </kclsu-button>`
+        
         btnContainer.appendChild(div);
         btnContainer.alignx = 'center';
-        document.addEventListener('emitClick', (e:any) => this.clickHandler(e))
+        container.appendChild(btnContainer);
+        this.formControls.appendChild(container)
+
+
+        const btnHandler = ButtonHandler.getInstance();
+        btnHandler.addEmitter('update', this.submitForm);
+        btnHandler.addEmitter('add', this.submitForm);
+        btnHandler.addEmitter('delete', this.deleteProfile);
+        //NOTE: THIS BUTTON MUST APPEAR AS A DROPDOWN 
+        btnHandler.addEmitter('addNew', this.clearForm);
     }
 
-    clickHandler(e:any){
-        switch(e.detail){
-            case 'update' : this.submitForm()
-                break;
-            case 'delete': this.deleteProfile()
-                break;
-            case 'add' : this.submitForm()
-                break;
-            case 'addNew' : store.dispatch(edit());
-                break;
-            default: console.log('button click error')
-        }
-    }
-
+    @BindThis
     submitForm(){
+        console.log('--- FORM2 --- Submit this terrible profile')
         this.validateValues();
     }
 
+    @BindThis
     clearForm(){
-        console.log(this.error)
+        this.formInputs
+        .forEach((input: Inputs) => {
+        if ('el' in input) input.el.value = '';
+        else if ('imageurl' in input) input.setThumbnail('');
+        else {
+            console.log('failed to find type of input')
+        }
+    })
 
     }
 
     deleteProfile(){
-        
+        console.log('--- FORM2 --- Delete this terrible profile')
     }
 
     setValues(){
         const data = store.getState().profiles;
         const profile: Profile = data.filter((prof:Profile) => prof.id === this.editid)[0];
-        console.log(profile);
         const profileKeys: string[] = Object.keys(profile);
-        console.log('------FORM INPUTS -------');
-        this.formInputs.forEach((input: TextInput) => {
+        console.log('------FORM 2 INPUTS -------');
+        console.log(profile)
+        this.formInputs
+            .forEach((input: Inputs) => {
             const key = profileKeys.find((key: string) => key === input.title);
-            if (key) input.el.value = profile[key];
+            if ('el' in input && key) input.el.value = profile[key];
+            else if ('imageurl' in input && key) input.setThumbnail(profile[key]);
+            else {
+                console.log('failed to find type of input')
+            }
         })
-
-        // this.name.value = profile.name;
-        // this.image.innerHTML = `<lazy-image image=${profile.url}></lzy-image>`
-        // console.log(profile.url)
-        // this.category.value = profile.type;
-        // this.description.value = profile.description;
-        // this.instagram.value = profile.instagram;
-        // this.facebook.value = profile.facebook;
-        // this.twitter.value = profile.twitter;
-        // this.upcomingevent.value = profile.upcomingevent;
-        // this.website.value = profile.website;
     }
 
     @BindThis
     validateValues(){
+        console.log(this.error)
         let inValid = false;
         const erstrings= [''];
         // const invalidProps = [];
@@ -121,8 +137,6 @@ class Form {
             div.appendChild(li)
         })
         div.classList.add('errorblock');
-        this.modal.append(div);
-        this.modal.show = true;
     }
 
     packageData(){
@@ -138,17 +152,13 @@ class Form {
         //     url: this.imageupload.value,
         //     website: this.website.value
         // }
-        console.log('ready to send');
+        console.log('--- FORM2 --- Ready to send all of this data');
         // console.log(profilePackage)
     }
 
-    @BindThis
-    closeErrorModal(){
-        this.modal.innerHTML = '';
-        this.modal.show = false;
-    }
 
 
 }
 
-export default Form;
+export default Form2;
+
