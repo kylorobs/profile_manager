@@ -1,13 +1,14 @@
 
 
 import {store} from '../../app';
-// import {edit} from '../../state/ProfileSlice';
+import { resetEditMode } from '../../state/ProfileSlice';
 import {BindThis} from '../../decorators/bindthis';
 import {Profile} from '../../models/Profile';
 import { KeyMap } from '../../models/InputKeys';
 import TextInput from './TextInput/TextInput';
 import ImageUpload from './ImageUpload/ImageUpload';
-import ButtonHandler from '../../models/ButtonHandler';
+import FormControls from './FormControls/FormControls';
+import Validator from './Validator/Validator';
 
 type Inputs = TextInput | ImageUpload;
 
@@ -15,7 +16,6 @@ class Form2 {
     private editid: string | null;
     private error: boolean;
     private formInputs: Inputs[];
-    private formControls: HTMLDivElement;
 
     constructor(keyMappings: KeyMap[]){
         this.editid = store.getState().editing_id || null;
@@ -26,13 +26,12 @@ class Form2 {
             if (map.type === 'file') return new ImageUpload('fileinputs', false, map, 'url');
             else return new TextInput('textinputs', map);
         });
- 
         this.formInputs = inputs;
-        this.formControls = document.createElement('div');
-        document.getElementById('textinputs')?.appendChild(this.formControls);
-        
+   
         this.configure();
+        this.configureButtons();
         store.subscribe(this.configure);
+        store.subscribe(this.reConfigureButtons);
     }
 
     @BindThis
@@ -40,42 +39,26 @@ class Form2 {
         this.editid = store.getState().editing_id || null;
         if (this.editid) this.setValues();
         else this.clearForm();
-        this.configureButtons();
     }
 
     @BindThis
     configureButtons(){
-        this.formControls.innerHTML = '';
-        const container = document.createElement('div');
-        container.id = 'controls';
-        container.innerHTML = '';
-        const btnContainer = document.createElement('flex-container') as HTMLFlexContainerElement;
-        btnContainer.innerHTML ='';
-        btnContainer.wrap = true;
+        //THIS WILL CREATE ALL BUTTONS INSIDE FORMCONTROLS CLASS
+        // FORMCONTROLS WILL CONTROL WHICH BUTTONS GET RENDERED 
+        const formControls = FormControls.getInstance(!!this.editid, 'textinputs');
+        formControls.createButton('Update', false, 'update', 'update', this.submitForm);
+        formControls.createButton('Create New', false, 'add', 'create', this.submitForm);
+        formControls.createButton('Delete', true, 'delete', 'update', this.deleteProfile);
+        formControls.createButton('Switch To New Entry Form', true, 'addNew', 'clear', this.clearForm);
+        formControls.resetButtons();
+    }
 
-        const div = document.createElement('div');
-        if (this.editid){
-            div.innerHTML = `<kclsu-button small emitid="update"> Update </kclsu-button><kclsu-button purple small emitid="delete">Delete</kclsu-button>`;
-            
-            const top = document.createElement('flex-container') as HTMLFlexContainerElement;
-            top.alignx = 'flex-end';
-            top.innerHTML = '<kclsu-button verysmall center margin="4em" purple emitid="addNew">Switch to New Entry</kclsu-button>';
-            document.getElementById('textinputs')?.prepend(top);
-        } 
-        else div.innerHTML = `<kclsu-button emitid="add" small center> Add Profile </kclsu-button>`
-        
-        btnContainer.appendChild(div);
-        btnContainer.alignx = 'center';
-        container.appendChild(btnContainer);
-        this.formControls.appendChild(container)
-
-
-        const btnHandler = ButtonHandler.getInstance();
-        btnHandler.addEmitter('update', this.submitForm);
-        btnHandler.addEmitter('add', this.submitForm);
-        btnHandler.addEmitter('delete', this.deleteProfile);
-        //NOTE: THIS BUTTON MUST APPEAR AS A DROPDOWN 
-        btnHandler.addEmitter('addNew', this.clearForm);
+    @BindThis
+    reConfigureButtons(){
+        console.log('--- FORM CONTROLS edit value ----')
+        console.log(this.editid)
+        const formControls = FormControls.getInstance(!!this.editid, 'textinputs');
+        formControls.resetButtons();
     }
 
     @BindThis
@@ -86,6 +69,9 @@ class Form2 {
 
     @BindThis
     clearForm(){
+        this.editid = null;
+        store.dispatch(resetEditMode)
+        this.reConfigureButtons();
         this.formInputs
         .forEach((input: Inputs) => {
         if ('el' in input) input.el.value = '';
@@ -121,11 +107,25 @@ class Form2 {
     @BindThis
     validateValues(){
         console.log(this.error)
-        let inValid = false;
-        const erstrings= [''];
-        // const invalidProps = [];
+        // let inValid = false;
+        // const erstrings= [''];
         
-        if (inValid) this.renderErrorMessages(erstrings)
+        // const invalidProps = [];
+        const errors = this.formInputs
+        .map((input: Inputs) => {
+            if ('el' in input){
+                return new Validator(input.el.value, input.keymap)
+            } 
+            else if ('imageurl' in input){
+                return new Validator(input.imageurl, input.keymap)
+            } 
+            else throw new Error('issue');
+        })
+        console.log('FORM ERRORS')
+        console.log(errors)
+        
+        // if (errors.find(er => er.isValid !== true)) this.renderErrorMessages(erstrings)
+        if (errors.find(er => er.isValid !== true)) console.log('Error found!');
         else this.packageData()
     }
 
@@ -139,26 +139,29 @@ class Form2 {
         div.classList.add('errorblock');
     }
 
-    packageData(){
-        // const profilePackage:Profile = {
-        //     name: this.name.value,
-        //     description: this.description.value,
-        //     facebook: this.facebook.value,
-        //     id: '43324',
-        //     instagram: this.instagram.value,
-        //     twitter: this.twitter.value,
-        //     type: this.category.value,
-        //     upcomingevent: this.upcomingevent.value,
-        //     url: this.imageupload.value,
-        //     website: this.website.value
-        // }
+    
+
+    packageData():void {
+
+        const profpackage: Profile = {};
+
+        this.formInputs
+            .forEach((input: Inputs) => {
+                if ('el' in input){
+                    console.log(input)
+                    profpackage[input.title] = input.el.value;
+                } 
+                else if ('imageurl' in input){
+                    profpackage[input.title] = input.imageurl;
+                } 
+                else console.log('failed to find type of input')
+                
+            })
         console.log('--- FORM2 --- Ready to send all of this data');
-        // console.log(profilePackage)
+        console.log(profpackage)
     }
 
-
-
-}
+};
 
 export default Form2;
 

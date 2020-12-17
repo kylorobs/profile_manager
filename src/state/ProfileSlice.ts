@@ -110,8 +110,12 @@ const profileSlice = createSlice({
       return state;
     },
     edit: (state: RootState, action) => {
-      state.editing = !state.editing;
-      state.editing_id = action.payload || null;
+      state.editing = true;
+      state.editing_id = action.payload;
+    },
+    resetEditMode: (state: RootState) => {
+      state.editing = false;
+      state.editing_id = '';
     }
   }
 }) as any;
@@ -120,6 +124,7 @@ export const {
   addProfile,
   deleteProfile,
   edit,
+  resetEditMode,
   fetchProfiles
 } = profileSlice.actions;
 

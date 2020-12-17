@@ -65,6 +65,41 @@ class Form {
         btnContainer.appendChild(div);
         btnContainer.alignx = 'center';
         document.addEventListener('emitClick', (e:any) => this.clickHandler(e))
+
+
+
+        //OLD
+        // this.formControls.innerHTML = '';
+        // const container = document.createElement('div');
+        // container.id = 'controls';
+        // container.innerHTML = '';
+        // const btnContainer = document.createElement('flex-container') as HTMLFlexContainerElement;
+        // btnContainer.innerHTML ='';
+        // btnContainer.wrap = true;
+
+        // const div = document.createElement('div');
+        // if (this.editid){
+        //     div.innerHTML = `<kclsu-button small emitid="update"> Update </kclsu-button><kclsu-button purple small emitid="delete">Delete</kclsu-button>`;
+            
+        //     const top = document.createElement('flex-container') as HTMLFlexContainerElement;
+        //     top.alignx = 'flex-end';
+        //     top.innerHTML = '<kclsu-button verysmall center margin="4em" purple emitid="addNew">Switch to New Entry</kclsu-button>';
+        //     document.getElementById('textinputs')?.prepend(top);
+        // } 
+        // else div.innerHTML = `<kclsu-button emitid="add" small center> Add Profile </kclsu-button>`
+        
+        // btnContainer.appendChild(div);
+        // btnContainer.alignx = 'center';
+        // container.appendChild(btnContainer);
+        // this.formControls.appendChild(container)
+
+
+        // const btnHandler = ButtonHandler.getInstance();
+        // btnHandler.addEmitter('update', this.submitForm);
+        // btnHandler.addEmitter('add', this.submitForm);
+        // btnHandler.addEmitter('delete', this.deleteProfile);
+        // //NOTE: THIS BUTTON MUST APPEAR AS A DROPDOWN 
+        // btnHandler.addEmitter('addNew', this.clearForm);
     }
 
     clickHandler(e:any){

@@ -20,7 +20,7 @@ const gui = new ProfileManager({
             inputTitle: 'Name',
             inputDefaultText: 'Full name...',
             type: 'input',
-            validationErrorMsg: 'Wrong!',
+            validationErrorMsg: 'Please supply a valid name',
             validationTypes: ['isNotEmpty']
         },
         { 
@@ -28,7 +28,7 @@ const gui = new ProfileManager({
             inputTitle: 'Profile Image',
             inputDefaultText: '',
             type: 'file',
-            validationErrorMsg: 'Wrong!',
+            validationErrorMsg: 'You have not uploaded a profile image!',
             validationTypes: ['isNotEmpty']
         },
         { 
@@ -36,7 +36,7 @@ const gui = new ProfileManager({
             inputTitle: 'Description',
             inputDefaultText: 'A short description...',
             type: 'textarea',
-            validationErrorMsg: 'Wrong!',
+            validationErrorMsg: 'Please enter a short text description.',
             validationTypes: ['isNotEmpty']
         },
         { 
@@ -44,15 +44,15 @@ const gui = new ProfileManager({
             inputTitle: 'Facebook',
             inputDefaultText: 'Facebook full url...',
             type: 'input',
-            validationErrorMsg: 'Wrong!',
-            validationTypes: ['isNotEmpty']
+            validationErrorMsg: 'Please provide a full facebook URL.',
+            validationTypes: ['isNotEmpty', 'isFacebookUrl']
         },
         { 
             keyName: 'twitter',
             inputTitle: 'Twitter',
             inputDefaultText: 'Twitter full url...',
             type: 'input',
-            validationErrorMsg: 'Wrong!',
+            validationErrorMsg: 'Please provide a full twitter URL for the twitter profile.',
             validationTypes: ['isNotEmpty']
         },
         { 
@@ -60,7 +60,7 @@ const gui = new ProfileManager({
             inputTitle: 'Website',
             inputDefaultText: '',
             type: 'input',
-            validationErrorMsg: 'Wrong!',
+            validationErrorMsg: 'Please supply a full website URL.',
             validationTypes: ['isNotEmpty']
         },
         { 
@@ -68,8 +68,8 @@ const gui = new ProfileManager({
             inputTitle: 'Upcoming Event',
             inputDefaultText: 'The kclsu upcoming event url....',
             type: 'input',
-            validationErrorMsg: 'Wrong!',
-            validationTypes: ['isNotEmpty']
+            validationErrorMsg: 'Please provide a full URL for the website.',
+            validationTypes: ['isUrl']
         },
     ]
 
