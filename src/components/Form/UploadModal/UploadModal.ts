@@ -73,7 +73,8 @@ class UploadModal {
     }
 
     public setThumbnail(url: string): void{
-      console.log('setting new image')
+      console.log('setting new image');
+      this.imageurl = url;
       this.thumbnailcontainer.innerHTML = `
         <lazy-image image=${url}></lazy-image>
       `

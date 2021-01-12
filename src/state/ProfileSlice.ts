@@ -103,8 +103,10 @@ const profileSlice = createSlice({
       });
       state.profiles = profiles;
     },
-    addProfile: (state: RootState) => {
-      return state;
+    addProfile: (state: RootState, action) => {
+      //FIRST UPLOAD TO FIREBASE
+      //THEN
+      state.profiles.unshift(action.payload);
     },
     deleteProfile: (state: RootState) => {
       return state;

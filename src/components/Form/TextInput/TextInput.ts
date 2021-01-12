@@ -1,13 +1,13 @@
 import { Input } from '../../../models/Input';
 import { KeyMap } from '../../../models/InputKeys';
 import {BindThis} from '../../../decorators/bindthis';
-import { validateInput } from '../../../utility/utility';
+import { Categories } from '../../../types/types';
 
 //  interface IIndexable {
 //     [key: string]: any;
 //   }
 
-class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement> {
+class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> {
 
     constructor(public parentId: string, public keymap: KeyMap, protected valid: boolean = false, public title: any = ''){
         super('', { value: 'unset' });
@@ -17,7 +17,7 @@ class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement> {
     }
 
     createElement(){
-        let el;
+        let el:any;
         const keymap = this.keymap;
         switch(keymap.type){
             case 'input' :
@@ -28,6 +28,18 @@ class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement> {
                 el = document.createElement('textarea') as HTMLTextAreaElement;
                 el.cols = 22;
                 el.rows = 8;
+            break;
+            case 'select':
+                console.log('correct')
+                el = document.createElement('select') as HTMLSelectElement;
+                keymap.options?.map((optionKey: Categories) => {
+                    const option = document.createElement('option') as HTMLOptionElement;
+                    option.innerText = optionKey[0];
+                    option.value = optionKey[1];
+                    console.log(option)
+                    return option;
+                })
+                .forEach(option => el.appendChild(option))
             break;
             default: el = document.createElement('input') as HTMLInputElement;
         }
@@ -41,14 +53,15 @@ class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement> {
 
     @BindThis
     changeHandler(e: any): void{
-        e.preventDefault();
-        let isValid = true;
-        this.keymap.validationTypes.forEach(type => {
-            if(!validateInput(e.target.value, type)) isValid = false
-        })
-        console.log(isValid)
-        if (isValid) this.valid = true;
-        else this.valid = false;
+        console.log(e)
+        // e.preventDefault();
+        // let isValid = true;
+        // this.keymap.validationTypes.forEach(type => {
+        //     if(!validateInput(e.target.value, type)) isValid = false
+        // })
+        // console.log(isValid)
+        // if (isValid) this.valid = true;
+        // else this.valid = false;
     }
 
 

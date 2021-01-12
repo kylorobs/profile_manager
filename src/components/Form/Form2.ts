@@ -1,6 +1,6 @@
 
 
-import {store} from '../../app';
+import { store } from '../../app';
 import { resetEditMode } from '../../state/ProfileSlice';
 import {BindThis} from '../../decorators/bindthis';
 import {Profile} from '../../models/Profile';
@@ -10,6 +10,7 @@ import UploadModal from './UploadModal/UploadModal';
 import FormControls from './FormControls/FormControls';
 import Validator from './Validator/Validator';
 import ErrorModal from './ErrorModal/ErrorModal';
+import {addProfile} from '../../state/ProfileSlice';
 
 type Inputs = TextInput | UploadModal;
 
@@ -71,7 +72,7 @@ class Form2 {
     @BindThis
     clearForm(){
         this.editid = null;
-        store.dispatch(resetEditMode)
+        // store.dispatch(resetEditMode());
         this.reConfigureButtons();
         this.formInputs
         .forEach((input: Inputs) => {
@@ -139,7 +140,10 @@ class Form2 {
                 
             })
         console.log('--- FORM2 --- Ready to send all of this data');
-        console.log(profpackage)
+        profpackage.id = 5656776767;
+        console.log(profpackage);
+        store.dispatch(addProfile(profpackage));
+        store.dispatch(resetEditMode());
     }
 
 };

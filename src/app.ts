@@ -12,7 +12,7 @@ export type RootState = ReturnType<typeof store.getState>;
 
 
 const gui = new ProfileManager({
-    categories: [['Xhibit', 'xhibit'], ['Feautured', 'featured'], ['Artists', 'artists'], ['Performers', 'performers']],
+    categories: [['Xhibit', 'xhibit'], ['Feautured', 'featured'], ['Artists', 'artists'], ['Performers', 'performers'], ['specialActs', 'Special Acts']],
     categoryKeyName: 'type',
     keyMapping: [
         { 
@@ -23,14 +23,15 @@ const gui = new ProfileManager({
             validationErrorMsg: 'Please supply a valid name',
             validationTypes: ['isNotEmpty']
         },
-        // { 
-        //     keyName: 'image',
-        //     inputTitle: 'Profile Image',
-        //     inputDefaultText: '',
-        //     type: 'file',
-        //     validationErrorMsg: 'You have not uploaded a profile image!',
-        //     validationTypes: ['isNotEmpty']
-        // },
+        { 
+            keyName: 'image',
+            inputTitle: 'Profile Image',
+            inputDefaultText: '',
+            type: 'file',
+            image: true,
+            validationErrorMsg: 'You have not uploaded a profile image!',
+            validationTypes: ['isNotEmpty']
+        },
         { 
             keyName: 'description',
             inputTitle: 'Description',
@@ -71,6 +72,15 @@ const gui = new ProfileManager({
             validationErrorMsg: 'Please provide an event URL from the kclsu events page.',
             validationTypes: ['isUrl']
         },
+        { 
+            keyName: 'type',
+            inputTitle: 'Category',
+            inputDefaultText: '...',
+            type: 'select',
+            options: [['Xhibit', 'xhibit'], ['Feautured', 'featured'], ['Artists', 'artists'], ['Performers', 'performers'], ['Special Acts', 'specialActs']],
+            validationErrorMsg: 'Please choose a category',
+            validationTypes: ['isNotEmpty']
+        }
     ]
 
 });
