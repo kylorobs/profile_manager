@@ -14,6 +14,7 @@ class Validator {
     }
 
     validate(val: any, type: validChecks, errorMsg: string){
+        //WE NEED TO FIRST  CHECK IF FIELD IS REQUIRED - THEN ONLY PROCEED WITH OTHER ERRORS
         switch(type){
             case 'isNotEmpty':
                 this.setErrorHelper(!validator.isEmpty(val), errorMsg);
@@ -55,7 +56,9 @@ class Validator {
     setErrorHelper(valid: boolean, errorMsg: string){
         if (!valid) {
             this.isValid = false;
-            this.errorMessages.push(errorMsg)
+            if (!this.errorMessages.find(er => er === errorMsg)) {
+                this.errorMessages.push(errorMsg)
+            } 
         }
     }
 }

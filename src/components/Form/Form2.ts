@@ -6,24 +6,24 @@ import {BindThis} from '../../decorators/bindthis';
 import {Profile} from '../../models/Profile';
 import { KeyMap } from '../../models/InputKeys';
 import TextInput from './TextInput/TextInput';
-import ImageUpload from './ImageUpload/ImageUpload';
+import UploadModal from './UploadModal/UploadModal';
 import FormControls from './FormControls/FormControls';
 import Validator from './Validator/Validator';
+import ErrorModal from './ErrorModal/ErrorModal';
 
-type Inputs = TextInput | ImageUpload;
+type Inputs = TextInput | UploadModal;
 
 class Form2 {
     private editid: string | null;
-    private error: boolean;
     private formInputs: Inputs[];
+    private errorModal: ErrorModal; 
 
     constructor(keyMappings: KeyMap[]){
         this.editid = store.getState().editing_id || null;
-        this.error = false;
-        
+        this.errorModal = new ErrorModal();
         //CREATE INPUTS, SEPARATING FILE INPUTS AND TEXT/SELECT INPUTS
         const inputs = keyMappings.map((map: KeyMap) =>{
-            if (map.type === 'file') return new ImageUpload('fileinputs', false, map, 'url');
+            if (map.type === 'file') return new UploadModal('fileinputs', false, map, 'url');
             else return new TextInput('textinputs', map);
         });
         this.formInputs = inputs;
@@ -64,7 +64,8 @@ class Form2 {
     @BindThis
     submitForm(){
         console.log('--- FORM2 --- Submit this terrible profile')
-        this.validateValues();
+        const formErrors =  this.validateValues();
+        formErrors.length >  0 ? this.errorModal.handleErrors(formErrors) : this.packageData();
     }
 
     @BindThis
@@ -106,40 +107,20 @@ class Form2 {
 
     @BindThis
     validateValues(){
-        console.log(this.error)
-        // let inValid = false;
-        // const erstrings= [''];
-        
-        // const invalidProps = [];
-        const errors = this.formInputs
-        .map((input: Inputs) => {
-            if ('el' in input){
-                return new Validator(input.el.value, input.keymap)
-            } 
-            else if ('imageurl' in input){
-                return new Validator(input.imageurl, input.keymap)
-            } 
-            else throw new Error('issue');
-        })
-        console.log('FORM ERRORS')
-        console.log(errors)
-        
-        // if (errors.find(er => er.isValid !== true)) this.renderErrorMessages(erstrings)
-        if (errors.find(er => er.isValid !== true)) console.log('Error found!');
-        else this.packageData()
+        return this.formInputs
+            .map((input: Inputs) => {
+                if ('el' in input){
+                    return new Validator(input.el.value, input.keymap)
+                } 
+                else if ('imageurl' in input){
+                    return new Validator(input.imageurl, input.keymap)
+                } 
+                else throw new Error('issue');
+            })
+            .filter((er: Validator)=> !er.isValid)
     }
 
-    renderErrorMessages(erstrings: string[]){
-        const div = document.createElement('ul') as any;
-        erstrings.forEach(str =>{
-            const li = document.createElement('li');
-            li.innerText = str
-            div.appendChild(li)
-        })
-        div.classList.add('errorblock');
-    }
 
-    
 
     packageData():void {
 

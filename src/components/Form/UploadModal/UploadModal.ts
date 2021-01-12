@@ -11,7 +11,7 @@ import Modal from '../../Modal/modal';
 // WHEN BUTTON IS CLICKED, THEY RENDER THE POPUP WITH THE FORM CONTAINING AN INPUT;
 // AFTER IMAGE IS UPLOADED, THE IMAGEURL IS UPDATED AND THE MODAL HIDDEN;
 
-class ImageUpload {
+class UploadModal {
     
     public imageurl: string;
     private uploadcontainer: HTMLDivElement;
@@ -90,7 +90,7 @@ class ImageUpload {
 
 }
 
-export default ImageUpload;
+export default UploadModal;
 
 // <div id="profileimage">
 // <lazy-image image="https://res.cloudinary.com/kclsu-media/image/upload/v1605106869/website_uploads/MISC/EM_u4q3mg.png"></lazy-image>

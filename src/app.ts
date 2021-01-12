@@ -23,14 +23,14 @@ const gui = new ProfileManager({
             validationErrorMsg: 'Please supply a valid name',
             validationTypes: ['isNotEmpty']
         },
-        { 
-            keyName: 'image',
-            inputTitle: 'Profile Image',
-            inputDefaultText: '',
-            type: 'file',
-            validationErrorMsg: 'You have not uploaded a profile image!',
-            validationTypes: ['isNotEmpty']
-        },
+        // { 
+        //     keyName: 'image',
+        //     inputTitle: 'Profile Image',
+        //     inputDefaultText: '',
+        //     type: 'file',
+        //     validationErrorMsg: 'You have not uploaded a profile image!',
+        //     validationTypes: ['isNotEmpty']
+        // },
         { 
             keyName: 'description',
             inputTitle: 'Description',
@@ -68,7 +68,7 @@ const gui = new ProfileManager({
             inputTitle: 'Upcoming Event',
             inputDefaultText: 'The kclsu upcoming event url....',
             type: 'input',
-            validationErrorMsg: 'Please provide a full URL for the website.',
+            validationErrorMsg: 'Please provide an event URL from the kclsu events page.',
             validationTypes: ['isUrl']
         },
     ]
