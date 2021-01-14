@@ -6,21 +6,19 @@ class Card {
     image: string;
     id: string;
     active: boolean;
+    parent: any;
+    element: any;
 
-    constructor(t: string, i: string, im: string, a: boolean){
+    constructor(t: string, i: string, im: string, a: boolean, parent: any){
         this.title = t;
         this.id = i;
+        this.parent = parent;
         this.image = im;
         this.active = a;
-        this.renderCard();
-    }
-
-    renderCard(){
         const card = this.buildCard();
-        card.addEventListener('click', () => this.dropHandler(this.id));
-        const container = this.buildContainer(card);
-        const parent = document.querySelector('.list')!;
-        parent.appendChild(container);
+        card.addEventListener('click', (e) => this.clickHandler(e));
+        //const container = this.buildContainer(card);
+        this.element = card;
     }
 
     buildCard(){
@@ -28,7 +26,10 @@ class Card {
         label.cardtitle = this.title;
         label.image = this.image;
         label.margin = '1em 0 1em 15px';
-        label.cardwidth = '85%';
+        label.cardwidth = '90%';
+        label.smallestheight = true;
+        label.smallheading = true;
+        label.style.position = 'relative';
         return label;
     }
 
@@ -37,18 +38,13 @@ class Card {
         container.alignx="space-between";
         container.aligny="center";
         container.appendChild(card);
-        const x = document.createElement('h3');
-        x.innerText = 'X';
-        x.addEventListener('click', ((ev: Event) => this.clickHandler(ev, this.id)))
-        container.appendChild(x);
+        container.classList.add('fullcard');
         return container;
     }
 
-    clickHandler(e: Event, id:string){
+    clickHandler(e: Event){
         e.preventDefault();
-        console.log('clicked!')
-        console.log(id)
-        store.dispatch(edit(this.id))
+        store.dispatch(edit(this.id));
     }
 
     dropHandler(id:string){

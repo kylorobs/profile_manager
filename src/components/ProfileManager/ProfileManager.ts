@@ -1,6 +1,5 @@
 import List from '../List/List';
 import DropArea from '../DropArea/DropArea'
-import Render from '../Render/Render';
 import Form2 from '../Form/Form2';
 import { Categories } from '../../types/types';
 import {store} from '../../app';
@@ -17,7 +16,7 @@ class ProfileManager {
     constructor(Manager: ManagerInit){
         store.dispatch(fetchProfiles());
         this.areas = Manager.categories;
-        this.list = new List();
+        this.list = new List(Manager.categories);
         this.setupAreas();
         this.createForms(Manager.keyMapping);
     }
@@ -31,7 +30,10 @@ class ProfileManager {
         const areas = this.areas.map((col: string[]) => {
             return new DropArea(col[0], col[1]);
         })
-        Render.renderAreas(areas);
+        const parent = document.querySelector('.droparea')!;
+        areas.forEach(area => {
+           parent.appendChild(area.element);
+        })
         console.log(this.list)
     }
 

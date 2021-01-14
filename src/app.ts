@@ -12,7 +12,7 @@ export type RootState = ReturnType<typeof store.getState>;
 
 
 const gui = new ProfileManager({
-    categories: [['Xhibit', 'xhibit'], ['Feautured', 'featured'], ['Artists', 'artists'], ['Performers', 'performers'], ['specialActs', 'Special Acts']],
+    categories: [['Xhibit', 'xhibit'], ['Feautured', 'featured'], ['Artists', 'artists'], ['Performers', 'performers'], ['Special Acts', 'specialActs']],
     categoryKeyName: 'type',
     keyMapping: [
         { 

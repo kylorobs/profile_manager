@@ -12,6 +12,7 @@ import {
 const initialState: State = {
   profiles: [],
   editing: false,
+  filterid: '',
   editing_id: '',
   authenticated: false
 }
@@ -36,7 +37,7 @@ const dummydata = {
       "instagram": "",
       "name": "Ekaterina",
       "twitter": "",
-      "type": "performers",
+      "type": "featured",
       "upcomingEvent": "https://www.kclsu.org/ents/event/6548/",
       "url": "https://firebasestorage.googleapis.com/v0/b/bush-house-sessions.appspot.com/o/profiles%2Fresized.jpg?alt=media&token=73a8d682-e3a4-49f0-92c1-0e7b8ec56bb9",
       "website": "https://www.youtube.com/channel/UCWTd6FXN4mtilv-mPeKig2Q/featured"
@@ -48,7 +49,7 @@ const dummydata = {
       "instagram": "",
       "name": "Karen Ng",
       "twitter": "",
-      "type": "xhibitArtists",
+      "type": "xhibit",
       "upcomingEvent": "",
       "url": "https://firebasestorage.googleapis.com/v0/b/bush-house-sessions.appspot.com/o/profiles%2FKN%20resized.jpg?alt=media&token=5edeb3a3-b365-4bc5-bc49-d8ee026db7b5",
       "website": "ngsumyi.tumblr.com"
@@ -115,6 +116,9 @@ const profileSlice = createSlice({
       state.editing = true;
       state.editing_id = action.payload;
     },
+    changeFilter: (state: RootState, action) => {
+      state.filterid = action.payload;
+    },
     resetEditMode: (state: RootState) => {
       state.editing = false;
       state.editing_id = '';
@@ -126,6 +130,7 @@ export const {
   addProfile,
   deleteProfile,
   edit,
+  changeFilter,
   resetEditMode,
   fetchProfiles
 } = profileSlice.actions;
