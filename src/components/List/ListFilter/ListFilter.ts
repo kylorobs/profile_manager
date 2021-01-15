@@ -2,6 +2,7 @@
 import ButtonHandler from '../../../models/ButtonHandler';
 import {store} from '../../../app'
 import { changeFilter } from '../../../state/ProfileSlice';
+import DropArea from '../../DropArea/DropArea';
 
 class ListFilter {
     public title: string = 'All'; // the name of the filter
@@ -22,6 +23,7 @@ class ListFilter {
     }
 
     clearFilter(){
+        DropArea.removeClickedClass();
         store.dispatch(changeFilter(''));
     }
 

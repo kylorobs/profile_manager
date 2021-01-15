@@ -54,11 +54,18 @@ body {
     .droppable {
         height: 100%;
         width: 300px;
-        background-color: lightgrey;
         margin: 1em;
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    .dropNeutral{
+        background-color: lightgrey;
+    }
+
+    .dropActive{
+        background-color: red;
     }
 };
 

@@ -12,6 +12,7 @@ import {
 const initialState: State = {
   profiles: [],
   editing: false,
+  filterkey: '',
   filterid: '',
   editing_id: '',
   authenticated: false
@@ -112,12 +113,21 @@ const profileSlice = createSlice({
     deleteProfile: (state: RootState) => {
       return state;
     },
+    updateCategory: <T extends {payload: {id: string, value: string}}> (state: State, action: T) => {
+      const profileIndex = state.profiles.findIndex((prof:Profile) => prof.id === action.payload.id);
+      if (profileIndex > -1){
+        state.profiles[profileIndex][state.filterkey] = action.payload.value;
+      }
+    },
     edit: (state: RootState, action) => {
       state.editing = true;
       state.editing_id = action.payload;
     },
     changeFilter: (state: RootState, action) => {
       state.filterid = action.payload;
+    },
+    updateFilterKey: (state: RootState, action) => {
+      state.filterkey = action.payload;
     },
     resetEditMode: (state: RootState) => {
       state.editing = false;
@@ -129,8 +139,10 @@ const profileSlice = createSlice({
 export const {
   addProfile,
   deleteProfile,
+  updateCategory,
   edit,
   changeFilter,
+  updateFilterKey,
   resetEditMode,
   fetchProfiles
 } = profileSlice.actions;

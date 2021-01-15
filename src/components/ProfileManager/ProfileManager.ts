@@ -3,6 +3,7 @@ import DropArea from '../DropArea/DropArea'
 import Form2 from '../Form/Form2';
 import { Categories } from '../../types/types';
 import {store} from '../../app';
+import {updateFilterKey} from '../../state/ProfileSlice';
 import {fetchProfiles} from '../../state/ProfileSlice';
 import { ManagerInit, KeyMap } from '../../models/InputKeys';
 
@@ -19,6 +20,7 @@ class ProfileManager {
         this.list = new List(Manager.categories);
         this.setupAreas();
         this.createForms(Manager.keyMapping);
+        store.dispatch(updateFilterKey(Manager.categoryKeyName));
     }
 
     createForms(keyMapping: KeyMap[]){

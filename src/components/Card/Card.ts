@@ -1,7 +1,9 @@
 import {store} from '../../app';
+import { BindThis } from '../../decorators/bindthis';
 import { edit } from '../../state/ProfileSlice';
+import { Draggable } from '../../types/types';
 
-class Card {
+class Card implements Draggable {
     title: string;
     image: string;
     id: string;
@@ -30,6 +32,7 @@ class Card {
         label.smallestheight = true;
         label.smallheading = true;
         label.style.position = 'relative';
+        label.addEventListener('dragstart', this.dragStartHandler)
         return label;
     }
 
@@ -42,14 +45,24 @@ class Card {
         return container;
     }
 
+    @BindThis
     clickHandler(e: Event){
         e.preventDefault();
         store.dispatch(edit(this.id));
     }
 
-    dropHandler(id:string){
-        console.log('Ready to Drop!')
-        console.log(id)
+
+    @BindThis
+    dragStartHandler(evt: DragEvent){
+        console.log('drag has started');
+        console.log(evt);
+        evt.dataTransfer!.setData('text/plain', this.id);
+        evt.dataTransfer!.effectAllowed = 'move';
+    }
+
+    @BindThis
+    dragEndHandler(_: DragEvent){
+        console.log('dragend')
     }
 }
 
