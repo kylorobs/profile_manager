@@ -20,14 +20,14 @@ class List {
     constructor(filterNames: Categories[]){
         this.title = 'All Artists';
         this.filterKey = 'type'; // change this so it is set via main class.
-        this.profiles = store.getState().profiles;
+        this.profiles = store.getState().data.profiles;
         this.searchContainer = document.createElement('kclsu-search') as HTMLKclsuSearchElement;
         this.filterNames = filterNames;
         this.searchContainer.attr = 'cardtitle';
         this.searchContainer.containerselector = 'label-card';
         this.searchContainer.style.position = 'absolute'
         this.updateList();
-        this.filterControls = new ListFilter(store.getState().filterid);
+        this.filterControls = new ListFilter(store.getState().data.filterid);
         document.querySelector('.list')!.appendChild(this.filterControls.el);
 
         store.subscribe(this.updateList);
@@ -35,8 +35,8 @@ class List {
 
     @BindThis
     async updateList(){
-        const profiles = await store.getState().profiles;
-        const currentFilter = await store.getState().filterid;
+        const profiles = await store.getState().data.profiles;
+        const currentFilter = await store.getState().data.filterid;
 
         let filterName = '';
         const matchingFilter = this.filterNames.find(filter => filter[1] === currentFilter);

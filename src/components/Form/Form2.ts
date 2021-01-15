@@ -1,7 +1,8 @@
 
 
 import { store } from '../../app';
-import { resetEditMode } from '../../state/ProfileSlice';
+import { resetEditMode } from '../../state/FormSlice';
+// import { updateProfile } from '../../state/ProfileSlice';
 import {BindThis} from '../../decorators/bindthis';
 import {Profile} from '../../models/Profile';
 import { KeyMap } from '../../models/InputKeys';
@@ -10,7 +11,7 @@ import UploadModal from './UploadModal/UploadModal';
 import FormControls from './FormControls/FormControls';
 import Validator from './Validator/Validator';
 import ErrorModal from './ErrorModal/ErrorModal';
-import {addProfile} from '../../state/ProfileSlice';
+import {addProfile, updateData} from '../../state/ProfileSlice';
 
 type Inputs = TextInput | UploadModal;
 
@@ -20,7 +21,7 @@ class Form2 {
     private errorModal: ErrorModal; 
 
     constructor(keyMappings: KeyMap[]){
-        this.editid = store.getState().editing_id || null;
+        this.editid = store.getState().form.editing_id || null;
         this.errorModal = new ErrorModal();
         //CREATE INPUTS, SEPARATING FILE INPUTS AND TEXT/SELECT INPUTS
         const inputs = keyMappings.map((map: KeyMap) =>{
@@ -37,9 +38,11 @@ class Form2 {
 
     @BindThis
     configure(){
-        this.editid = store.getState().editing_id || null;
-        if (this.editid) this.setValues();
-        else this.clearForm();
+        if (store.getState().form.editing_id !== this.editid){
+            this.editid = store.getState().form.editing_id;
+            if (this.editid) this.setValues();
+            else this.clearForm();
+        }
     }
 
     @BindThis
@@ -47,8 +50,8 @@ class Form2 {
         //THIS WILL CREATE ALL BUTTONS INSIDE FORMCONTROLS CLASS
         // FORMCONTROLS WILL CONTROL WHICH BUTTONS GET RENDERED 
         const formControls = FormControls.getInstance(!!this.editid, 'textinputs');
-        formControls.createButton('Update', false, 'update', 'update', this.submitForm);
-        formControls.createButton('Create New', false, 'add', 'create', this.submitForm);
+        formControls.createButton('Update', false, 'update', 'update', () => this.submitForm('update'));
+        formControls.createButton('Create New', false, 'add', 'create', () => this.submitForm('new'));
         formControls.createButton('Delete', true, 'delete', 'update', this.deleteProfile);
         formControls.createButton('Switch To New Entry Form', true, 'addNew', 'clear', this.clearForm);
         formControls.resetButtons();
@@ -56,24 +59,24 @@ class Form2 {
 
     @BindThis
     reConfigureButtons(){
-        console.log('--- FORM CONTROLS edit value ----')
-        console.log(this.editid)
-        const formControls = FormControls.getInstance(!!this.editid, 'textinputs');
-        formControls.resetButtons();
+        // if (store.getState().form.editing_id === this.editid){
+            const formControls = FormControls.getInstance(!!this.editid, 'textinputs');
+            formControls.resetButtons();
+        // }
     }
 
     @BindThis
-    submitForm(){
-        console.log('--- FORM2 --- Submit this terrible profile')
+    submitForm(type: 'new' | 'update'){
         const formErrors =  this.validateValues();
-        formErrors.length >  0 ? this.errorModal.handleErrors(formErrors) : this.packageData();
+        formErrors.length >  0 ? this.errorModal.handleErrors(formErrors) : this.packageData(type);
     }
+
 
     @BindThis
     clearForm(){
         this.editid = null;
-        // store.dispatch(resetEditMode());
         this.reConfigureButtons();
+        //store.dispatch(resetEditMode());
         this.formInputs
         .forEach((input: Inputs) => {
         if ('el' in input) input.el.value = '';
@@ -90,7 +93,7 @@ class Form2 {
     }
 
     setValues(){
-        const data = store.getState().profiles;
+        const data = store.getState().data.profiles;
         const profile: Profile = data.filter((prof:Profile) => prof.id === this.editid)[0];
         const profileKeys: string[] = Object.keys(profile);
         console.log('------FORM 2 INPUTS -------');
@@ -123,7 +126,7 @@ class Form2 {
 
 
 
-    packageData():void {
+    packageData(type: 'new' | 'update'):void {
 
         const profpackage: Profile = {};
 
@@ -140,9 +143,23 @@ class Form2 {
                 
             })
         console.log('--- FORM2 --- Ready to send all of this data');
-        profpackage.id = 5656776767;
-        console.log(profpackage);
-        store.dispatch(addProfile(profpackage));
+        
+        switch(type){
+            case 'new' : 
+                profpackage.id = Math.random().toString(36).substr(2, 10);
+                store.dispatch(addProfile(profpackage));
+            break;
+            case 'update':
+                store.dispatch(updateData({
+                    url: 'https://test-db-1577e.firebaseio.com/artists',
+                    id: this.editid,
+                    data: profpackage
+                }))
+                // store.dispatch(updateProfile({id: this.editid, data: profpackage}));
+            break;
+            default: console.log('Unknown update type');
+        }
+
         store.dispatch(resetEditMode());
     }
 

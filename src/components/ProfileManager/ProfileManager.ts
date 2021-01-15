@@ -4,7 +4,7 @@ import Form2 from '../Form/Form2';
 import { Categories } from '../../types/types';
 import {store} from '../../app';
 import {updateFilterKey} from '../../state/ProfileSlice';
-import {fetchProfiles} from '../../state/ProfileSlice';
+import {fetchData} from '../../state/ProfileSlice';
 import { ManagerInit, KeyMap } from '../../models/InputKeys';
 
 
@@ -15,7 +15,7 @@ class ProfileManager {
 
 
     constructor(Manager: ManagerInit){
-        store.dispatch(fetchProfiles());
+        store.dispatch(fetchData('https://test-db-1577e.firebaseio.com/artists.json'));
         this.areas = Manager.categories;
         this.list = new List(Manager.categories);
         this.setupAreas();

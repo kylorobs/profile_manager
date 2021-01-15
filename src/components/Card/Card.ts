@@ -1,6 +1,6 @@
 import {store} from '../../app';
 import { BindThis } from '../../decorators/bindthis';
-import { edit } from '../../state/ProfileSlice';
+import { edit } from '../../state/FormSlice';
 import { Draggable } from '../../types/types';
 
 class Card implements Draggable {
