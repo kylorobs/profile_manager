@@ -11,3 +11,10 @@ export interface DragTarget {
     dropHandler(evt: DragEvent): void;
     dragLeaveHandler(evt: DragEvent): void;
 }
+
+export interface FormFunctions {
+    switch: () => void,
+    update: () => void,
+    delete: () => void,
+    add: () => void
+}

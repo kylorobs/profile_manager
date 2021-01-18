@@ -1,96 +1,78 @@
 
+import FormButtons from './FormButtons/FormButtons';
+import Modal from '../../Modal/modal';
 import ButtonHandler from '../../../models/ButtonHandler';
+import { BindThis } from '../../../decorators/bindthis';
+import {FormFunctions} from '../../../types/types';
 
 class FormControls {
 
     static instance: FormControls;
-    public editMode: boolean;
-    private editModeButtons: HTMLKclsuButtonElement[];
-    private clearFormButtons: HTMLKclsuButtonElement[];
-    private createModeButtons: HTMLKclsuButtonElement[];
-    private editBtnContainer: HTMLFlexContainerElement;
-    private clearBtnContainer: HTMLFlexContainerElement;
+    private formButtons: any;
+    private modal: Modal;
 
-    private constructor(editMode: boolean, formId: string){
-        this.editMode = editMode;
-        this.editBtnContainer = this.createButtonsContainer('center', 'center', true);
-        this.clearBtnContainer = this.createButtonsContainer('flex-end', 'center', true);
-        this.editModeButtons = [];
-        this.clearFormButtons = [];
-        this.createModeButtons = [];
-        const form = document.getElementById(formId)!
-
-        //APPEND BUTTON CONTAINER TO FORM
-        form.appendChild(this.editBtnContainer);
-
-        //PREPEND CLEARFORM BUTTON CONTAINER TO FORM
-        form.prepend(this.clearBtnContainer);
+    constructor(editMode: boolean, formFunctions: FormFunctions){
+        this.formButtons = new FormButtons(editMode);
+        this.modal = Modal.getInstance();
+        this.configureButtons(formFunctions);
     }
 
-    static getInstance(editMode: boolean, formId: string){
-        const instance = this.instance;
-        if (instance){
-            if (instance.editMode !== editMode) instance.editMode = editMode;
-            return this.instance;
-        } 
-            
-        else {
-            this.instance = new FormControls(editMode, formId);
-            return this.instance;
-        }; 
+    public toggleEditMode(val: boolean){
+        this.formButtons.toggleEditMode(val);
     }
 
-    private createButtonsContainer(x: string, y: string, flexwrap: boolean): HTMLFlexContainerElement {
-        const container = document.createElement('flex-container') as HTMLFlexContainerElement;
-        container.alignx = x;
-        container.aligny = y;
-        container.wrap = flexwrap;
-        container.fillcontainer = true;
-        return container;
+    private configureButtons(formFns:FormFunctions){
+        //CREATE BUTTONS ON FORM 
+        this.formButtons.createButton('Update', false, 'updateHandler', 'bottom', this.handleUpdate);
+        this.formButtons.createButton('Create New', false, 'addHandler', 'editing-bottom', this.handleAdd);
+        this.formButtons.createButton('Delete', true, 'deleteHandler', 'bottom', this.handleDelete);
+        this.formButtons.createButton('Switch To New Entry Form', true, 'switch', 'editing-top', formFns.switch);
+        this.formButtons.resetButtons();
+
+        //CREATE BUTTON EVENTS AND HANDLERS
+        // BUTTON ELEMENTS CREATED DYNAMICALLY
+        const modalButtons= ButtonHandler.getInstance();
+        modalButtons.addEmitter('update', formFns.update);
+        modalButtons.addEmitter('add', formFns.add);
+        modalButtons.addEmitter('delete', formFns.delete);
+        // modalButtons.addEmitter('switch', formFns.switch);
     }
 
-    public createButton ( text: string, purple: boolean, emitId: string, type: 'create' | 'update' | 'clear', cb: (e:Event) => void ): void{
-        const button = document.createElement('kclsu-button') as HTMLKclsuButtonElement;
-        button.text = text;
-        button.purple = purple;
-        button.emitid = emitId;
-        switch (type){
-            case 'create' :
-                this.createModeButtons.push(button);
-                break;
-            case 'update' :
-                this.editModeButtons.push(button);
-                break;
-            case 'clear' :
-                button.verysmall = true;
-                this.clearFormButtons.push(button);
-                break;
-            default : throw new Error('Unable to place Button')
-        }
-
-
-        //REGISTER EMITIDS IN BUTTON CLASS CLICK LISTENER
-        const btnHandler = ButtonHandler.getInstance(); 
-        btnHandler.addEmitter(emitId, cb);
+    @BindThis
+    handleUpdate(){
+        const modalMessage = this.buildModalContent('update', 'Are you sure you want to make an update? Double check before proceeding.')
+        this.modal.showModal(modalMessage);
     }
 
-    public resetButtons(){
-        this.editBtnContainer.innerHTML = '';
-        this.clearBtnContainer.innerHTML = '';
-        this.renderButtons();
+    @BindThis
+    handleDelete(){
+        const modalMessage = this.buildModalContent('delete', 'Are you sure you want to DELETE? Double check before proceeding.')
+        this.modal.showModal(modalMessage);
     }
 
-    private renderButtons(){
-        if (this.editMode){
-            this.renderHelper(this.editModeButtons, this.editBtnContainer);
-            this.renderHelper(this.clearFormButtons, this.clearBtnContainer);
-        }
-        else this.renderHelper(this.createModeButtons, this.editBtnContainer);
+    @BindThis
+    handleAdd(){
+        const modalMessage = this.buildModalContent('add', 'Are you sure you want to make an update? Double check before proceeding.')
+        this.modal.showModal(modalMessage);
     }
 
-    private renderHelper(ar: any[], container: any){
-        ar.forEach(btn => container.appendChild(btn))
-    }   
+    @BindThis
+    handleSwitch(){
+        const modalMessage = this.buildModalContent('switch', 'You are switching to an empty template. Any changes will be lost.')
+        this.modal.showModal(modalMessage);
+    }
+
+    buildModalContent(type: string, text: string): HTMLDivElement{
+        const parent = document.createElement('div');
+        const content = `
+            <p>${text}</p>
+            <flex-container alignx="center">
+                <kclsu-button emitid="${type}">Proceed</kclsu-button>
+                <kclsu-button >Cancel</kclsu-button>
+            </flex-container>`;
+        parent.innerHTML = content;
+        return parent;
+    }
 
 }
 export default FormControls;

@@ -12,6 +12,7 @@ import FormControls from './FormControls/FormControls';
 import Validator from './Validator/Validator';
 import ErrorModal from './ErrorModal/ErrorModal';
 import * as thunks from '../../state/thunks/profile';
+import Modal from '../Modal/modal';
 
 type Inputs = TextInput | UploadModal;
 
@@ -19,6 +20,8 @@ class Form2 {
     private editid: string | null;
     private formInputs: Inputs[];
     private errorModal: ErrorModal; 
+    private formControls: FormControls;
+    private modal: Modal;
 
     constructor(keyMappings: KeyMap[]){
         this.editid = store.getState().form.editing_id || null;
@@ -30,43 +33,36 @@ class Form2 {
         });
         this.formInputs = inputs;
    
+        this.formControls = new FormControls(!!this.editid, {
+            update: () => this.submitForm('update'), 
+            add: () => this.submitForm('add'),
+            delete: this.deleteData,
+            switch: this.swithToEmptyForm
+        })
+        this.modal = Modal.getInstance();
         this.configure();
-        this.configureButtons();
         store.subscribe(this.configure);
-        store.subscribe(this.reConfigureButtons);
     }
 
     @BindThis
     configure(){
-        if (store.getState().form.editing_id !== this.editid){
-            this.editid = store.getState().form.editing_id;
-            if (this.editid) this.setValues();
-            else this.clearForm();
+        const editId = store.getState().form.editing_id;
+        if (editId !== this.editid){
+            this.editid = editId;
+            if (editId) {
+                this.setValues();
+                this.formControls.toggleEditMode(true);
+            }
+            else {
+                this.formControls.toggleEditMode(false)
+            this.swithToEmptyForm();
+            }
         }
     }
 
-    @BindThis
-    configureButtons(){
-        //THIS WILL CREATE ALL BUTTONS INSIDE FORMCONTROLS CLASS
-        // FORMCONTROLS WILL CONTROL WHICH BUTTONS GET RENDERED 
-        const formControls = FormControls.getInstance(!!this.editid, 'textinputs');
-        formControls.createButton('Update', false, 'update', 'update', () => this.submitForm('update'));
-        formControls.createButton('Create New', false, 'add', 'create', () => this.submitForm('new'));
-        formControls.createButton('Delete', true, 'delete', 'update', () => this.deleteData());
-        formControls.createButton('Switch To New Entry Form', true, 'addNew', 'clear', this.clearForm);
-        formControls.resetButtons();
-    }
 
     @BindThis
-    reConfigureButtons(){
-        // if (store.getState().form.editing_id === this.editid){
-            const formControls = FormControls.getInstance(!!this.editid, 'textinputs');
-            formControls.resetButtons();
-        // }
-    }
-
-    @BindThis
-    submitForm(type: 'new' | 'update'){
+    submitForm(type: 'add' | 'update'){
         const formErrors =  this.validateValues();
         formErrors.length >  0 ? this.errorModal.handleErrors(formErrors) : this.packageData(type);
     }
@@ -77,14 +73,14 @@ class Form2 {
             url: store.getState().data.dataUrl,
             id: this.editid,
         }))
-        this.clearForm();
+        this.swithToEmptyForm();
     }
 
 
     @BindThis
-    clearForm(){
+    swithToEmptyForm(){
         this.editid = null;
-        this.reConfigureButtons();
+        this.formControls.toggleEditMode(false);
         //store.dispatch(resetEditMode());
         this.formInputs
         .forEach((input: Inputs) => {
@@ -101,8 +97,6 @@ class Form2 {
         const data = store.getState().data.profiles;
         const profile: Profile = data.filter((prof:Profile) => prof.id === this.editid)[0];
         const profileKeys: string[] = Object.keys(profile);
-        console.log('------FORM 2 INPUTS -------');
-        console.log(profile)
         this.formInputs
             .forEach((input: Inputs) => {
             const key = profileKeys.find((key: string) => key === input.title);
@@ -131,7 +125,7 @@ class Form2 {
 
 
 
-    packageData(type: 'new' | 'update'):void {
+    packageData(type: 'add' | 'update'):void {
 
         const profpackage: Profile = {};
 
@@ -149,7 +143,7 @@ class Form2 {
             })
         
         switch(type){
-            case 'new' : 
+            case 'add' : 
                 store.dispatch(thunks.addData({
                     url: store.getState().data.dataUrl,
                     data: profpackage
@@ -169,6 +163,12 @@ class Form2 {
         store.dispatch(resetEditMode());
     }
 
+
+    //FIRE 
+    proceedWithConfirmation(fn: () => void){
+        this.modal.exitModal();
+        fn();
+    }
 };
 
 export default Form2;

@@ -4,6 +4,8 @@
 // HANDLES HIDING AND SHOWING OF MODAL
 // HANDLES UPDATES 
 
+import { BindThis } from "../../decorators/bindthis";
+
 
 
 class Modal {
@@ -32,13 +34,14 @@ class Modal {
         return modal;
     }
 
+    @BindThis
     public showModal(el:HTMLDivElement): void{
         this.modal.innerHTML = '';
         this.modal.appendChild(el);
         this.modal.show = true;
     }
 
-
+    @BindThis
     public exitModal(){
         this.modal.innerHTML = '';
         this.modal.show = false;
