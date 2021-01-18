@@ -25,7 +25,6 @@ class FormControls {
 
         //PREPEND CLEARFORM BUTTON CONTAINER TO FORM
         form.prepend(this.clearBtnContainer);
-        console.log('everything should be appended')
     }
 
     static getInstance(editMode: boolean, formId: string){
@@ -82,8 +81,6 @@ class FormControls {
     }
 
     private renderButtons(){
-        console.log('We are re-rendering the buttons and this is the value of edit:');
-        console.log(this.editMode);
         if (this.editMode){
             this.renderHelper(this.editModeButtons, this.editBtnContainer);
             this.renderHelper(this.clearFormButtons, this.clearBtnContainer);

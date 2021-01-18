@@ -2,6 +2,7 @@ import {Categories} from '../types/types';
 
 export interface ManagerInit {
     categories: Categories[],
+    dataUrl: string,
     categoryKeyName: string,
     keyMapping: KeyMap[]
 }

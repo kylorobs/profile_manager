@@ -24,19 +24,16 @@ class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement | HTMLSelec
                 el = document.createElement('input') as HTMLInputElement;
             break;
             case 'textarea':
-                console.log('correct')
                 el = document.createElement('textarea') as HTMLTextAreaElement;
                 el.cols = 22;
                 el.rows = 8;
             break;
             case 'select':
-                console.log('correct')
                 el = document.createElement('select') as HTMLSelectElement;
                 keymap.options?.map((optionKey: Categories) => {
                     const option = document.createElement('option') as HTMLOptionElement;
                     option.innerText = optionKey[0];
                     option.value = optionKey[1];
-                    console.log(option)
                     return option;
                 })
                 .forEach(option => el.appendChild(option))
@@ -52,8 +49,8 @@ class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement | HTMLSelec
     }
 
     @BindThis
-    changeHandler(e: any): void{
-        console.log(e)
+    changeHandler(): void{
+        // console.log(e)
         // e.preventDefault();
         // let isValid = true;
         // this.keymap.validationTypes.forEach(type => {

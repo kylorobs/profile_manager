@@ -25,7 +25,7 @@ class List {
         this.filterNames = filterNames;
         this.searchContainer.attr = 'cardtitle';
         this.searchContainer.containerselector = 'label-card';
-        this.searchContainer.style.position = 'absolute'
+        this.searchContainer.style.position = 'absolute';
         this.updateList();
         this.filterControls = new ListFilter(store.getState().data.filterid);
         document.querySelector('.list')!.appendChild(this.filterControls.el);
@@ -43,7 +43,7 @@ class List {
         if (matchingFilter) filterName = matchingFilter[0];
         this.clearList();
         this.updateFilter(filterName);
-        this.createCards(profiles, currentFilter);
+        if (!store.getState().data.error) this.createCards(profiles, currentFilter);
     }
 
     @BindThis

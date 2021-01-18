@@ -6,6 +6,9 @@ export interface FormState {
 }
 
 export interface DataState {
+    dataUrl: string,
+    error: boolean,
+    errorMessage: string
     profiles: Profile[],
     filterid: string,
     filterkey: string,

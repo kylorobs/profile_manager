@@ -11,7 +11,7 @@ import UploadModal from './UploadModal/UploadModal';
 import FormControls from './FormControls/FormControls';
 import Validator from './Validator/Validator';
 import ErrorModal from './ErrorModal/ErrorModal';
-import {addProfile, updateData} from '../../state/ProfileSlice';
+import * as thunks from '../../state/thunks/profile';
 
 type Inputs = TextInput | UploadModal;
 
@@ -52,7 +52,7 @@ class Form2 {
         const formControls = FormControls.getInstance(!!this.editid, 'textinputs');
         formControls.createButton('Update', false, 'update', 'update', () => this.submitForm('update'));
         formControls.createButton('Create New', false, 'add', 'create', () => this.submitForm('new'));
-        formControls.createButton('Delete', true, 'delete', 'update', this.deleteProfile);
+        formControls.createButton('Delete', true, 'delete', 'update', () => this.deleteData());
         formControls.createButton('Switch To New Entry Form', true, 'addNew', 'clear', this.clearForm);
         formControls.resetButtons();
     }
@@ -71,6 +71,15 @@ class Form2 {
         formErrors.length >  0 ? this.errorModal.handleErrors(formErrors) : this.packageData(type);
     }
 
+    @BindThis
+    deleteData(){
+        store.dispatch(thunks.deleteData({
+            url: store.getState().data.dataUrl,
+            id: this.editid,
+        }))
+        this.clearForm();
+    }
+
 
     @BindThis
     clearForm(){
@@ -86,10 +95,6 @@ class Form2 {
         }
     })
 
-    }
-
-    deleteProfile(){
-        console.log('--- FORM2 --- Delete this terrible profile')
     }
 
     setValues(){
@@ -142,22 +147,23 @@ class Form2 {
                 else console.log('failed to find type of input')
                 
             })
-        console.log('--- FORM2 --- Ready to send all of this data');
         
         switch(type){
             case 'new' : 
-                profpackage.id = Math.random().toString(36).substr(2, 10);
-                store.dispatch(addProfile(profpackage));
+                store.dispatch(thunks.addData({
+                    url: store.getState().data.dataUrl,
+                    data: profpackage
+                }));
             break;
             case 'update':
-                store.dispatch(updateData({
-                    url: 'https://test-db-1577e.firebaseio.com/artists',
+                store.dispatch(thunks.updateData({
+                    url: store.getState().data.dataUrl,
                     id: this.editid,
                     data: profpackage
                 }))
                 // store.dispatch(updateProfile({id: this.editid, data: profpackage}));
             break;
-            default: console.log('Unknown update type');
+            default: console.log('Unknown button type');
         }
 
         store.dispatch(resetEditMode());

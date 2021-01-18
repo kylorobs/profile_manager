@@ -1,53 +1,22 @@
 import {
-  createSlice,
-  createAsyncThunk
+  createSlice
 } from '@reduxjs/toolkit';
 import {Profile} from '../models/Profile';
 import {
   DataState
-} from '../models/State'
+} from '../models/State';
+import * as thunks from './thunks/profile';
 
 const initialState: DataState = {
+  dataUrl:'',
+  error: false,
+  errorMessage: '',
   profiles: [],
   filterkey: '',
   filterid: '',
   authenticated: false
 }
 
-
-export const fetchData: any = createAsyncThunk(
-  'profiles/fetchData',
-  async (url: string) => {
-    const response = await fetch(url);
-    const collection = await response.json();
-    const data = [];
-    for (const key in collection){
-      collection[key].id = key;
-      data.push(collection[key])
-    }
-    console.log(data)
-    return data;
-  }
-)
-
-export const updateData: any = createAsyncThunk(
-  'profiles/updateData',
-  async (dataPackage:any) => {
-    try {
-      let payload: any = {
-        method: 'PUT', // *GET, POST, PUT, DELETE, etc.
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(dataPackage.data) // body data type must match "Content-Type" header
-      };
-      const res = await fetch(`${dataPackage.url}/${dataPackage.id}.json`, payload);
-      const result =  await res.json()
-      return {id:dataPackage.id, data: result};
-    }
-    catch {
-      return {id: null, data: null};
-    }
-  }
-)
 
 const profileSlice = createSlice({
   name: 'profiles',
@@ -72,14 +41,31 @@ const profileSlice = createSlice({
     },
     updateFilterKey: (state: DataState, action) => {
       state.filterkey = action.payload;
-    }
+    },
+    updateDataUrl: (state: DataState, action) => {
+      state.dataUrl = action.payload;
+    },
+    setError: (state: DataState, action) => {
+      state.error = true;
+      state.errorMessage = action.payload;
+    },
   },
   extraReducers: {
     // Add reducers for additional action types here, and handle loading state as needed
-    [fetchData.fulfilled]: (state, action) => {
+    [thunks.fetchData.fulfilled]: (state, action) => {
       state.profiles = action.payload;
     },
-    [updateData.fulfilled]: (state, action) => {
+    [thunks.addData.fulfilled]: (state, action) => {
+      state.profiles.unshift(action.payload);
+    },
+    [thunks.deleteData.fulfilled]: (state, action) => {
+      console.log(action.payload)
+      const removeIndex = state.profiles.findIndex(prof => prof.id === action.payload.id);
+      console.log('DELETED INDEX');
+      console.log(removeIndex);
+      if (removeIndex >= 0) state.profiles.splice(removeIndex, 1);
+    },
+    [thunks.updateData.fulfilled]: (state, action) => {
       if (action.payload.id){
         const profileIndex = state.profiles.findIndex((prof:Profile) => prof.id === action.payload.id);
         if (profileIndex > -1){
@@ -97,6 +83,8 @@ export const {
   updateCategory,
   changeFilter,
   updateFilterKey,
+  updateDataUrl,
+  setError,
 } = profileSlice.actions;
 
 

@@ -3,8 +3,8 @@ import DropArea from '../DropArea/DropArea'
 import Form2 from '../Form/Form2';
 import { Categories } from '../../types/types';
 import {store} from '../../app';
-import {updateFilterKey} from '../../state/ProfileSlice';
-import {fetchData} from '../../state/ProfileSlice';
+import {updateDataUrl, updateFilterKey} from '../../state/ProfileSlice';
+import * as thunks from '../../state/thunks/profile';
 import { ManagerInit, KeyMap } from '../../models/InputKeys';
 
 
@@ -13,9 +13,9 @@ class ProfileManager {
     private areas: Categories[];
     private list: List;
 
-
     constructor(Manager: ManagerInit){
-        store.dispatch(fetchData('https://test-db-1577e.firebaseio.com/artists.json'));
+        store.dispatch(thunks.fetchData(`${Manager.dataUrl}.json`));
+        store.dispatch(updateDataUrl(Manager.dataUrl));
         this.areas = Manager.categories;
         this.list = new List(Manager.categories);
         this.setupAreas();

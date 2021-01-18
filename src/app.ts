@@ -17,6 +17,7 @@ export type RootState = ReturnType<typeof store.getState>;
 
 const gui = new ProfileManager({
     categories: [['Xhibit', 'xhibit'], ['Feautured', 'featured'], ['Artists', 'artists'], ['Performers', 'performers'], ['Special Acts', 'specialActs']],
+    dataUrl: 'https://test-db-1577e.firebaseio.com/artists',
     categoryKeyName: 'type',
     keyMapping: [
         { 
