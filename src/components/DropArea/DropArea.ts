@@ -1,7 +1,8 @@
 import { store } from "../../app";
 import { BindThis } from "../../decorators/bindthis";
-import { changeFilter, updateCategory } from "../../state/ProfileSlice";
+import { changeFilter} from "../../state/ProfileSlice";
 import { DragTarget } from "../../types/types";
+import * as thunks from '../../state/thunks/profile';
 
 class DropArea implements DragTarget {
     title: string;
@@ -27,7 +28,7 @@ class DropArea implements DragTarget {
         block.classList.add('droppable');
         block.classList.add('dropNeutral');
         block.id = this.id;
-        block.innerHTML = `<h2>${this.title}</h2>`;
+        block.innerHTML = `<h3>${this.title}</h3>`;
         block.addEventListener('click', this.filterList);
         block.addEventListener('drop', this.dropHandler);
         block.addEventListener('dragover', this.dragOverHandler);
@@ -53,19 +54,21 @@ class DropArea implements DragTarget {
 
     @BindThis
     dropHandler(evt: DragEvent){
-        console.log('I HAVE BEEN DROPPED')
-        console.log(evt.dataTransfer!.getData('text/plain'));
+
         const id = evt.dataTransfer!.getData('text/plain');
-        const value = this.id;
+        const val = this.id;
         this.filterList();
         //UPDATE CATEGORY TYPE
-        store.dispatch(updateCategory({id, value}))
+        store.dispatch(thunks.updateCategory({
+            url: store.getState().data.dataUrl,
+            id: id, 
+            val: val,
+            category: store.getState().data.filterkey
+        }))
     }
 
     @BindThis
-    dragLeaveHandler(evt: DragEvent){
-        console.log(evt);
-        console.log('I have left');
+    dragLeaveHandler(_: DragEvent){
         this.element.classList.add('dropNeutral');
         this.element.classList.remove('dropActive');
     }

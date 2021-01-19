@@ -42,7 +42,7 @@ class ListFilter {
 
     private createContainer(){
         const flexC = document.createElement('flex-container') as HTMLFlexContainerElement;
-        flexC.alignx = 'space-between';
+        flexC.alignx = 'space-around';
         flexC.aligny = 'center';
         flexC.appendChild(this.titleElement);
         flexC.appendChild(this.resetFilterElement);

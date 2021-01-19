@@ -8,13 +8,13 @@ class FormButtons {
     private editModeButtons: HTMLKclsuButtonElement[];
     private topButtons: HTMLKclsuButtonElement[];
     private bottomButtons: HTMLKclsuButtonElement[];
-    private bottomBtnContainer: HTMLFlexContainerElement;
-    private topBtnContainer: HTMLFlexContainerElement;
+    private bottomBtnContainer: HTMLDivElement;
+    private topBtnContainer: HTMLDivElement;
 
     constructor(editMode: boolean){
         this.editMode = editMode;
-        this.bottomBtnContainer = this.createButtonsContainer('center', 'center', true);
-        this.topBtnContainer = this.createButtonsContainer('flex-end', 'center', true);
+        this.bottomBtnContainer = this.createButtonsContainer('flex-center-center');
+        this.topBtnContainer = this.createButtonsContainer('flex-end-center');
         this.editModeButtons = [];
         this.topButtons = [];
         this.bottomButtons = [];
@@ -33,12 +33,9 @@ class FormButtons {
     }
 
 
-    private createButtonsContainer(x: string, y: string, flexwrap: boolean): HTMLFlexContainerElement {
-        const container = document.createElement('flex-container') as HTMLFlexContainerElement;
-        container.alignx = x;
-        container.aligny = y;
-        container.wrap = flexwrap;
-        container.fillcontainer = true;
+    private createButtonsContainer(flexClass: string): HTMLDivElement {
+        const container = document.createElement('div');
+        container.classList.add(flexClass);
         return container;
     }
 
@@ -56,6 +53,7 @@ class FormButtons {
                 break;
             case 'editing-top' :
                 button.verysmall = true;
+                button.margin = '100px';
                 this.topButtons.push(button);
                 break;
             default : throw new Error('Unable to place Button')

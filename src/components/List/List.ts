@@ -25,7 +25,8 @@ class List {
         this.filterNames = filterNames;
         this.searchContainer.attr = 'cardtitle';
         this.searchContainer.containerselector = 'label-card';
-        this.searchContainer.style.position = 'absolute';
+        // this.searchContainer.style.position = 'absolute';
+        this.searchContainer.style.overflow = 'scroll';
         this.updateList();
         this.filterControls = new ListFilter(store.getState().data.filterid);
         document.querySelector('.list')!.appendChild(this.filterControls.el);
@@ -48,6 +49,8 @@ class List {
 
     @BindThis
     createCards(profiles: Profile[], currentFilter: string):void{
+        document.querySelector('.list')!.appendChild(this.searchContainer);
+        if (this.searchContainer.shadowRoot){
         profiles
             .filter(prof => {
                 if (!currentFilter) return true;
@@ -56,7 +59,11 @@ class List {
             .map(prof=> {
                 return new Card(prof.name, prof.id, prof.url, false, document.querySelector('.list'));
             }).forEach(card => this.searchContainer.appendChild(card.element));
-        document.querySelector('.list')!.appendChild(this.searchContainer);
+
+        this.searchContainer!.shadowRoot!.querySelector('div')!.style.height = 'auto';
+        this.searchContainer!.shadowRoot!.querySelector('div')!.style.width = '90%';
+        this.searchContainer!.shadowRoot!.querySelector('div')!.style.margin = 'auto';
+        }
     }
 
     updateFilter(currentFilter: string){

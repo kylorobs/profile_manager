@@ -59,11 +59,14 @@ const profileSlice = createSlice({
       state.profiles.unshift(action.payload);
     },
     [thunks.deleteData.fulfilled]: (state, action) => {
-      console.log(action.payload)
       const removeIndex = state.profiles.findIndex(prof => prof.id === action.payload.id);
-      console.log('DELETED INDEX');
-      console.log(removeIndex);
       if (removeIndex >= 0) state.profiles.splice(removeIndex, 1);
+    },
+    [thunks.updateCategory.fulfilled]: (state, action) => {
+      const profileIndex = state.profiles.findIndex((prof:Profile) => prof.id === action.payload.id);
+      if (profileIndex > -1){
+        state.profiles[profileIndex][state.filterkey] = action.payload.value;
+      }
     },
     [thunks.updateData.fulfilled]: (state, action) => {
       if (action.payload.id){

@@ -5,7 +5,7 @@ import { store } from '../../app';
   import {setError} from '../ProfileSlice';
 
 
-const makeRequest = async (type: 'POST' | 'GET' | 'PUT' | 'DELETE', url: string, data:any) => {
+const makeRequest = async (type: 'POST' | 'GET' | 'PUT' | 'DELETE' | 'PATCH', url: string, data:any) => {
     let payload: any = {
         method: type, 
         headers: {'Content-Type': 'application/json'},
@@ -60,9 +60,7 @@ export const fetchData: any = createAsyncThunk(
     'profiles/addData',
     async (dataPackage:any) => {
         try {
-            console.log('DATA PACKAGE');
-            console.log(dataPackage);
-          const res = await makeRequest('POST', `${dataPackage.url}.json`, dataPackage.data);
+            const res = await makeRequest('POST', `${dataPackage.url}.json`, dataPackage.data);
             const newData = {...dataPackage.data};
             newData.id = res.name;
           return newData;
@@ -93,3 +91,21 @@ export const fetchData: any = createAsyncThunk(
       }
     }
   )
+
+
+  export const updateCategory: any = createAsyncThunk(
+    'profiles/updateCategory', async (dataPackage:any) => {
+        try {
+          const res = await makeRequest('PUT', `${dataPackage.url}/${dataPackage.id}/${dataPackage.category}.json`, dataPackage.val);
+          return { id:dataPackage.id, value: dataPackage.data, data: res};
+        }
+        catch(e) {
+          store.dispatch(setError('error in updating data: ' + e));
+          return ; 
+        }
+      } 
+
+)
+
+
+
