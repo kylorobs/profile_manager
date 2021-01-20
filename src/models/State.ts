@@ -8,6 +8,7 @@ export interface FormState {
 export interface DataState {
     dataUrl: string,
     error: boolean,
+    loading: boolean,
     errorMessage: string
     profiles: Profile[],
     filterid: string,

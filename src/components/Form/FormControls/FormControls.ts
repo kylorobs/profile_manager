@@ -35,6 +35,7 @@ class FormControls {
         modalButtons.addEmitter('update', formFns.update);
         modalButtons.addEmitter('add', formFns.add);
         modalButtons.addEmitter('delete', formFns.delete);
+        modalButtons.addEmitter('cancel', this.modal.exitModal);
         // modalButtons.addEmitter('switch', formFns.switch);
     }
 
@@ -68,7 +69,7 @@ class FormControls {
             <p>${text}</p>
             <flex-container alignx="center">
                 <kclsu-button emitid="${type}">Proceed</kclsu-button>
-                <kclsu-button >Cancel</kclsu-button>
+                <kclsu-button purple emitid="cancel">Cancel</kclsu-button>
             </flex-container>`;
         parent.innerHTML = content;
         return parent;

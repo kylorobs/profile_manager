@@ -15,7 +15,7 @@ class ImageForm {
       this.spinner.show = false;
       this.form = this.createForm();
       this.imageurl = '';
-      
+
     }
 
 
@@ -48,10 +48,6 @@ class ImageForm {
         console.log(e)
         this.spinner.show = true;
         e.preventDefault();
-        // const temp = 'https://res.cloudinary.com/kclsu-media/image/fetch/c_fill,f_auto,fl_any_format,w_400/https://www.kclsu.org/asset/Manifesto/9324/Screenshot-2020-09-25-at-22.42.35.png';
-        // this.imageurl = temp;
-        // // this.fn(result) ; 
-        // this.fn(temp);
         const formData = new FormData((e.target as any));
         console.log(e.target)
         console.log(formData)

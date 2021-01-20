@@ -6,6 +6,7 @@ import {store} from '../../app';
 import {updateDataUrl, updateFilterKey} from '../../state/ProfileSlice';
 import * as thunks from '../../state/thunks/profile';
 import { ManagerInit, KeyMap } from '../../models/InputKeys';
+import LoadingModal from '../Modal/LoadingModal/LoadingModal';
 
 
 class ProfileManager {
@@ -21,6 +22,7 @@ class ProfileManager {
         this.setupAreas();
         this.createForms(Manager.keyMapping);
         store.dispatch(updateFilterKey(Manager.categoryKeyName));
+        new LoadingModal();
     }
 
     createForms(keyMapping: KeyMap[]){

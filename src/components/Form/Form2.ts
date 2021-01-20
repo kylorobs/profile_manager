@@ -13,6 +13,7 @@ import Validator from './Validator/Validator';
 import ErrorModal from './ErrorModal/ErrorModal';
 import * as thunks from '../../state/thunks/profile';
 import Modal from '../Modal/modal';
+import { loading } from '../../state/ProfileSlice';
 
 type Inputs = TextInput | UploadModal;
 
@@ -63,12 +64,14 @@ class Form2 {
 
     @BindThis
     submitForm(type: 'add' | 'update'){
+        this.proceedWithConfirmation();
         const formErrors =  this.validateValues();
         formErrors.length >  0 ? this.errorModal.handleErrors(formErrors) : this.packageData(type);
     }
 
     @BindThis
     deleteData(){
+        this.proceedWithConfirmation();
         store.dispatch(thunks.deleteData({
             url: store.getState().data.dataUrl,
             id: this.editid,
@@ -95,15 +98,19 @@ class Form2 {
 
     setValues(){
         const data = store.getState().data.profiles;
+        console.log(data)
         const profile: Profile = data.filter((prof:Profile) => prof.id === this.editid)[0];
+        console.log(profile)
         const profileKeys: string[] = Object.keys(profile);
+        console.log(profileKeys)
         this.formInputs
             .forEach((input: Inputs) => {
             const key = profileKeys.find((key: string) => key === input.title);
             if ('el' in input && key) input.el.value = profile[key];
             else if ('imageurl' in input && key) input.setThumbnail(profile[key]);
             else {
-                console.log('failed to find type of input')
+                console.log('failed to find type of input');
+                console.log(input)
             }
         })
     }
@@ -138,7 +145,10 @@ class Form2 {
                 else if ('imageurl' in input){
                     profpackage[input.title] = input.imageurl;
                 } 
-                else console.log('failed to find type of input')
+                else {
+                    console.log(input)
+                    console.log('failed to find type of input')
+                }
                 
             })
         
@@ -163,11 +173,16 @@ class Form2 {
         store.dispatch(resetEditMode());
     }
 
+    @BindThis
+    public checkForLoadingState(): void{
+        const loadingState = store.getState().data.loading;
+        if (loadingState) this.modal.showSpinner();
+        else if (!loadingState && this.modal.active) this.modal.exitModal()
+    }
 
     //FIRE 
-    proceedWithConfirmation(fn: () => void){
-        this.modal.exitModal();
-        fn();
+    proceedWithConfirmation(){
+        store.dispatch(loading())
     }
 };
 

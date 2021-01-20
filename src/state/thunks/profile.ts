@@ -2,6 +2,7 @@ import {
     createAsyncThunk
   } from '@reduxjs/toolkit';
 import { store } from '../../app';
+import { resetEditMode } from '../FormSlice';
   import {setError} from '../ProfileSlice';
 
 
@@ -76,13 +77,9 @@ export const fetchData: any = createAsyncThunk(
   export const deleteData: any = createAsyncThunk(
     'profiles/deleteData',
     async (dataPackage:any) => {
-        console.log('delete this id')
-        console.log(dataPackage.id)
       try {
-          console.log(`${dataPackage.url}/${dataPackage.id}.json`)
-        const res = await makeRequest('DELETE', `${dataPackage.url}/${dataPackage.id}.json`, null);
-        console.log('STATUS')
-        console.log(res.status);
+        await makeRequest('DELETE', `${dataPackage.url}/${dataPackage.id}.json`, null);
+        store.dispatch(resetEditMode());
         return {id: dataPackage.id};
       }
       catch(e) {
@@ -97,7 +94,7 @@ export const fetchData: any = createAsyncThunk(
     'profiles/updateCategory', async (dataPackage:any) => {
         try {
           const res = await makeRequest('PUT', `${dataPackage.url}/${dataPackage.id}/${dataPackage.category}.json`, dataPackage.val);
-          return { id:dataPackage.id, value: dataPackage.data, data: res};
+          return { id:dataPackage.id, value: dataPackage.val, data: res};
         }
         catch(e) {
           store.dispatch(setError('error in updating data: ' + e));

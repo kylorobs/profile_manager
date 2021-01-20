@@ -24,6 +24,7 @@ class UploadModal {
       this.modal = Modal.getInstance();
       const div = document.createElement('div');
       this.title = title;
+      // this.title = keymap.keyName;
       div.id = this.title;
       this.uploadcontainer = div;
       this.thumbnailcontainer = document.createElement('div');

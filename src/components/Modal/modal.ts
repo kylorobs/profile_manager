@@ -12,9 +12,14 @@ class Modal {
 
     static instance: Modal;
     private modal: HTMLKclsuModalElement;
+    private spinner: HTMLLoadingSpinnerElement;
+    public active: boolean;
 
     private constructor(){
         this.modal = this.createModalElement();
+        this.active = false;
+        this.spinner = document.createElement('loading-spinner');
+        this.spinner.style.padding = '2em';
         document.getElementById('app')?.appendChild(this.modal);
         document.addEventListener('exitModal', this.exitModal);
     }
@@ -30,21 +35,32 @@ class Modal {
     private createModalElement(): HTMLKclsuModalElement{
         const modal = document.createElement('kclsu-modal') as HTMLKclsuModalElement;
         modal.autoexit = true;
-        modal.show = false;
+        modal.show = this.active;
         return modal;
     }
 
+
     @BindThis
-    public showModal(el:HTMLDivElement): void{
+    public showModal(el:HTMLDivElement | HTMLLoadingSpinnerElement): void{
         this.modal.innerHTML = '';
         this.modal.appendChild(el);
         this.modal.show = true;
+        this.active = true;
+    }
+
+
+    @BindThis
+    public showSpinner(): void{
+        this.spinner.show = true;
+        this.showModal(this.spinner)
     }
 
     @BindThis
     public exitModal(){
         this.modal.innerHTML = '';
+        this.spinner.show = false;
         this.modal.show = false;
+        this.active = false;
     }
 
 

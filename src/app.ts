@@ -16,7 +16,7 @@ export type RootState = ReturnType<typeof store.getState>;
 
 
 const gui = new ProfileManager({
-    categories: [['Xhibit', 'xhibit'], ['Feautured', 'featured'], ['Artists', 'artists'], ['Performers', 'performers'], ['Special Acts', 'specialActs']],
+    categories: [['Xhibit', 'xhibitArtists'], ['Feautured', 'upcoming'], ['Artists', 'artists'], ['Performers', 'performers'], ['Special Acts', 'specialActs']],
     dataUrl: 'https://test-db-1577e.firebaseio.com/artists',
     categoryKeyName: 'type',
     keyMapping: [
@@ -70,7 +70,7 @@ const gui = new ProfileManager({
             validationTypes: ['isNotEmpty']
         },
         { 
-            keyName: 'upcomingevent',
+            keyName: 'upcomingEvent',
             inputTitle: 'Upcoming Event',
             inputDefaultText: 'The kclsu upcoming event url....',
             type: 'input',
@@ -82,7 +82,7 @@ const gui = new ProfileManager({
             inputTitle: 'Category',
             inputDefaultText: '...',
             type: 'select',
-            options: [['Xhibit', 'xhibit'], ['Feautured', 'featured'], ['Artists', 'artists'], ['Performers', 'performers'], ['Special Acts', 'specialActs']],
+            options: [['Xhibit', 'xhibitArtists'], ['Feautured', 'upcoming'], ['Artists', 'artists'], ['Performers', 'performers'], ['Special Acts', 'specialActs']],
             validationErrorMsg: 'Please choose a category',
             validationTypes: ['isNotEmpty']
         }
