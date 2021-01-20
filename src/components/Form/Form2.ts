@@ -7,29 +7,31 @@ import {BindThis} from '../../decorators/bindthis';
 import {Profile} from '../../models/Profile';
 import { KeyMap } from '../../models/InputKeys';
 import TextInput from './TextInput/TextInput';
-import UploadModal from './UploadModal/UploadModal';
+import FileInput from './FileInput/FileInput';
 import FormControls from './FormControls/FormControls';
 import Validator from './Validator/Validator';
-import ErrorModal from './ErrorModal/ErrorModal';
+import FormErrorModal from '../Modal/FormErrorModal/FormErrorModal';
 import * as thunks from '../../state/thunks/profile';
-import Modal from '../Modal/modal';
+import Modal from '../Modal/Modal';
 import { loading } from '../../state/ProfileSlice';
 
-type Inputs = TextInput | UploadModal;
+type Inputs = TextInput | FileInput;
 
 class Form2 {
     private editid: string | null;
     private formInputs: Inputs[];
-    private errorModal: ErrorModal; 
+    private errorModal: FormErrorModal; 
     private formControls: FormControls;
     private modal: Modal;
+    private loading: boolean;
 
     constructor(keyMappings: KeyMap[]){
         this.editid = store.getState().form.editing_id || null;
-        this.errorModal = new ErrorModal();
+        this.errorModal = new FormErrorModal();
+        this.loading = false;
         //CREATE INPUTS, SEPARATING FILE INPUTS AND TEXT/SELECT INPUTS
         const inputs = keyMappings.map((map: KeyMap) =>{
-            if (map.type === 'file') return new UploadModal('fileinputs', false, map, 'url');
+            if (map.type === 'file') return new FileInput('fileinputs', false, map, 'url');
             else return new TextInput('textinputs', map);
         });
         this.formInputs = inputs;
@@ -48,7 +50,9 @@ class Form2 {
     @BindThis
     configure(){
         const editId = store.getState().form.editing_id;
-        if (editId !== this.editid){
+        const loading = store.getState().data.loading;
+        if (this.loading !== loading) this.loading = loading;
+        else if (editId !== this.editid){
             this.editid = editId;
             if (editId) {
                 this.setValues();
@@ -65,7 +69,7 @@ class Form2 {
     @BindThis
     submitForm(type: 'add' | 'update'){
         this.proceedWithConfirmation();
-        const formErrors =  this.validateValues();
+        const formErrors = this.validateValues();
         formErrors.length >  0 ? this.errorModal.handleErrors(formErrors) : this.packageData(type);
     }
 
@@ -98,11 +102,8 @@ class Form2 {
 
     setValues(){
         const data = store.getState().data.profiles;
-        console.log(data)
         const profile: Profile = data.filter((prof:Profile) => prof.id === this.editid)[0];
-        console.log(profile)
         const profileKeys: string[] = Object.keys(profile);
-        console.log(profileKeys)
         this.formInputs
             .forEach((input: Inputs) => {
             const key = profileKeys.find((key: string) => key === input.title);
@@ -154,6 +155,7 @@ class Form2 {
         
         switch(type){
             case 'add' : 
+                console.log('ADDING')
                 store.dispatch(thunks.addData({
                     url: store.getState().data.dataUrl,
                     data: profpackage

@@ -3,8 +3,8 @@
 // import {BindThis} from '../../../decorators/bindthis';
 // import ButtonHandler from '../../../models/ButtonHandler';
 // import { KeyMap } from '../../../models/InputKeys';
-import Modal from '../../Modal/modal';
-import Validator from '../Validator/Validator';
+import Modal from '../Modal';
+import Validator from '../../Form/Validator/Validator';
 
 
 

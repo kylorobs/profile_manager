@@ -41,7 +41,7 @@ class Modal {
 
 
     @BindThis
-    public showModal(el:HTMLDivElement | HTMLLoadingSpinnerElement): void{
+    public showModal(el:HTMLDivElement | HTMLLoadingSpinnerElement | HTMLFormElement): void{
         this.modal.innerHTML = '';
         this.modal.appendChild(el);
         this.modal.show = true;

@@ -1,6 +1,6 @@
 
 import FormButtons from './FormButtons/FormButtons';
-import Modal from '../../Modal/modal';
+import Modal from '../../Modal/Modal';
 import ButtonHandler from '../../../models/ButtonHandler';
 import { BindThis } from '../../../decorators/bindthis';
 import {FormFunctions} from '../../../types/types';
@@ -9,11 +9,11 @@ class FormControls {
 
     static instance: FormControls;
     private formButtons: any;
-    private modal: Modal;
+    private contentModal: Modal;
 
     constructor(editMode: boolean, formFunctions: FormFunctions){
         this.formButtons = new FormButtons(editMode);
-        this.modal = Modal.getInstance();
+        this.contentModal = Modal.getInstance();
         this.configureButtons(formFunctions);
     }
 
@@ -35,32 +35,32 @@ class FormControls {
         modalButtons.addEmitter('update', formFns.update);
         modalButtons.addEmitter('add', formFns.add);
         modalButtons.addEmitter('delete', formFns.delete);
-        modalButtons.addEmitter('cancel', this.modal.exitModal);
+        modalButtons.addEmitter('cancel', this.contentModal.exitModal);
         // modalButtons.addEmitter('switch', formFns.switch);
     }
 
     @BindThis
     handleUpdate(){
         const modalMessage = this.buildModalContent('update', 'Are you sure you want to make an update? Double check before proceeding.')
-        this.modal.showModal(modalMessage);
+        this.contentModal.showModal(modalMessage);
     }
 
     @BindThis
     handleDelete(){
         const modalMessage = this.buildModalContent('delete', 'Are you sure you want to DELETE? Double check before proceeding.')
-        this.modal.showModal(modalMessage);
+        this.contentModal.showModal(modalMessage);
     }
 
     @BindThis
     handleAdd(){
-        const modalMessage = this.buildModalContent('add', 'Are you sure you want to make an update? Double check before proceeding.')
-        this.modal.showModal(modalMessage);
+        const modalMessage = this.buildModalContent('add', 'You are about to submit a new entry. Double check before proceeding.')
+        this.contentModal.showModal(modalMessage);
     }
 
     @BindThis
     handleSwitch(){
         const modalMessage = this.buildModalContent('switch', 'You are switching to an empty template. Any changes will be lost.')
-        this.modal.showModal(modalMessage);
+        this.contentModal.showModal(modalMessage);
     }
 
     buildModalContent(type: string, text: string): HTMLDivElement{

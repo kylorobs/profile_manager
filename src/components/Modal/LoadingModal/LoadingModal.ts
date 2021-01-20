@@ -1,21 +1,21 @@
-import Modal from "../modal";
-import {BindThis} from '../../../decorators/bindthis';
-import {store} from '../../../app'
+import Modal from "../Modal";
+import { BindThis } from '../../../decorators/bindthis';
+import { store } from '../../../app'
 
 class LoadingModal {
     
-    modal: Modal;
+    loadingmodal: Modal;
 
     constructor(){
-        this.modal = Modal.getInstance();
+        this.loadingmodal = Modal.getInstance();
         store.subscribe(this.checkForLoadingState);
     }
 
     @BindThis
     public checkForLoadingState(): void{
         const loadingState = store.getState().data.loading;
-        if (loadingState) this.modal.showSpinner();
-        else if (!loadingState) this.modal.exitModal();
+        if (loadingState) this.loadingmodal.showSpinner();
+        else if (!loadingState) this.loadingmodal.exitModal();
     }
 }
 

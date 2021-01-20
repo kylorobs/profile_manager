@@ -4,27 +4,22 @@ import {BindThis} from '../../../decorators/bindthis';
 import ButtonHandler from '../../../models/ButtonHandler';
 import { KeyMap } from '../../../models/InputKeys';
 import ImageForm from './ImapeForm/imageForm';
-import Modal from '../../Modal/modal';
 
 
 //IMAGEINPUTS CONSIST OF A THUMBNAIL, AN UPLOAD BUTTON, A DELETE BUTTON;
 // WHEN BUTTON IS CLICKED, THEY RENDER THE POPUP WITH THE FORM CONTAINING AN INPUT;
 // AFTER IMAGE IS UPLOADED, THE IMAGEURL IS UPDATED AND THE MODAL HIDDEN;
 
-class UploadModal {
+class FileInput {
     
     public imageurl: string;
     private uploadcontainer: HTMLDivElement;
-    private modal: Modal;
     private thumbnailcontainer: HTMLDivElement;
     
-
     constructor(public parentId: string, protected valid: boolean = false, public keymap: KeyMap, public title: string){
       this.imageurl = '';
-      this.modal = Modal.getInstance();
       const div = document.createElement('div');
       this.title = title;
-      // this.title = keymap.keyName;
       div.id = this.title;
       this.uploadcontainer = div;
       this.thumbnailcontainer = document.createElement('div');
@@ -58,23 +53,15 @@ class UploadModal {
     }
 
     @BindThis
-    public updateImageUrl(url: string, er?: string){
+    public updateImageUrl(url: string){
       console.log('--- IMAGE UPLOAD --- image url property updated')
-      if (!er){
+      if (url){
         this.setThumbnail(url);
         this.imageurl = url;
-        this.modal.exitModal();
-      }
-      else {
-        const div = document.createElement('div');
-        div.innerHTML = er;
-        this.modal.showModal(div);
-      }
-      
+      }   
     }
 
     public setThumbnail(url: string): void{
-      console.log('setting new image');
       this.imageurl = url;
       this.thumbnailcontainer.innerHTML = `
         <lazy-image image=${url}></lazy-image>
@@ -84,20 +71,12 @@ class UploadModal {
     @BindThis
     renderUploader(){
       console.log('--- IMAGE UPLOAD --- Show Uploader');
-      const imageForm = new ImageForm(this.updateImageUrl);
-      const div = document.createElement('div');
-      div.appendChild(imageForm.form)
-      this.modal.showModal(div);
+      new ImageForm(this.updateImageUrl);
     }
 
 }
 
-export default UploadModal;
+export default FileInput;
 
-// <div id="profileimage">
-// <lazy-image image="https://res.cloudinary.com/kclsu-media/image/upload/v1605106869/website_uploads/MISC/EM_u4q3mg.png"></lazy-image>
-// </div>
-// <label>Profile Image</label>
-// <input id="imageupload" type="file" />
 
  

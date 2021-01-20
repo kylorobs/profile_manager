@@ -1,8 +1,6 @@
 
 import { Profile } from '../../models/Profile';
 import { store } from '../../app';
-// import Render from '../Render/Render';
-// import Render from '../Render/Render';
 import Card from '../Card/Card';
 import {BindThis} from '../../decorators/bindthis';
 import ListFilter from './ListFilter/ListFilter';
