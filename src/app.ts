@@ -32,9 +32,17 @@ const gui = new ProfileManager({
             keyName: 'image',
             inputTitle: 'Profile Image',
             inputDefaultText: '',
-            type: 'file',
-            image: true,
+            type: 'image_file',
+            thumbnailUrl: 'https://res.cloudinary.com/kclsu-media/image/upload/v1605106869/website_uploads/MISC/EM_u4q3mg.png',
             validationErrorMsg: 'You have not uploaded a profile image!',
+            validationTypes: ['isNotEmpty']
+        },
+        { 
+            keyName: 'manifesto',
+            inputTitle: 'Manifesto',
+            inputDefaultText: '',
+            type: 'document_file',
+            validationErrorMsg: 'You have not uploaded a document!',
             validationTypes: ['isNotEmpty']
         },
         { 

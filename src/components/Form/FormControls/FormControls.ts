@@ -4,6 +4,8 @@ import Modal from '../../Modal/Modal';
 import ButtonHandler from '../../../models/ButtonHandler';
 import { BindThis } from '../../../decorators/bindthis';
 import {FormFunctions} from '../../../types/types';
+import { store } from '../../../app';
+import { notLoading } from '../../../state/ProfileSlice';
 
 class FormControls {
 
@@ -13,7 +15,7 @@ class FormControls {
 
     constructor(editMode: boolean, formFunctions: FormFunctions){
         this.formButtons = new FormButtons(editMode);
-        this.contentModal = Modal.getInstance();
+        this.contentModal = new Modal();
         this.configureButtons(formFunctions);
     }
 
@@ -35,7 +37,7 @@ class FormControls {
         modalButtons.addEmitter('update', formFns.update);
         modalButtons.addEmitter('add', formFns.add);
         modalButtons.addEmitter('delete', formFns.delete);
-        modalButtons.addEmitter('cancel', this.contentModal.exitModal);
+        modalButtons.addEmitter('cancel', this.cancelConfirm);
         // modalButtons.addEmitter('switch', formFns.switch);
     }
 
@@ -61,6 +63,12 @@ class FormControls {
     handleSwitch(){
         const modalMessage = this.buildModalContent('switch', 'You are switching to an empty template. Any changes will be lost.')
         this.contentModal.showModal(modalMessage);
+    }
+
+    @BindThis
+    cancelConfirm(){
+        this.contentModal.exitModal();
+        store.dispatch(notLoading());
     }
 
     buildModalContent(type: string, text: string): HTMLDivElement{

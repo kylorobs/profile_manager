@@ -17,52 +17,71 @@ class FileInput {
     private thumbnailcontainer: HTMLDivElement;
     
     constructor(public parentId: string, protected valid: boolean = false, public keymap: KeyMap, public title: string){
-      this.imageurl = '';
+      this.imageurl = keymap.thumbnailUrl ? keymap.thumbnailUrl : '';
       const div = document.createElement('div');
       this.title = title;
       div.id = this.title;
       this.uploadcontainer = div;
-      this.thumbnailcontainer = document.createElement('div');
-      this.thumbnailcontainer.id = 'thumbnail';
+      this.thumbnailcontainer = this.createThumbnailContainer();
       this.renderUploadControls();
+    }
+
+    createThumbnailContainer(){
+      const div = document.createElement('div');
+      let className = this.keymap.type === 'document_file'? 
+                      'document_thumbnail' :
+                      'image_thumbnail';
+      div.classList.add(className);
+      return div;
     }
 
     renderUploadControls(){
       //CLEAR CONTAINERS
       this.thumbnailcontainer.innerHTML = '';
       this.uploadcontainer.innerHTML = '';
-
-      // const thumbnail = this.createThumbnail('https://res.cloudinary.com/kclsu-media/image/upload/v1605106869/website_uploads/MISC/EM_u4q3mg.png')
+      const emitter = 'upload' + this.keymap.inputTitle
 
       const button = document.createElement('kclsu-button') as HTMLKclsuButtonElement;
-      button.emitid = 'uploadImage';
+      button.emitid = emitter;
       button.text = 'Upload New';
       button.verysmall = true;
       button.purple = true;
 
+      const label = document.createElement('span');
+      label.classList.add('fileinputTitle');
+      label.innerText= this.keymap.inputTitle;
+
+      const flex = document.createElement('div');
+      flex.classList.add('flex-end-center');
+      flex.appendChild(label);
+      flex.appendChild(button);
+
       //REGISTER CLICK EMIT IN BUTTON HANDLER CLASS
       const btnHandler = ButtonHandler.getInstance();
-      btnHandler.addEmitter('uploadImage', this.renderUploader);
+      btnHandler.addEmitter(emitter, this.renderUploader);
 
       this.uploadcontainer.appendChild(this.thumbnailcontainer);
-      this.uploadcontainer.appendChild(button);
+      this.uploadcontainer.appendChild(flex);
 
       //RENDER UPLOAD CONTROLS
       document.getElementById(this.parentId)?.appendChild(this.uploadcontainer);
-      this.setThumbnail('https://res.cloudinary.com/kclsu-media/image/upload/v1605106869/website_uploads/MISC/EM_u4q3mg.png')
+      this.setThumbnail();
     }
 
     @BindThis
-    public updateImageUrl(url: string){
-      console.log('--- IMAGE UPLOAD --- image url property updated')
-      if (url){
-        this.setThumbnail(url);
-        this.imageurl = url;
-      }   
+    public updateImageUrl(url:string | null){
+      this.imageurl = url ?? this.imageurl;
+      this.setThumbnail();   
     }
 
-    public setThumbnail(url: string): void{
-      this.imageurl = url;
+    @BindThis
+    public setThumbnail(): void{
+      let url = this.imageurl;
+      //IF DOCUMENT TYPE, SET THUMBNAIL AS PAPERCLIP
+      const regex = /.docx?$|.csv$|.xlsx$|.pptx$/gm
+      if (regex.test(url)) url = 'https://res.cloudinary.com/kclsu-media/image/upload/f_auto,fl_any_format/v1611323460/website_uploads/MISC/tickclip_pnpire.png'
+      else if (this.keymap.type === 'document_file') url = 'https://res.cloudinary.com/kclsu-media/image/upload/f_auto,fl_any_format/v1611323576/website_uploads/MISC/newtick_lo6g5p.png'
+      //SET THE THUMBNAIL URL
       this.thumbnailcontainer.innerHTML = `
         <lazy-image image=${url}></lazy-image>
       `
@@ -70,7 +89,7 @@ class FileInput {
 
     @BindThis
     renderUploader(){
-      console.log('--- IMAGE UPLOAD --- Show Uploader');
+      console.log(this)
       new ImageForm(this.updateImageUrl);
     }
 

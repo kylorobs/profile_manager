@@ -31,6 +31,9 @@ const profileSlice = createSlice({
     loading: (state: DataState) => {
       state.loading = true;
     },
+    notLoading: (state: DataState) => {
+      state.loading = false;
+    },
     updateCategory: <T extends {payload: {id: string, value: string}}> (state: DataState, action: T) => {
       const profileIndex = state.profiles.findIndex((prof:Profile) => prof.id === action.payload.id);
       if (profileIndex > -1){
@@ -91,6 +94,7 @@ const profileSlice = createSlice({
 export const {
   addProfile,
   loading,
+  notLoading,
   updateCategory,
   changeFilter,
   updateFilterKey,

@@ -8,7 +8,7 @@ class ImageForm {
     public form: HTMLFormElement;
     private uploadModal: UploadModal;
 
-    constructor(private fn: (url: string) => void){
+    constructor(private fn: (url: string | null) => void){
       this.uploadModal = new UploadModal();
       this.form = this.createForm();
       console.log(this.form)
@@ -43,28 +43,24 @@ class ImageForm {
     uploadImage(e:Event){
         this.uploadModal.showSpinner();
         e.preventDefault();
-        const formData = new FormData((e.target as any));
-        console.log(e.target)
-        console.log(formData)
       fetch("http://localhost:4000/upload", { method: 'POST', body: new FormData((e.target as any))})
         .then(res => res.json())
         .then(result => {
-          console.log('---- IMAGE FORM ---- New Cloudinary image: ' + result)
-          console.log('result!')
+          console.log('IMAHGE UPLOAD RESULT');
           console.log(result)
           if (!result.url){
-            this.uploadModal.showError('Failed to upload')
-            this.fn('');
+            this.uploadModal.showError(result.message? result.message : 'Failed to upload')
+            this.fn(null);
             throw new Error('failed to upload');
           }
-          this.uploadModal.exit();
+          this.uploadModal.exitModal();
           this.imageurl = result.url;
           this.fn(result.url) ; 
         })
         .catch(er => {
-          console.log('ERRROR')
-          this.uploadModal.showError(er)
-          this.fn('');
+          console.log('ERROR : Catch Statement in File Upload' + ' ' + er)
+          // this.uploadModal.showError(er.message? er.message : 'Failed to upload')
+          this.fn(null);
           throw new Error(er);
         })
     }

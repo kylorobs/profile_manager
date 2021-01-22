@@ -8,15 +8,14 @@ import Validator from '../../Form/Validator/Validator';
 
 
 
-class ErrorModal {
+class ErrorModal extends Modal {
     
     private divcontainer: HTMLDivElement;
-    private modal: Modal;
     private errorList: Validator[]
 
     constructor(){
+      super();
       this.errorList = [];
-      this.modal = Modal.getInstance();
       const div = document.createElement('div');
       div.id = 'ErrorModal';
       this.divcontainer = div;
@@ -40,7 +39,7 @@ class ErrorModal {
         this.errorList = errors;
         this.divcontainer.innerHTML = '';
         this.setErrorMessages();
-        this.modal.showModal(this.divcontainer);
+        this.showModal(this.divcontainer);
     }
 
 

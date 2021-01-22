@@ -2,20 +2,18 @@ import Modal from "../Modal";
 import { BindThis } from '../../../decorators/bindthis';
 import { store } from '../../../app'
 
-class LoadingModal {
+class LoadingModal extends Modal {
     
-    loadingmodal: Modal;
-
     constructor(){
-        this.loadingmodal = Modal.getInstance();
+        super();
         store.subscribe(this.checkForLoadingState);
     }
 
     @BindThis
     public checkForLoadingState(): void{
         const loadingState = store.getState().data.loading;
-        if (loadingState) this.loadingmodal.showSpinner();
-        else if (!loadingState) this.loadingmodal.exitModal();
+        if (loadingState) this.showSpinner();
+        else if (!loadingState) this.exitModal();
     }
 }
 

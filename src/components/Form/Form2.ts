@@ -22,7 +22,7 @@ class Form2 {
     private formInputs: Inputs[];
     private errorModal: FormErrorModal; 
     private formControls: FormControls;
-    private modal: Modal;
+    private submitModal: Modal;
     private loading: boolean;
 
     constructor(keyMappings: KeyMap[]){
@@ -31,10 +31,11 @@ class Form2 {
         this.loading = false;
         //CREATE INPUTS, SEPARATING FILE INPUTS AND TEXT/SELECT INPUTS
         const inputs = keyMappings.map((map: KeyMap) =>{
-            if (map.type === 'file') return new FileInput('fileinputs', false, map, 'url');
+            if (map.type === 'document_file' || map.type === 'image_file' ) return new FileInput('fileinputs', false, map, 'url');
             else return new TextInput('textinputs', map);
         });
         this.formInputs = inputs;
+        console.log(inputs)
    
         this.formControls = new FormControls(!!this.editid, {
             update: () => this.submitForm('update'), 
@@ -42,7 +43,7 @@ class Form2 {
             delete: this.deleteData,
             switch: this.swithToEmptyForm
         })
-        this.modal = Modal.getInstance();
+        this.submitModal = new Modal();
         this.configure();
         store.subscribe(this.configure);
     }
@@ -58,17 +59,14 @@ class Form2 {
                 this.setValues();
                 this.formControls.toggleEditMode(true);
             }
-            else {
-                this.formControls.toggleEditMode(false)
-            this.swithToEmptyForm();
-            }
+            else this.formControls.toggleEditMode(false)
+
         }
     }
 
 
     @BindThis
     submitForm(type: 'add' | 'update'){
-        this.proceedWithConfirmation();
         const formErrors = this.validateValues();
         formErrors.length >  0 ? this.errorModal.handleErrors(formErrors) : this.packageData(type);
     }
@@ -91,11 +89,11 @@ class Form2 {
         //store.dispatch(resetEditMode());
         this.formInputs
         .forEach((input: Inputs) => {
-        if ('el' in input) input.el.value = '';
-        else if ('imageurl' in input) input.setThumbnail('');
-        else {
-            console.log('failed to find type of input')
-        }
+            if ('el' in input) input.el.value = '';
+            else if ('imageurl' in input) input.updateImageUrl('');
+            else {
+                console.log('failed to find type of input')
+            }
     })
 
     }
@@ -108,7 +106,7 @@ class Form2 {
             .forEach((input: Inputs) => {
             const key = profileKeys.find((key: string) => key === input.title);
             if ('el' in input && key) input.el.value = profile[key];
-            else if ('imageurl' in input && key) input.setThumbnail(profile[key]);
+            else if ('imageurl' in input && key) input.updateImageUrl(profile[key]);
             else {
                 console.log('failed to find type of input');
                 console.log(input)
@@ -134,7 +132,8 @@ class Form2 {
 
 
     packageData(type: 'add' | 'update'):void {
-
+        
+        this.proceedWithConfirmation();
         const profpackage: Profile = {};
 
         this.formInputs
@@ -178,8 +177,8 @@ class Form2 {
     @BindThis
     public checkForLoadingState(): void{
         const loadingState = store.getState().data.loading;
-        if (loadingState) this.modal.showSpinner();
-        else if (!loadingState && this.modal.active) this.modal.exitModal()
+        if (loadingState) this.submitModal.showSpinner();
+        else if (!loadingState && this.submitModal.active) this.submitModal.exitModal()
     }
 
     //FIRE 

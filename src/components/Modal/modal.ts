@@ -1,35 +1,30 @@
 
-// USE SINGLETON PATTERN
-// CREATES A MODAL FOR THE PAGE
-// HANDLES HIDING AND SHOWING OF MODAL
-// HANDLES UPDATES 
-
+// import { store } from "../../app";
 import { BindThis } from "../../decorators/bindthis";
-
-
+// import { notLoading } from "../../state/ProfileSlice";
 
 class Modal {
 
-    static instance: Modal;
-    private modal: HTMLKclsuModalElement;
+    protected modal: HTMLKclsuModalElement;
     private spinner: HTMLLoadingSpinnerElement;
     public active: boolean;
 
-    private constructor(){
-        this.modal = this.createModalElement();
+   constructor(){
+        this.modal = this.fetchModalElement();
         this.active = false;
         this.spinner = document.createElement('loading-spinner');
-        this.spinner.style.padding = '2em';
-        document.getElementById('app')?.appendChild(this.modal);
-        document.addEventListener('exitModal', this.exitModal);
     }
 
-    static getInstance(): Modal{
-        if (this.instance) return this.instance;
-        else {
-            this.instance = new Modal();
-            return this.instance;
-        }; 
+
+    private fetchModalElement(){
+        let modal = document.querySelector('kclsu-modal');
+        modal!.autoexit = true;
+        if (!modal) {
+            modal = this.createModalElement();
+            document.getElementById('app')?.appendChild(this.modal);
+            document.addEventListener('exitModal', this.exitModal);
+        }
+        return modal;
     }
 
     private createModalElement(): HTMLKclsuModalElement{
@@ -61,6 +56,7 @@ class Modal {
         this.spinner.show = false;
         this.modal.show = false;
         this.active = false;
+        // store.dispatch(notLoading());
     }
 
 

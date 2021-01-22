@@ -3,36 +3,28 @@
 import Modal from '../Modal';
 
 
-class UploadModal {
+class UploadModal extends Modal {
     
     public imageurl: string;
-    private uploadmodal: Modal;
-    
 
     constructor(){
+      super();
       this.imageurl = '';
-      this.uploadmodal = Modal.getInstance();
     }
 
-    showSpinner(){
-        this.uploadmodal.showSpinner();
-    }
 
     showError(msg:string){
-        const p = document.createElement('p');
-        p.innerText = msg;
-        this.uploadmodal.showModal(p)
+        const div = document.createElement('div');
+        const message = `
+        <h3> Whoah! Upload Error... </h3>
+        <p> ${msg}!</p>
+        `
+        div.innerHTML = message;
+        this.showModal(div);
     }
 
     showForm(form: HTMLFormElement){
-        // const div = document.createElement('div');
-        // div.appendChild(form);
-        // console.log(div);
-        this.uploadmodal.showModal(form);
-    }
-
-    exit(){
-        this.uploadmodal.exitModal();
+        this.showModal(form);
     }
 
 }
