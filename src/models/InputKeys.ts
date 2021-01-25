@@ -1,6 +1,7 @@
 import {Categories} from '../types/types';
 
 export interface ManagerInit {
+    pageTitle: string,
     categories: Categories[],
     dataUrl: string,
     categoryKeyName: string,

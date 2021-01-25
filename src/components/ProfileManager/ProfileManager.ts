@@ -11,17 +11,19 @@ import LoadingModal from '../Modal/LoadingModal/LoadingModal';
 
 class ProfileManager {
 
-    private areas: Categories[];
+    public areas: Categories[];
     private list: List;
 
     constructor(Manager: ManagerInit){
+        this.buildHtmlTemplate(Manager.pageTitle);
+        const categories = Manager.categories || [];
         store.dispatch(thunks.fetchData(`${Manager.dataUrl}.json`));
         store.dispatch(updateDataUrl(Manager.dataUrl));
-        this.areas = Manager.categories;
-        this.list = new List(Manager.categories);
+        this.areas = categories;
+        this.list = new List(categories);
         this.setupAreas();
         this.createForms(Manager.keyMapping);
-        store.dispatch(updateFilterKey(Manager.categoryKeyName));
+        store.dispatch(updateFilterKey(Manager.categoryKeyName || ''));
         new LoadingModal();
     }
 
@@ -31,14 +33,40 @@ class ProfileManager {
 
     setupAreas(){
         //CREATE DRAG AND DROP AREAS
-        const areas = this.areas.map((col: string[]) => {
-            return new DropArea(col[0], col[1]);
+        const areas = this.areas.map((col: Categories) => {
+            return new DropArea(col[0], col[1], !!col[2]);
         })
         const parent = document.querySelector('.droparea')!;
-        areas.forEach(area => {
-           parent.appendChild(area.element);
-        })
+        if (this.areas.length > 0){
+            areas.forEach(area => {
+                parent.appendChild(area.element);
+                })
+        }
+        else {
+            parent.innerHTML = '<p> You currently have no filters set up </p>'
+        }
         console.log(this.list)
+    }
+
+    private buildHtmlTemplate(pageTitle: string): void{
+        const parent = document.getElementById('app')! as HTMLDivElement;
+        if (parent)
+            parent.innerHTML = `
+                <kclsu-modal show="false"></kclsu-modal>
+                <div class="area">
+                    <h1>${pageTitle}</h1>
+                    <div class="droparea"></div>
+                </div>
+                <div class="list"></div>
+                <div class="editor">
+                    <form>
+                        <div id="fileinputs"></div>
+                        <div id="textinputs">
+                            <div id="controls"></div>
+                        </div>
+                        <!-- <div id="controls"></div> -->
+                    </form>
+                </div> `
     }
 
 

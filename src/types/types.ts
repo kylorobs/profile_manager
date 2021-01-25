@@ -1,5 +1,9 @@
+import { Profile } from "../models/Profile";
 
-export type Categories = [string, string];
+export type filterFn = ((val:Profile, Index?:number) => boolean) | null;
+
+export type Categories = [string, string, filterFn];
+
 
 export interface Draggable {
     dragStartHandler(event: DragEvent): void;

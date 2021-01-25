@@ -1,16 +1,18 @@
 import { store } from "../../app";
 import { BindThis } from "../../decorators/bindthis";
-import { changeFilter} from "../../state/ProfileSlice";
+import { changeFilter, updateFilterWithCustomFunction} from "../../state/ProfileSlice";
 import { DragTarget } from "../../types/types";
 import * as thunks from '../../state/thunks/profile';
 
 class DropArea implements DragTarget {
     title: string;
     id: string;
+    filterFn: boolean;
     element: any;
 
-    constructor(n: string, i:string){
+    constructor(n: string, i:string, fn: boolean){
         this.title = n;
+        this.filterFn = fn ;
         this.id = i;
         this.element = this.createElement();
     }
@@ -30,9 +32,14 @@ class DropArea implements DragTarget {
         block.id = this.id;
         block.innerHTML = `<h3>${this.title}</h3>`;
         block.addEventListener('click', this.filterList);
-        block.addEventListener('drop', this.dropHandler);
-        block.addEventListener('dragover', this.dragOverHandler);
-        block.addEventListener('dragleave', this.dragLeaveHandler);
+
+        //IF NO CUSTOM FILTER FUNCTION SPECIFIED, APPLY DRAG N DROP EVENT LISTENERS
+        if (!this.filterFn){
+            block.addEventListener('drop', this.dropHandler);
+            block.addEventListener('dragover', this.dragOverHandler);
+            block.addEventListener('dragleave', this.dragLeaveHandler);
+        }
+
         return block;
     }
 
@@ -40,7 +47,8 @@ class DropArea implements DragTarget {
     filterList(){
         DropArea.removeClickedClass();
         this.element.classList.add('dropActive');
-        store.dispatch(changeFilter(this.id));
+        if (this.filterFn) store.dispatch(updateFilterWithCustomFunction(this.id));
+        else store.dispatch(changeFilter(this.id));
     }
 
     @BindThis

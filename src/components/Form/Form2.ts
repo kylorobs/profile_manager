@@ -29,6 +29,11 @@ class Form2 {
         this.editid = store.getState().form.editing_id || null;
         this.errorModal = new FormErrorModal();
         this.loading = false;
+        const containsFileInputs = keyMappings.find(map => map.type === 'document_file' || map.type === 'image_file' );
+        console.log('contains file index: ' + containsFileInputs);
+        if (!containsFileInputs){
+            this.adjustFormLayout();
+        }
         //CREATE INPUTS, SEPARATING FILE INPUTS AND TEXT/SELECT INPUTS
         const inputs = keyMappings.map((map: KeyMap) =>{
             if (map.type === 'document_file' || map.type === 'image_file' ) return new FileInput('fileinputs', false, map, 'url');
@@ -64,6 +69,20 @@ class Form2 {
         }
     }
 
+    adjustFormLayout(){
+        console.log('adjusting form styles')
+        const filesColumn = document.querySelector('#fileinputs')! as HTMLDivElement;
+        const textColumn = document.querySelector('#textinputs')! as HTMLDivElement;
+        console.log(filesColumn)
+        console.log(textColumn)
+        // const form = document.querySelector('form')! as HTMLFormElement;
+        //HIDE THE COLUMN WITH FILE INPUTS
+        filesColumn.style.display = 'none';
+        //MAKE COL FULL WIDTH
+        textColumn.style.width = '100%';
+        textColumn.style.maxWidth = '800px';
+        textColumn.style.margin = 'auto';
+    }
 
     @BindThis
     submitForm(type: 'add' | 'update'){
@@ -86,7 +105,6 @@ class Form2 {
     swithToEmptyForm(){
         this.editid = null;
         this.formControls.toggleEditMode(false);
-        //store.dispatch(resetEditMode());
         this.formInputs
         .forEach((input: Inputs) => {
             if ('el' in input) input.el.value = '';

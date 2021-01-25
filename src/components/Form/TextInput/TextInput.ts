@@ -50,15 +50,8 @@ class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement | HTMLSelec
 
     @BindThis
     changeHandler(): void{
-        // console.log(e)
-        // e.preventDefault();
-        // let isValid = true;
-        // this.keymap.validationTypes.forEach(type => {
-        //     if(!validateInput(e.target.value, type)) isValid = false
-        // })
-        // console.log(isValid)
-        // if (isValid) this.valid = true;
-        // else this.valid = false;
+
+        
     }
 
 

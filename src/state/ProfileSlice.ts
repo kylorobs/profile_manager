@@ -15,6 +15,7 @@ const initialState: DataState = {
   profiles: [],
   filterkey: '',
   filterid: '',
+  filterWithCustomFunction: '',
   authenticated: false
 }
 
@@ -41,10 +42,15 @@ const profileSlice = createSlice({
       }
     },
     changeFilter: (state: DataState, action) => {
+      state.filterWithCustomFunction = '';
       state.filterid = action.payload;
     },
     updateFilterKey: (state: DataState, action) => {
       state.filterkey = action.payload;
+    },
+    updateFilterWithCustomFunction: (state: DataState, action) => {
+      state.filterid = '';
+      state.filterWithCustomFunction = action.payload;
     },
     updateDataUrl: (state: DataState, action) => {
       state.dataUrl = action.payload;
@@ -98,6 +104,7 @@ export const {
   updateCategory,
   changeFilter,
   updateFilterKey,
+  updateFilterWithCustomFunction,
   updateDataUrl,
   setError,
 } = profileSlice.actions;

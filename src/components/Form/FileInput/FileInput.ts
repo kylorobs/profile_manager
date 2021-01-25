@@ -89,7 +89,6 @@ class FileInput {
 
     @BindThis
     renderUploader(){
-      console.log(this)
       new ImageForm(this.updateImageUrl);
     }
 

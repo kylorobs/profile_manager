@@ -1,3 +1,4 @@
+
 import {Profile} from './Profile';
 
 export interface FormState {
@@ -13,5 +14,6 @@ export interface DataState {
     profiles: Profile[],
     filterid: string,
     filterkey: string,
+    filterWithCustomFunction: string,
     authenticated: boolean
 }

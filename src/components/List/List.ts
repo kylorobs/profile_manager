@@ -4,7 +4,7 @@ import { store } from '../../app';
 import Card from '../Card/Card';
 import {BindThis} from '../../decorators/bindthis';
 import ListFilter from './ListFilter/ListFilter';
-import { Categories } from '../../types/types';
+import { Categories, filterFn } from '../../types/types';
 
 
 class List {
@@ -36,24 +36,37 @@ class List {
     async updateList(){
         const profiles = await store.getState().data.profiles;
         const currentFilter = await store.getState().data.filterid;
-
+        const categoryFilterFunctionId = await store.getState().data.filterWithCustomFunction;
+        let filterFunction = null as filterFn;
         let filterName = '';
+
+        if (categoryFilterFunctionId){
+            const category = this.filterNames.find((category: Categories) => category[1] === categoryFilterFunctionId);
+            if (category) {
+                filterFunction = category[2];
+                filterName = category[0]; 
+            }
+        }
         const matchingFilter = this.filterNames.find(filter => filter[1] === currentFilter);
         if (matchingFilter) filterName = matchingFilter[0];
         this.clearList();
         this.updateFilter(filterName);
-        if (!store.getState().data.error) this.createCards(profiles, currentFilter);
+        if (!store.getState().data.error) this.createCards(profiles, currentFilter, filterFunction);
     }
 
     @BindThis
-    createCards(profiles: Profile[], currentFilter: string):void{
+    createCards(profiles: Profile[], currentFilter: string, customFilter: filterFn ):void{
         document.querySelector('.list')!.appendChild(this.searchContainer);
+        console.log(customFilter);
+
+        const filterByCategory = (prof: Profile) => {
+            if (!currentFilter) return true;
+            return prof[this.filterKey]  === currentFilter;
+        };
+
         if (this.searchContainer.shadowRoot){
         profiles
-            .filter(prof => {
-                if (!currentFilter) return true;
-                return prof[this.filterKey]  === currentFilter;
-            })
+            .filter(customFilter || filterByCategory)
             .map(prof=> {
                 return new Card(prof.name, prof.id, prof.url, false, document.querySelector('.list'));
             }).forEach(card => this.searchContainer.appendChild(card.element));

@@ -4,6 +4,7 @@ import ProfileManager from './components/ProfileManager/ProfileManager';
 import 'kclsu-components';
 import './styles.scss';
 import FormSlice from './state/FormSlice';
+import { Profile } from './models/Profile';
 
 export const store = configureStore({
     reducer: {
@@ -15,10 +16,15 @@ export const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 
 
+const filterForNowWebsite = (val: Profile) => {
+    return !val.website;
+}
+
 const gui = new ProfileManager({
-    categories: [['Xhibit', 'xhibitArtists'], ['Feautured', 'upcoming'], ['Artists', 'artists'], ['Performers', 'performers'], ['Special Acts', 'specialActs']],
+    pageTitle: 'ProjectX Profile Manager ',
+    categories: [['No Website', 'website_filter', filterForNowWebsite]],
     dataUrl: 'https://test-db-1577e.firebaseio.com/artists',
-    categoryKeyName: 'type',
+    categoryKeyName: 'twitter',
     keyMapping: [
         { 
             keyName: 'name',
@@ -90,7 +96,7 @@ const gui = new ProfileManager({
             inputTitle: 'Category',
             inputDefaultText: '...',
             type: 'select',
-            options: [['Xhibit', 'xhibitArtists'], ['Feautured', 'upcoming'], ['Artists', 'artists'], ['Performers', 'performers'], ['Special Acts', 'specialActs']],
+            options: [['Xhibit', 'xhibitArtists', null], ['Feautured', 'upcoming', null], ['Artists', 'artists', null], ['Performers', 'performers', null], ['Special Acts', 'specialActs', null]],
             validationErrorMsg: 'Please choose a category',
             validationTypes: ['isNotEmpty']
         }
@@ -98,7 +104,3 @@ const gui = new ProfileManager({
 
 });
 console.log(gui);
-
-//NOTES
-//IF CATEGORIES.LENGTH > 0, THEN WILL AUTOMATICALLY CREATE A SELECT INPUT FROM THOSE CATEGORIES. 
-// OTHERWISE THERE WILL BE NO DROP AREAS, AND NO SELECT DROP DOWN

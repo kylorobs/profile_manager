@@ -14,7 +14,6 @@ class ListFilter {
         this.title = title;
         this.resetFilterElement = this.createButton();
 
-
         this.titleElement = document.createElement('h4');
         this.titleElement.innerText = `View: ${this.title}`;
         this.titleElement.style.margin = '15px';
