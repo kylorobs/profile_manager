@@ -6,30 +6,29 @@ import { Draggable } from '../../types/types';
 class Card implements Draggable {
     title: string;
     image: string;
+    subtext: string;
     id: string;
-    active: boolean;
     parent: any;
     element: any;
 
-    constructor(t: string, i: string, im: string, a: boolean, parent: any){
+    constructor(t: string, i: string, im: string, sub: string){
         this.title = t;
         this.id = i;
-        this.parent = parent;
         this.image = im;
-        this.active = a;
+        this.subtext = sub;
         const card = this.buildCard();
         card.addEventListener('click', (e) => this.clickHandler(e));
-        //const container = this.buildContainer(card);
         this.element = card;
     }
 
     buildCard(){
         const label: HTMLLabelCardElement = document.createElement('label-card');
         label.cardtitle = this.title;
-        label.image = this.image;
+        if (this.image) label.image = this.image;
+        if (this.subtext) label.text = this.subtext;
         label.margin = '1em 0 1em 15px';
         label.cardwidth = '90%';
-        label.smallestheight = true;
+        label.smallestheight = !!!this.subtext;
         label.smallheading = true;
         label.style.position = 'relative';
         label.addEventListener('dragstart', this.dragStartHandler)

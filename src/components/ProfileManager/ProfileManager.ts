@@ -20,7 +20,7 @@ class ProfileManager {
         store.dispatch(thunks.fetchData(`${Manager.dataUrl}.json`));
         store.dispatch(updateDataUrl(Manager.dataUrl));
         this.areas = categories;
-        this.list = new List(categories);
+        this.list = new List(categories, Manager.categoryKeyName, Manager.labelCardKeys);
         this.setupAreas();
         this.createForms(Manager.keyMapping);
         store.dispatch(updateFilterKey(Manager.categoryKeyName || ''));
