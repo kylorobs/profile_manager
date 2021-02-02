@@ -1,21 +1,26 @@
-import DropArea from '../DropArea/DropArea';
+
 import {Profile} from '../../models/Profile';
+import DOMPurify from 'dompurify';
 
 function fetchParent(classname: string){
     return document.querySelector(`${classname}`)
 }
 
+interface T extends HTMLElement {};
+
 class Render {
-    static renderAreas(ar: DropArea[]){
-        console.log('RENDERING AREA')
-        const parent = fetchParent('.droparea')!;
-        ar.forEach(area => {
-           const block = document.createElement('div') as HTMLDivElement;
-           block.classList.add('droppable');
-           block.id = area.id;
-           block.innerHTML = `<h2>${area.title}</h2>`;
-           parent.appendChild(block);
-        })
+    static renderList(parent: T, ar: T[]){
+        console.log(parent, ar);
+    }
+
+    static renderInnerHTML(parentId: string, el: string, allowedTags: string[] = []){
+        console.log(parentId, el);
+        const options = {} as { ADD_TAGS?: string[] };
+        if (allowedTags.length > 0) options.ADD_TAGS = [...allowedTags] 
+        document.querySelector(parentId)!.innerHTML = DOMPurify.sanitize(
+            el,
+            options
+        );    
     }
 
     static renderProfiles(ar: Profile[]){
@@ -37,9 +42,6 @@ class Render {
     static editor(){
         const form = fetchParent('#form') as HTMLFormElement;
         console.log(form)
-    }
-    static renderList(){
-        // const data = 
     }
 }
 

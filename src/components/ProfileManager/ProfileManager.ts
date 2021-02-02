@@ -7,7 +7,7 @@ import {updateDataUrl, updateFilterKey} from '../../state/ProfileSlice';
 import * as thunks from '../../state/thunks/profile';
 import { ManagerInit, KeyMap } from '../../models/InputKeys';
 import LoadingModal from '../Modal/LoadingModal/LoadingModal';
-
+import Render from '../Render/Render';
 
 class ProfileManager {
 
@@ -43,15 +43,17 @@ class ProfileManager {
                 })
         }
         else {
-            parent.innerHTML = '<p> You currently have no filters set up </p>'
+            Render.renderInnerHTML('.droparea', '<p> You currently have no filters set up </p>')
         }
         console.log(this.list)
     }
 
     private buildHtmlTemplate(pageTitle: string): void{
         const parent = document.getElementById('app')! as HTMLDivElement;
-        if (parent)
-            parent.innerHTML = `
+        if (parent){
+            const formTags = ['kclsu-modal'];
+            
+            Render.renderInnerHTML('#app', `
                 <kclsu-modal show="false"></kclsu-modal>
                 <div class="area">
                     <h1>${pageTitle}</h1>
@@ -66,7 +68,9 @@ class ProfileManager {
                         </div>
                         <!-- <div id="controls"></div> -->
                     </form>
-                </div> `
+                </div> `,
+                formTags)
+        }
     }
 
 
