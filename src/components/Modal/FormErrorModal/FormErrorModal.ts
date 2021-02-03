@@ -5,6 +5,7 @@
 // import { KeyMap } from '../../../models/InputKeys';
 import Modal from '../Modal';
 import Validator from '../../Form/Validator/Validator';
+import DOMHelper from '../../DOMHelper/DOMHelper';
 
 
 
@@ -16,9 +17,7 @@ class ErrorModal extends Modal {
     constructor(){
       super();
       this.errorList = [];
-      const div = document.createElement('div');
-      div.id = 'ErrorModal';
-      this.divcontainer = div;
+      this.divcontainer = DOMHelper.createDivHTML();
     }
 
     private setErrorMessages(): void{
@@ -37,7 +36,7 @@ class ErrorModal extends Modal {
 
     public handleErrors(errors: Validator[]):void{
         this.errorList = errors;
-        this.divcontainer.innerHTML = '';
+        this.divcontainer.innerHTML = DOMHelper.sanitise('');
         this.setErrorMessages();
         this.showModal(this.divcontainer);
     }

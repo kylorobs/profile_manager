@@ -5,6 +5,7 @@ import Card from '../Card/Card';
 import {BindThis} from '../../decorators/bindthis';
 import ListFilter from './ListFilter/ListFilter';
 import { Categories, filterFn } from '../../types/types';
+import DOMHelper from '../DOMHelper/DOMHelper';
 
 
 class List {
@@ -66,15 +67,16 @@ class List {
         };
 
         if (this.searchContainer.shadowRoot){
-        profiles
-            .filter(customFilter || filterByCategory)
-            .map(prof=> {
-                return new Card(prof[heading], prof.id, prof[image], prof[subtext]);
-            }).forEach(card => this.searchContainer.appendChild(card.element));
+            profiles
+                .filter(customFilter || filterByCategory)
+                .map(prof=> {
+                    return new Card(prof[heading], prof.id, prof[image], prof[subtext]);
+                })
+                .forEach(card => this.searchContainer.appendChild(card.element));
 
-        this.searchContainer!.shadowRoot!.querySelector('div')!.style.height = 'auto';
-        this.searchContainer!.shadowRoot!.querySelector('div')!.style.width = '90%';
-        this.searchContainer!.shadowRoot!.querySelector('div')!.style.margin = 'auto';
+            this.searchContainer!.shadowRoot!.querySelector('div')!.style.height = 'auto';
+            this.searchContainer!.shadowRoot!.querySelector('div')!.style.width = '90%';
+            this.searchContainer!.shadowRoot!.querySelector('div')!.style.margin = 'auto';
         }
     }
 
@@ -84,7 +86,7 @@ class List {
 
 
     clearList(){
-        this.searchContainer.innerHTML = '';    
+        this.searchContainer.innerHTML = DOMHelper.sanitise('');    
     }
 
 }

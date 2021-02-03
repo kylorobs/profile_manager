@@ -1,6 +1,7 @@
 
 // import { store } from "../../app";
 import { BindThis } from "../../decorators/bindthis";
+import DOMHelper from "../DOMHelper/DOMHelper";
 // import { notLoading } from "../../state/ProfileSlice";
 
 class Modal {
@@ -37,7 +38,7 @@ class Modal {
 
     @BindThis
     public showModal(el:HTMLDivElement | HTMLLoadingSpinnerElement | HTMLFormElement): void{
-        this.modal.innerHTML = '';
+        this.modal.innerHTML = DOMHelper.sanitise('');
         this.modal.appendChild(el);
         this.modal.show = true;
         this.active = true;

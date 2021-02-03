@@ -8,7 +8,7 @@ function fetchParent(classname: string){
 
 interface T extends HTMLElement {};
 
-class Render {
+class DOMHelper {
     static renderList(parent: T, ar: T[]){
         console.log(parent, ar);
     }
@@ -22,6 +22,15 @@ class Render {
             options
         );    
     }
+
+    static createDivHTML(str?: string):HTMLDivElement {
+        const div = document.createElement('div');
+        if (str) div.innerHTML = DOMPurify.sanitize(str);
+        return div;
+    }
+
+    static sanitise(str: string):string { return DOMPurify.sanitize(str)}
+
 
     static renderProfiles(ar: Profile[]){
         const parent = fetchParent('.list')!;
@@ -45,4 +54,4 @@ class Render {
     }
 }
 
-export default Render;
+export default DOMHelper;

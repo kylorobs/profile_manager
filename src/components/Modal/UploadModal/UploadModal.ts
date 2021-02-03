@@ -1,6 +1,7 @@
 
 
-// import Render from '../../Render/Render';
+// import DOMHelper from '../../DOMHelper/DOMHelper';
+import DOMHelper from '../../DOMHelper/DOMHelper';
 import Modal from '../Modal';
 
 
@@ -15,12 +16,10 @@ class UploadModal extends Modal {
 
 
     showError(msg:string){
-        const div = document.createElement('div');
         const message = `
-        <h3> Whoah! Upload Error... </h3>
-        <p> ${msg}!</p>
-        `
-        div.innerHTML = message;
+            <h3> Whoah! Upload Error... </h3>
+            <p> ${msg}!</p>`
+        const div = DOMHelper.createDivHTML(message);
         this.showModal(div);
     }
 
