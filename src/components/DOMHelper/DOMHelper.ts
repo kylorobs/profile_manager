@@ -34,9 +34,20 @@ class DOMHelper {
         return div;
     }
 
+    //create a basic flex container 
+    static createFlexContainer(x: string, y: string, wrap: boolean, str?: string, el?:HTMLElement):HTMLFlexContainerElement {
+        const flex = document.createElement('flex-container') as HTMLFlexContainerElement;
+        if (x) flex.alignx = x;
+        if (y) flex.aligny = y;
+        if (wrap) flex.wrap = true;
+        if (str) flex.innerHTML = DOMPurify.sanitize(str);
+        if (el) flex.appendChild(el);
+        return flex;
+    }
+
     //create a new element 
-    static createElement<T extends string>(elType:T, innerText?:string):HTMLElement{
-        const el = document.createElement(elType);
+    static create<T extends HTMLElement>(elType:string, innerText?:string):T{
+        const el = document.createElement(elType) as T;
         if (innerText) el.innerHTML = innerText;
         return el;
     }

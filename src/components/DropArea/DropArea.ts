@@ -3,12 +3,13 @@ import { BindThis } from "../../decorators/bindthis";
 import { changeFilter, updateFilterWithCustomFunction} from "../../state/ProfileSlice";
 import { DragTarget } from "../../types/types";
 import * as thunks from '../../state/thunks/profile';
+import DOMHelper from "../DOMHelper/DOMHelper";
 
 class DropArea implements DragTarget {
     title: string;
     id: string;
     filterFn: boolean;
-    element: any;
+    element: HTMLDivElement;
 
     constructor(n: string, i:string, fn: boolean){
         this.title = n;
@@ -25,12 +26,12 @@ class DropArea implements DragTarget {
         });
     }
 
-    createElement(){
-        const block = document.createElement('div') as HTMLDivElement;
+    //Create Div with Drag event listeners
+    private createElement(): HTMLDivElement{
+        const block = DOMHelper.createDivHTML(`<h3>${this.title}</h3>`);
         block.classList.add('droppable');
         block.classList.add('dropNeutral');
         block.id = this.id;
-        block.innerHTML = `<h3>${this.title}</h3>`;
         block.addEventListener('click', this.filterList);
 
         //IF NO CUSTOM FILTER FUNCTION SPECIFIED, APPLY DRAG N DROP EVENT LISTENERS

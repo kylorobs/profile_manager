@@ -5,7 +5,7 @@ export abstract class Input<T extends HTMLInputElement | HTMLTextAreaElement | H
     constructor(public value: string, public el: T | {value: 'unset'}) {}
 
     appendToDOM(el: T, inputTitle: string, parentID: string): void{
-        const label = DOMHelper.createElement('label', inputTitle)
+        const label = DOMHelper.create('label', inputTitle)
         const div = DOMHelper.createDivHTML(undefined, label);
         div.appendChild(el);
         DOMHelper.renderInnerHTML(`#${parentID}`, div)
