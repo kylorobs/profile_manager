@@ -46,7 +46,6 @@ export const fetchData: any = createAsyncThunk(
     async (dataPackage:any) => {
       try {
         const res = await makeRequest('PUT', `${dataPackage.url}/${dataPackage.id}.json`, dataPackage.data);
-
         return {id:dataPackage.id, data: res};
       }
       catch(e) {

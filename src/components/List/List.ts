@@ -22,7 +22,7 @@ class List {
         this.filterKey = filterKey; 
         this.cardKeys = cardKeys;
         this.profiles = store.getState().data.profiles;
-        this.searchContainer = document.createElement('kclsu-search') as HTMLKclsuSearchElement;
+        this.searchContainer = DOMHelper.create<HTMLKclsuSearchElement>('kclsu-search');
         this.filterNames = filterNames;
         this.searchContainer.attr = 'cardtitle';
         this.searchContainer.containerselector = 'label-card';

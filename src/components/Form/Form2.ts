@@ -38,7 +38,7 @@ class Form2 {
 
         // Create input classes, separating file inputs and text/select inputs
         const inputs = keyMappings.map((map: KeyMap) =>{
-            if (map.type === 'document_file' || map.type === 'image_file' ) return new FileInput('fileinputs', false, map, 'url');
+            if (map.type === 'document_file' || map.type === 'image_file' ) return new FileInput('fileinputs', false, map, map.keyName);
             else return new TextInput('textinputs', map);
         });
 
@@ -70,7 +70,7 @@ class Form2 {
                 this.setValues();
                 this.formControls.toggleEditMode(true);
             }
-            else this.formControls.toggleEditMode(false)
+            else this.swithToEmptyForm();
 
         }
     }
@@ -129,6 +129,7 @@ class Form2 {
 
         //Fetch profile with matching ID
         const profile: Profile = data.filter((prof:Profile) => prof.id === this.editid)[0];
+        console.log(profile)
         //Pull all object keys from profile
         const profileKeys: string[] = Object.keys(profile);
         
@@ -143,6 +144,7 @@ class Form2 {
             else {
                 console.log('failed to find type of input: ' + input);
                 console.log(input)
+                console.log(key)
                 //We need to show Error Modal. On 'Proceed' we create a NEW input and set state to 'AllowedNewInput'
             }
         })

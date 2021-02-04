@@ -24,11 +24,6 @@ class DOMHelper {
         if (allowedAttr.length >0) options.ALLOWED_ATTR = allowedAttr
         if ( el && typeof el !== 'string') parent.appendChild(el);    
         else {
-            console.log('RENDER IMAGE');
-            console.log(DOMPurify.sanitize(
-                el,
-                options
-            ))
             parent.innerHTML = DOMPurify.sanitize(
             el,
             options
