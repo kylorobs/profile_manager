@@ -28,8 +28,10 @@ export const fetchData: any = createAsyncThunk(
             const res = await makeRequest('GET', url, null);
             const data = [];
             for (const key in res){
+              if (res[key] !== null) {
                 res[key].id = key;
                 data.push(res[key])
+              }
             }
             return data;
         } catch (e){
