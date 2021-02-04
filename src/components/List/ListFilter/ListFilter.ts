@@ -3,6 +3,7 @@ import ButtonHandler from '../../../models/ButtonHandler';
 import {store} from '../../../app'
 import { changeFilter } from '../../../state/ProfileSlice';
 import DropArea from '../../DropArea/DropArea';
+import DOMHelper from '../../DOMHelper/DOMHelper';
 
 class ListFilter {
     public title: string = 'All'; // the name of the filter
@@ -14,7 +15,7 @@ class ListFilter {
         this.title = title;
         this.resetFilterElement = this.createButton();
 
-        this.titleElement = document.createElement('h4');
+        this.titleElement = DOMHelper.create<HTMLTitleElement>('h4');
         this.titleElement.innerText = `View: ${this.title}`;
         this.titleElement.style.margin = '15px';
 
@@ -27,7 +28,7 @@ class ListFilter {
     }
 
     private createButton(): HTMLKclsuButtonElement{
-        const button = document.createElement('kclsu-button');
+        const button = DOMHelper.create<HTMLKclsuButtonElement>('kclsu-button');
         button.text = 'reset filter';
         button.verysmall = true;
         button.purple = true;
@@ -40,11 +41,8 @@ class ListFilter {
 
 
     private createContainer(){
-        const flexC = document.createElement('flex-container') as HTMLFlexContainerElement;
-        flexC.alignx = 'space-around';
-        flexC.aligny = 'center';
-        flexC.appendChild(this.titleElement);
-        flexC.appendChild(this.resetFilterElement);
+        const flexC = DOMHelper.createFlexContainer('space-around', 'center', false);
+        DOMHelper.appendChildren(flexC, [this.titleElement, this.resetFilterElement])
         return flexC;
     }
 

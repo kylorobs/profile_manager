@@ -6,6 +6,7 @@ import { BindThis } from '../../../decorators/bindthis';
 import {FormFunctions} from '../../../types/types';
 import { store } from '../../../app';
 import { notLoading } from '../../../state/ProfileSlice';
+import DOMHelper from '../../DOMHelper/DOMHelper';
 
 class FormControls {
 
@@ -72,15 +73,15 @@ class FormControls {
     }
 
     buildModalContent(type: string, text: string): HTMLDivElement{
-        const parent = document.createElement('div');
+        const div = DOMHelper.createDivHTML();
         const content = `
             <p>${text}</p>
             <flex-container alignx="center">
                 <kclsu-button emitid="${type}">Proceed</kclsu-button>
                 <kclsu-button purple emitid="cancel">Cancel</kclsu-button>
             </flex-container>`;
-        parent.innerHTML = content;
-        return parent;
+        DOMHelper.renderInnerHTML(div, content, ['flex-container', 'kclsu-button'], ['alignx', 'emitid', 'purple'])
+        return div;
     }
 
 }

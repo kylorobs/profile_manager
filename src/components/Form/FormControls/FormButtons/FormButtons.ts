@@ -1,5 +1,6 @@
 
 import ButtonHandler from '../../../../models/ButtonHandler';
+import DOMHelper from '../../../DOMHelper/DOMHelper';
 
 class FormButtons {
 
@@ -34,13 +35,13 @@ class FormButtons {
 
 
     private createButtonsContainer(flexClass: string): HTMLDivElement {
-        const container = document.createElement('div');
+        const container = DOMHelper.createDivHTML();
         container.classList.add(flexClass);
         return container;
     }
 
     public createButton ( text: string, purple: boolean, emitId: string, position: 'editing-top' | 'editing-bottom' | 'bottom', cb: (e:Event) => void ): void{
-        const button = document.createElement('kclsu-button') as HTMLKclsuButtonElement;
+        const button = DOMHelper.create<HTMLKclsuButtonElement>('kclsu-button');
         button.text = text;
         button.purple = purple;
         button.emitid = emitId;
@@ -65,8 +66,8 @@ class FormButtons {
     }
 
     public resetButtons(){
-        this.bottomBtnContainer.innerHTML = '';
-        this.topBtnContainer.innerHTML = '';
+        this.bottomBtnContainer.innerHTML = DOMHelper.sanitise('');
+        this.topBtnContainer.innerHTML = DOMHelper.sanitise('');
         this.renderButtons();
     }
 
@@ -79,7 +80,7 @@ class FormButtons {
     }
 
     private renderHelper(ar: any[], container: any){
-        ar.forEach(btn => container.appendChild(btn))
+        DOMHelper.appendChildren(container, ar)
     }   
 
 }

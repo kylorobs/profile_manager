@@ -2,6 +2,7 @@ import { Input } from '../../../models/Input';
 import { KeyMap } from '../../../models/InputKeys';
 import {BindThis} from '../../../decorators/bindthis';
 import { Categories } from '../../../types/types';
+import DOMHelper from '../../DOMHelper/DOMHelper';
 
 //  interface IIndexable {
 //     [key: string]: any;
@@ -21,24 +22,24 @@ class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement | HTMLSelec
         const keymap = this.keymap;
         switch(keymap.type){
             case 'input' :
-                el = document.createElement('input') as HTMLInputElement;
+                el = DOMHelper.create<HTMLInputElement>('input');
             break;
             case 'textarea':
-                el = document.createElement('textarea') as HTMLTextAreaElement;
+                el = DOMHelper.create<HTMLTextAreaElement>('textarea');
                 el.cols = 22;
                 el.rows = 8;
             break;
             case 'select':
-                el = document.createElement('select') as HTMLSelectElement;
+                el =  DOMHelper.create<HTMLSelectElement>('select');
                 keymap.options?.map((optionKey: Categories) => {
-                    const option = document.createElement('option') as HTMLOptionElement;
+                    const option = DOMHelper.create<HTMLOptionElement>('option');
                     option.innerText = optionKey[0];
                     option.value = optionKey[1];
                     return option;
                 })
                 .forEach(option => el.appendChild(option))
             break;
-            default: el = document.createElement('input') as HTMLInputElement;
+            default: el = DOMHelper.create<HTMLInputElement>('input');
         }
 
         el.id = keymap.keyName;

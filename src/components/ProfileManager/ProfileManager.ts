@@ -5,14 +5,13 @@ import { Categories } from '../../types/types';
 import {store} from '../../app';
 import {updateDataUrl, updateFilterKey} from '../../state/ProfileSlice';
 import * as thunks from '../../state/thunks/profile';
-import { ManagerInit, KeyMap } from '../../models/InputKeys';
+import { ManagerInit} from '../../models/InputKeys';
 import LoadingModal from '../Modal/LoadingModal/LoadingModal';
 import DOMHelper from '../DOMHelper/DOMHelper';
 
 class ProfileManager {
 
     public areas: Categories[];
-    private list: List;
 
     constructor(Manager: ManagerInit){
         this.buildHtmlTemplate(Manager.pageTitle);
@@ -20,15 +19,11 @@ class ProfileManager {
         store.dispatch(thunks.fetchData(`${Manager.dataUrl}.json`));
         store.dispatch(updateDataUrl(Manager.dataUrl));
         this.areas = categories;
-        this.list = new List(categories, Manager.categoryKeyName, Manager.labelCardKeys);
         this.setupAreas();
-        this.createForms(Manager.keyMapping);
         store.dispatch(updateFilterKey(Manager.categoryKeyName || ''));
         new LoadingModal();
-    }
-
-    createForms(keyMapping: KeyMap[]){
-        new Form2(keyMapping);
+        new List(categories, Manager.categoryKeyName, Manager.labelCardKeys);
+        new Form2(Manager.keyMapping);
     }
 
     setupAreas(){
@@ -37,15 +32,11 @@ class ProfileManager {
             return new DropArea(col[0], col[1], !!col[2]);
         })
         const parent = document.querySelector('.droparea')!;
-        if (this.areas.length > 0){
-            areas.forEach(area => {
-                parent.appendChild(area.element);
-                })
-        }
-        else {
-            DOMHelper.renderInnerHTML('.droparea', '<p> You currently have no filters set up </p>')
-        }
-        console.log(this.list)
+        if (this.areas.length > 0)
+            areas.forEach(area => parent.appendChild(area.element));
+        else 
+            DOMHelper.renderInnerHTML('.droparea', '<p> You currently have no filters set up </p>');
+        
     }
 
     private buildHtmlTemplate(pageTitle: string): void{
