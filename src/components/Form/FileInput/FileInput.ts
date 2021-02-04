@@ -90,7 +90,7 @@ class FileInput {
       
       //IF DOCUMENT TYPE, SET THUMBNAIL AS PAPERCLIP
       const regex = /.docx?$|.csv$|.xlsx$|.pptx$/gm
-      if (regex.test(url)) url = 'https://res.cloudinary.com/kclsu-media/image/upload/f_auto,fl_any_format/v1611323460/website_uploads/MISC/tickclip_pnpire.png'
+      if (regex.test(url) || url.includes('drive.google.com/drive/folders/')) url = 'https://res.cloudinary.com/kclsu-media/image/upload/f_auto,fl_any_format/v1611323460/website_uploads/MISC/tickclip_pnpire.png'
       else if (this.keymap.type === 'document_file') url = 'https://res.cloudinary.com/kclsu-media/image/upload/f_auto,fl_any_format/v1611323576/website_uploads/MISC/newtick_lo6g5p.png'
       
       //SET THE THUMBNAIL URL
@@ -110,4 +110,4 @@ class FileInput {
 export default FileInput;
 
 
- 
+ResultsLink: "https://drive.google.com/drive/folders/1tx196BEdgBQBVlcreDqECegqfQw-LC5c?usp=sharing"
