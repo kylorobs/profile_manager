@@ -3,6 +3,7 @@
 import {BindThis} from '../../../decorators/bindthis';
 import ButtonHandler from '../../../models/ButtonHandler';
 import { KeyMap } from '../../../models/InputKeys';
+import DOMHelper from '../../DOMHelper/DOMHelper';
 import ImageForm from './ImapeForm/imageForm';
 
 
@@ -18,16 +19,14 @@ class FileInput {
     
     constructor(public parentId: string, protected valid: boolean = false, public keymap: KeyMap, public title: string){
       this.imageurl = keymap.thumbnailUrl ? keymap.thumbnailUrl : '';
-      const div = document.createElement('div');
       this.title = title;
-      div.id = this.title;
-      this.uploadcontainer = div;
+      this.uploadcontainer = DOMHelper.createDivHTML(undefined, undefined, this.title);
       this.thumbnailcontainer = this.createThumbnailContainer();
       this.renderUploadControls();
     }
 
     createThumbnailContainer(){
-      const div = document.createElement('div');
+      const div = DOMHelper.createDivHTML();
       let className = this.keymap.type === 'document_file'? 
                       'document_thumbnail' :
                       'image_thumbnail';
@@ -37,54 +36,67 @@ class FileInput {
 
     renderUploadControls(){
       //CLEAR CONTAINERS
-      this.thumbnailcontainer.innerHTML = '';
-      this.uploadcontainer.innerHTML = '';
+      this.thumbnailcontainer.innerHTML = DOMHelper.sanitise('');
+      this.uploadcontainer.innerHTML = DOMHelper.sanitise('');
       const emitter = 'upload' + this.keymap.inputTitle
 
-      const button = document.createElement('kclsu-button') as HTMLKclsuButtonElement;
+      //create button to upload file
+      const button = DOMHelper.create<HTMLKclsuButtonElement>('kclsu-button');
       button.emitid = emitter;
       button.text = 'Upload New';
       button.verysmall = true;
       button.purple = true;
 
-      const label = document.createElement('span');
-      label.classList.add('fileinputTitle');
-      label.innerText= this.keymap.inputTitle;
+      // create span element to hold label
+      const span = DOMHelper.create<HTMLSpanElement>('span')
+      span.classList.add('fileinputTitle');
+      span.innerText= this.keymap.inputTitle;
 
-      const flex = document.createElement('div');
-      flex.classList.add('flex-end-center');
-      flex.appendChild(label);
-      flex.appendChild(button);
+      //Create container for span label and button
+      const div = DOMHelper.createDivHTML();
+      div.classList.add('flex-end-center');
+      DOMHelper.appendChildren(div, [span, button]);
 
-      //REGISTER CLICK EMIT IN BUTTON HANDLER CLASS
+      //Register click emit in button handler class
       const btnHandler = ButtonHandler.getInstance();
       btnHandler.addEmitter(emitter, this.renderUploader);
 
-      this.uploadcontainer.appendChild(this.thumbnailcontainer);
-      this.uploadcontainer.appendChild(flex);
+      //Append both containers to the main upload container
+      DOMHelper.appendChildren(this.uploadcontainer, [this.thumbnailcontainer, div])
 
-      //RENDER UPLOAD CONTROLS
-      document.getElementById(this.parentId)?.appendChild(this.uploadcontainer);
+      //Render upload controls
+      DOMHelper.renderInnerHTML(`#${this.parentId}`, this.uploadcontainer)
+      // document.getElementById(this.parentId)!.appendChild(this.uploadcontainer)
       this.setThumbnail();
     }
 
     @BindThis
     public updateImageUrl(url:string | null){
-      this.imageurl = url ?? this.imageurl;
+      let updatedUrl = '';
+      if (url === '' || typeof url === 'object'){
+        if (this.keymap.thumbnailUrl) updatedUrl = this.keymap.thumbnailUrl;
+      }
+      else updatedUrl =url;
+
+      this.imageurl = updatedUrl;
+      
       this.setThumbnail();   
     }
 
     @BindThis
     public setThumbnail(): void{
       let url = this.imageurl;
+      
       //IF DOCUMENT TYPE, SET THUMBNAIL AS PAPERCLIP
       const regex = /.docx?$|.csv$|.xlsx$|.pptx$/gm
       if (regex.test(url)) url = 'https://res.cloudinary.com/kclsu-media/image/upload/f_auto,fl_any_format/v1611323460/website_uploads/MISC/tickclip_pnpire.png'
       else if (this.keymap.type === 'document_file') url = 'https://res.cloudinary.com/kclsu-media/image/upload/f_auto,fl_any_format/v1611323576/website_uploads/MISC/newtick_lo6g5p.png'
+      
       //SET THE THUMBNAIL URL
-      this.thumbnailcontainer.innerHTML = `
-        <lazy-image image=${url}></lazy-image>
-      `
+      DOMHelper.renderInnerHTML(this.thumbnailcontainer, `
+      <lazy-image image=${url}></lazy-image>
+    `, ['lazy-image'], ['image'])
+
     }
 
     @BindThis

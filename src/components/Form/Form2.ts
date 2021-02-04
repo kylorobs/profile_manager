@@ -30,31 +30,37 @@ class Form2 {
         this.errorModal = new FormErrorModal();
         this.loading = false;
         const containsFileInputs = keyMappings.find(map => map.type === 'document_file' || map.type === 'image_file' );
-        console.log('contains file index: ' + containsFileInputs);
+        
+        // If there are no Image or Document file types, adjust layout
         if (!containsFileInputs){
             this.adjustFormLayout();
         }
-        //CREATE INPUTS, SEPARATING FILE INPUTS AND TEXT/SELECT INPUTS
+
+        // Create input classes, separating file inputs and text/select inputs
         const inputs = keyMappings.map((map: KeyMap) =>{
             if (map.type === 'document_file' || map.type === 'image_file' ) return new FileInput('fileinputs', false, map, 'url');
             else return new TextInput('textinputs', map);
         });
+
         this.formInputs = inputs;
-        console.log(inputs)
    
+        // Supply the handler functions which will allow the FormControls to update form state 
         this.formControls = new FormControls(!!this.editid, {
             update: () => this.submitForm('update'), 
             add: () => this.submitForm('add'),
             delete: this.deleteData,
             switch: this.swithToEmptyForm
         })
+
         this.submitModal = new Modal();
-        this.configure();
-        store.subscribe(this.configure);
+        this.setEditingState();
+        store.subscribe(this.setEditingState);
     }
 
+    // Check for an editID or Loading boolean in global state. 
+    // Set values if editId exists
     @BindThis
-    configure(){
+    private setEditingState(): void{
         const editId = store.getState().form.editing_id;
         const loading = store.getState().data.loading;
         if (this.loading !== loading) this.loading = loading;
@@ -69,21 +75,18 @@ class Form2 {
         }
     }
 
-    adjustFormLayout(){
-        console.log('adjusting form styles')
+    // Adjust styles of Div Elements contained within form
+    private adjustFormLayout(): void{
         const filesColumn = document.querySelector('#fileinputs')! as HTMLDivElement;
         const textColumn = document.querySelector('#textinputs')! as HTMLDivElement;
-        console.log(filesColumn)
-        console.log(textColumn)
-        // const form = document.querySelector('form')! as HTMLFormElement;
-        //HIDE THE COLUMN WITH FILE INPUTS
         filesColumn.style.display = 'none';
-        //MAKE COL FULL WIDTH
+        // Make column full width
         textColumn.style.width = '100%';
         textColumn.style.maxWidth = '800px';
         textColumn.style.margin = 'auto';
     }
 
+    //Submit the form. We could either be adding a new entry, or updating an existing one
     @BindThis
     submitForm(type: 'add' | 'update'){
         const formErrors = this.validateValues();
@@ -101,10 +104,15 @@ class Form2 {
     }
 
 
+    //We want a blank form, ready for a new entry
     @BindThis
-    swithToEmptyForm(){
+    swithToEmptyForm(): void {
+
+        //Reset editing global state
         this.editid = null;
         this.formControls.toggleEditMode(false);
+
+        // Clear all form inputs
         this.formInputs
         .forEach((input: Inputs) => {
             if ('el' in input) input.el.value = '';
@@ -116,21 +124,30 @@ class Form2 {
 
     }
 
-    setValues(){
+    setValues(): void{
         const data = store.getState().data.profiles;
+
+        //Fetch profile with matching ID
         const profile: Profile = data.filter((prof:Profile) => prof.id === this.editid)[0];
+        //Pull all object keys from profile
         const profileKeys: string[] = Object.keys(profile);
+        
+        // For each input, find matching key name
+        // If a text / select input, set the value property
+        // If a file input, invoke the update function for that component
         this.formInputs
             .forEach((input: Inputs) => {
             const key = profileKeys.find((key: string) => key === input.title);
             if ('el' in input && key) input.el.value = profile[key];
             else if ('imageurl' in input && key) input.updateImageUrl(profile[key]);
             else {
-                console.log('failed to find type of input');
+                console.log('failed to find type of input: ' + input);
                 console.log(input)
+                //We need to show Error Modal. On 'Proceed' we create a NEW input and set state to 'AllowedNewInput'
             }
         })
     }
+
 
     @BindThis
     validateValues(){
@@ -142,14 +159,14 @@ class Form2 {
                 else if ('imageurl' in input){
                     return new Validator(input.imageurl, input.keymap)
                 } 
-                else throw new Error('issue');
+                else throw new Error('issue'); //Show Error Modal
             })
             .filter((er: Validator)=> !er.isValid)
     }
 
 
 
-    packageData(type: 'add' | 'update'):void {
+    private packageData(type: 'add' | 'update'):void {
         
         this.proceedWithConfirmation();
         const profpackage: Profile = {};

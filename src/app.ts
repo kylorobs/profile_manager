@@ -29,47 +29,83 @@ export type RootState = ReturnType<typeof store.getState>;
 
 })(window);
 
-
+const filterForNowWebsite = (val: any) => {
+    return !val.website;
+}
 
  new ProfileManager({
-pageTitle: 'Elec Candidate Manager ',
-categories: [['Approved', 'Approved', null], ['UnApproved', 'UnApproved', null]],
-dataUrl: 'https://varsity-f9a3f.firebaseio.com/87634',
-labelCardKeys: ['', 'Name', 'Post'],
-categoryKeyName: 'Status',
-keyMapping: [
-    { 
-        keyName: 'Name',
-        inputTitle: 'Name',
-        inputDefaultText: 'Full name...',
-        type: 'input',
-        validationErrorMsg: 'Please supply a valid name',
-        validationTypes: ['isNotEmpty']
-    },
-    { 
-        keyName: 'ManifestoLink',
-        inputTitle: 'Manifesto Link',
-        inputDefaultText: '',
-        type: 'input',
-        validationErrorMsg: 'You have not uploaded a manifesto link!',
-        validationTypes: ['isNotEmpty']
-    },
-    { 
-        keyName: 'Post',
-        inputTitle: 'Post Title',
-        inputDefaultText: '',
-        type: 'input',
-        validationErrorMsg: 'There is no Title!',
-        validationTypes: ['isNotEmpty']
-    },
-    { 
-        keyName: 'Status',
-        inputTitle: 'Status',
-        inputDefaultText: 'The candidates status',
-        type: 'input',
-        validationErrorMsg: 'Please enter a candidate status.',
-        validationTypes: ['isNotEmpty']
-    },
-]
-
-});
+    pageTitle: 'ProjectX Profile Manager ',
+    categories: [['No Website', 'website_filter', filterForNowWebsite]],
+    labelCardKeys: ['url', 'name', ''],
+    dataUrl: 'https://test-db-1577e.firebaseio.com/artists',
+    categoryKeyName: 'twitter',
+    keyMapping: [
+        { 
+            keyName: 'name',
+            inputTitle: 'Name',
+            inputDefaultText: 'Full name...',
+            type: 'input',
+            validationErrorMsg: 'Please supply a valid name',
+            validationTypes: ['isNotEmpty']
+        },
+        { 
+            keyName: 'url',
+            inputTitle: 'Profile Image',
+            inputDefaultText: '',
+            type: 'image_file',
+            thumbnailUrl: 'https://res.cloudinary.com/kclsu-media/image/upload/v1605106869/website_uploads/MISC/EM_u4q3mg.png',
+            validationErrorMsg: 'You have not uploaded a profile image!',
+            validationTypes: ['isNotEmpty']
+        },
+        { 
+            keyName: 'description',
+            inputTitle: 'Description',
+            inputDefaultText: 'A short description...',
+            type: 'textarea',
+            validationErrorMsg: 'Please enter a short text description.',
+            validationTypes: ['isNotEmpty']
+        },
+        { 
+            keyName: 'facebook',
+            inputTitle: 'Facebook',
+            inputDefaultText: 'Facebook full url...',
+            type: 'input',
+            validationErrorMsg: 'Please provide a full facebook URL.',
+            validationTypes: ['isNotEmpty', 'isFacebookUrl']
+        },
+        { 
+            keyName: 'twitter',
+            inputTitle: 'Twitter',
+            inputDefaultText: 'Twitter full url...',
+            type: 'input',
+            validationErrorMsg: 'Please provide a full twitter URL for the twitter profile.',
+            validationTypes: ['isNotEmpty']
+        },
+        { 
+            keyName: 'website',
+            inputTitle: 'Website',
+            inputDefaultText: '',
+            type: 'input',
+            validationErrorMsg: 'Please supply a full website URL.',
+            validationTypes: ['isNotEmpty']
+        },
+        { 
+            keyName: 'upcomingEvent',
+            inputTitle: 'Upcoming Event',
+            inputDefaultText: 'The kclsu upcoming event url....',
+            type: 'input',
+            validationErrorMsg: 'Please provide an event URL from the kclsu events page.',
+            validationTypes: ['isUrl']
+        },
+        { 
+            keyName: 'type',
+            inputTitle: 'Category',
+            inputDefaultText: '...',
+            type: 'select',
+            options: [['Xhibit', 'xhibitArtists', null], ['Feautured', 'upcoming', null], ['Artists', 'artists', null], ['Performers', 'performers', null], ['Special Acts', 'specialActs', null]],
+            validationErrorMsg: 'Please choose a category',
+            validationTypes: ['isNotEmpty']
+        }
+    ]
+    
+    });

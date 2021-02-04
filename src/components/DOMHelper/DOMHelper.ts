@@ -14,21 +14,33 @@ class DOMHelper {
     }
 
     //Render HTML strings / elements to a parent node
-    static renderInnerHTML(parentId: string, el: string|HTMLElement, allowedTags: string[] = []){
-        const parent = document.querySelector(parentId)!
-        const options = {} as { ADD_TAGS?: string[] };
-        if (allowedTags.length > 0) options.ADD_TAGS = [...allowedTags]; 
-        console.log(el)
-        if ( el && typeof el !== 'string') parent.appendChild(el);
-        else parent.innerHTML = DOMPurify.sanitize(
+    static renderInnerHTML(parentId: string|HTMLElement, el: string|HTMLElement, allowedTags: string[] = [], allowedAttr: string[] = []){
+        const parent =  typeof parentId ==='string' ? 
+            document.querySelector(parentId)!
+            :
+            parentId;
+        const options = {} as { ADD_TAGS?: string[], ALLOWED_ATTR: string[] };
+        if (allowedTags.length > 0) options.ADD_TAGS = allowedTags; 
+        if (allowedAttr.length >0) options.ALLOWED_ATTR = allowedAttr
+        if ( el && typeof el !== 'string') parent.appendChild(el);    
+        else {
+            console.log('RENDER IMAGE');
+            console.log(DOMPurify.sanitize(
+                el,
+                options
+            ))
+            parent.innerHTML = DOMPurify.sanitize(
             el,
             options
-        );    
+        );  
+            }
+          
     }
 
     //Create a Div Container with containing elements or HTML strings
-    static createDivHTML(str?: string, el?:HTMLElement):HTMLDivElement {
+    static createDivHTML(str?: string, el?:HTMLElement, id?:string):HTMLDivElement {
         const div = document.createElement('div');
+        if (id) div.id = id;
         if (str) div.innerHTML = DOMPurify.sanitize(str);
         if (el) div.appendChild(el);
         return div;
@@ -51,6 +63,10 @@ class DOMHelper {
         if (innerText) el.innerHTML = innerText;
         return el;
     }
+
+    static appendChildren(parent:HTMLElement, children: HTMLElement[] = []):void{
+        if (children.length > 0) children.forEach((child: HTMLElement) => parent.appendChild(child));
+    }   
 
     //Return a sanitised string
     static sanitise(str: string):string { return DOMPurify.sanitize(str)}

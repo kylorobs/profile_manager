@@ -1,5 +1,6 @@
 
 import {BindThis} from '../../../../decorators/bindthis';
+import DOMHelper from '../../../DOMHelper/DOMHelper';
 import UploadModal from '../../../Modal/UploadModal/UploadModal';
 
 
@@ -11,29 +12,27 @@ class ImageForm {
     constructor(private fn: (url: string | null) => void){
       this.uploadModal = new UploadModal();
       this.form = this.createForm();
-      console.log(this.form)
       this.uploadModal.showForm(this.form);
       this.imageurl = '';
     }
 
 
     createForm(){
-      const form = document.createElement('form') as HTMLFormElement;
+      const form = DOMHelper.create<HTMLFormElement>('form');
       form.enctype = "multipart/form-data";
       form.method = 'post';
 
   
-      const el = document.createElement('input') as HTMLInputElement;
+      const el = DOMHelper.create<HTMLInputElement>('input');
       el.id = 'upload';
       el.name = 'file_upload'
       el.type = 'file';
       
-      const submit = document.createElement('input') as HTMLInputElement;
+      const submit = DOMHelper.create<HTMLInputElement>('input');
       submit.type = 'submit';
       form.addEventListener('submit', this.uploadImage);
 
-      form.appendChild(el);
-      form.appendChild(submit);
+      DOMHelper.appendChildren(form, [el, submit])
  
       return form;
     };

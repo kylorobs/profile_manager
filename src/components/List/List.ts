@@ -60,6 +60,7 @@ class List {
     createCards(profiles: Profile[], currentFilter: string, customFilter: filterFn ):void{
         document.querySelector('.list')!.appendChild(this.searchContainer);
         const [image, heading, subtext] = this.cardKeys;
+
         //Default Filter function passed into .filter() function
         const filterByCategory = (prof: Profile) => {
             if (!currentFilter) return true;
