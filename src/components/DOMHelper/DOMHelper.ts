@@ -13,22 +13,35 @@ class DOMHelper {
         console.log(parent, ar);
     }
 
-    static renderInnerHTML(parentId: string, el: string, allowedTags: string[] = []){
-        console.log(parentId, el);
+    //Render HTML strings / elements to a parent node
+    static renderInnerHTML(parentId: string, el: string|HTMLElement, allowedTags: string[] = []){
+        const parent = document.querySelector(parentId)!
         const options = {} as { ADD_TAGS?: string[] };
-        if (allowedTags.length > 0) options.ADD_TAGS = [...allowedTags] 
-        document.querySelector(parentId)!.innerHTML = DOMPurify.sanitize(
+        if (allowedTags.length > 0) options.ADD_TAGS = [...allowedTags]; 
+        console.log(el)
+        if ( el && typeof el !== 'string') parent.appendChild(el);
+        else parent.innerHTML = DOMPurify.sanitize(
             el,
             options
         );    
     }
 
-    static createDivHTML(str?: string):HTMLDivElement {
+    //Create a Div Container with containing elements or HTML strings
+    static createDivHTML(str?: string, el?:HTMLElement):HTMLDivElement {
         const div = document.createElement('div');
         if (str) div.innerHTML = DOMPurify.sanitize(str);
+        if (el) div.appendChild(el);
         return div;
     }
 
+    //create a new element 
+    static createElement<T extends string>(elType:T, innerText?:string):HTMLElement{
+        const el = document.createElement(elType);
+        if (innerText) el.innerHTML = innerText;
+        return el;
+    }
+
+    //Return a sanitised string
     static sanitise(str: string):string { return DOMPurify.sanitize(str)}
 
 
