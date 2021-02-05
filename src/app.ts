@@ -29,9 +29,16 @@ export type RootState = ReturnType<typeof store.getState>;
 
 })(window);
 
+const filterForBioscience = (val:any) => {
+    return val.Post.includes('Bioscience');
+}
+const filterForPres = (val:any) => {
+    return val.Post.includes('President');
+}
+
  new ProfileManager({
     pageTitle: 'Elections Results Manager ',
-    categories: [],
+    categories: [['Bioscience', 'Bioscience', filterForBioscience], ['President', 'Pres', filterForPres]],
     dataUrl: 'https://varsity-f9a3f.firebaseio.com/163/results',
     labelCardKeys: ['ImageLink', 'Name', ''],
     categoryKeyName: '',

@@ -28,7 +28,7 @@ class List {
         this.searchContainer.containerselector = 'label-card';
         this.searchContainer.style.overflow = 'scroll';
         this.updateList();
-        this.filterControls = new ListFilter(store.getState().data.filterid);
+        this.filterControls = new ListFilter(store.getState().data.filterid, store.getState().data.profiles.length);
         document.querySelector('.list')!.appendChild(this.filterControls.el);
 
         store.subscribe(this.updateList);
@@ -52,14 +52,15 @@ class List {
         const matchingFilter = this.filterNames.find(filter => filter[1] === currentFilter);
         if (matchingFilter) filterName = matchingFilter[0];
         this.clearList();
-        this.updateFilter(filterName);
-        if (!store.getState().data.error) this.createCards(profiles, currentFilter, filterFunction);
+        this.updateFilter(filterName, this.createCards(profiles, currentFilter, filterFunction));
+        // if (!store.getState().data.error) this.createCards(profiles, currentFilter, filterFunction);
     }
 
     @BindThis
-    createCards(profiles: Profile[], currentFilter: string, customFilter: filterFn ):void{
+    createCards(profiles: Profile[], currentFilter: string, customFilter: filterFn ):number{
         document.querySelector('.list')!.appendChild(this.searchContainer);
         const [image, heading, subtext] = this.cardKeys;
+        let count = 0;
 
         //Default Filter function passed into .filter() function
         const filterByCategory = (prof: Profile) => {
@@ -68,21 +69,26 @@ class List {
         };
 
         if (this.searchContainer.shadowRoot){
-            profiles
+           profiles
                 .filter(customFilter || filterByCategory)
                 .map(prof=> {
                     return new Card(prof[heading], prof.id, prof[image], prof[subtext]);
                 })
-                .forEach(card => this.searchContainer.appendChild(card.element));
+                .forEach(card => {
+                    this.searchContainer.appendChild(card.element);
+                    count++;
+                });
 
             this.searchContainer!.shadowRoot!.querySelector('div')!.style.height = 'auto';
             this.searchContainer!.shadowRoot!.querySelector('div')!.style.width = '90%';
             this.searchContainer!.shadowRoot!.querySelector('div')!.style.margin = 'auto';
         }
+
+        return count;
     }
 
-    updateFilter(currentFilter: string){
-        this.filterControls.updateFilter(currentFilter);
+    updateFilter(currentFilter: string, resultsCount: number){
+        this.filterControls.updateFilter(currentFilter, resultsCount);
     }
 
 
