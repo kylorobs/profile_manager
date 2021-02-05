@@ -6,6 +6,23 @@ import { resetEditMode } from '../FormSlice';
   import {setError} from '../ProfileSlice';
 
 
+const createUrl = (dataPackage: any) => {
+  let fetchUrl;
+  const {url, id, category} = dataPackage;
+  const token = store.getState().data.token;
+  const auth = !token ? '' : `?auth=${token}`;
+
+  if (id && category)
+    fetchUrl = `${url}/${id}/${category}.json${auth}`;
+  else if (id) 
+    fetchUrl = `${url}/${id}.json${auth}`;
+  else 
+    fetchUrl = `${url}.json${auth}`;
+
+  return fetchUrl;
+}
+
+
 const makeRequest = async (type: 'POST' | 'GET' | 'PUT' | 'DELETE' | 'PATCH', url: string, data:any) => {
     let payload: any = {
         method: type, 
@@ -25,7 +42,7 @@ const makeRequest = async (type: 'POST' | 'GET' | 'PUT' | 'DELETE' | 'PATCH', ur
 export const fetchData: any = createAsyncThunk(
     'profiles/fetchData', async (url:string) => {
         try {
-            const res = await makeRequest('GET', url, null);
+            const res = await makeRequest('GET', createUrl({url}), null);
             const data = [];
             for (const key in res){
               if (res[key] !== null) {
@@ -47,7 +64,7 @@ export const fetchData: any = createAsyncThunk(
     'profiles/updateData',
     async (dataPackage:any) => {
       try {
-        const res = await makeRequest('PUT', `${dataPackage.url}/${dataPackage.id}.json`, dataPackage.data);
+        const res = await makeRequest('PUT', createUrl(dataPackage), dataPackage.data);
         return {id:dataPackage.id, data: res};
       }
       catch(e) {
@@ -62,7 +79,7 @@ export const fetchData: any = createAsyncThunk(
     'profiles/addData',
     async (dataPackage:any) => {
         try {
-            const res = await makeRequest('POST', `${dataPackage.url}.json`, dataPackage.data);
+            const res = await makeRequest('POST', createUrl(dataPackage), dataPackage.data);
             const newData = {...dataPackage.data};
             newData.id = res.name;
           return newData;
@@ -79,7 +96,7 @@ export const fetchData: any = createAsyncThunk(
     'profiles/deleteData',
     async (dataPackage:any) => {
       try {
-        await makeRequest('DELETE', `${dataPackage.url}/${dataPackage.id}.json`, null);
+        await makeRequest('DELETE', createUrl(dataPackage), null);
         store.dispatch(resetEditMode());
         return {id: dataPackage.id};
       }
@@ -94,7 +111,7 @@ export const fetchData: any = createAsyncThunk(
   export const updateCategory: any = createAsyncThunk(
     'profiles/updateCategory', async (dataPackage:any) => {
         try {
-          const res = await makeRequest('PUT', `${dataPackage.url}/${dataPackage.id}/${dataPackage.category}.json`, dataPackage.val);
+          const res = await makeRequest('PUT', createUrl(dataPackage), dataPackage.val);
           return { id:dataPackage.id, value: dataPackage.val, data: res};
         }
         catch(e) {

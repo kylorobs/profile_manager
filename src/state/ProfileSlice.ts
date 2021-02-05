@@ -16,7 +16,8 @@ const initialState: DataState = {
   filterkey: '',
   filterid: '',
   filterWithCustomFunction: '',
-  authenticated: false
+  authenticated: false,
+  token: ''
 }
 
 
@@ -34,6 +35,10 @@ const profileSlice = createSlice({
     },
     notLoading: (state: DataState) => {
       state.loading = false;
+    },
+    setAuthentication: (state: DataState, action) => {
+      state.authenticated = true;
+      state.token = action.payload;
     },
     updateCategory: <T extends {payload: {id: string, value: string}}> (state: DataState, action: T) => {
       const profileIndex = state.profiles.findIndex((prof:Profile) => prof.id === action.payload.id);

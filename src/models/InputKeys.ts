@@ -2,6 +2,7 @@ import {Categories} from '../types/types';
 
 export interface ManagerInit {
     pageTitle: string,
+    authArea?: string,
     categories: Categories[],
     labelCardKeys: [string, string, string], //[Image, Heading, SubText]
     dataUrl: string,

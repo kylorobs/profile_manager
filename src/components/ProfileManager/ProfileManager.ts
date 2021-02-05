@@ -3,20 +3,38 @@ import DropArea from '../DropArea/DropArea'
 import Form2 from '../Form/Form2';
 import { Categories } from '../../types/types';
 import {store} from '../../app';
-import {updateDataUrl, updateFilterKey} from '../../state/ProfileSlice';
+import {setError, updateDataUrl, updateFilterKey} from '../../state/ProfileSlice';
 import * as thunks from '../../state/thunks/profile';
 import { ManagerInit} from '../../models/InputKeys';
 import LoadingModal from '../Modal/LoadingModal/LoadingModal';
 import DOMHelper from '../DOMHelper/DOMHelper';
+import { BindThis } from '../../decorators/bindthis';
 
 class ProfileManager {
 
-    public areas: Categories[];
+    app: HTMLElement;
+    public areas: Categories[]
 
     constructor(Manager: ManagerInit){
-        this.buildHtmlTemplate(Manager.pageTitle);
+        this.app = this.buildHtmlTemplate(Manager.pageTitle);
+        this.areas = [];
+        const authRequired = this.checkforAuth(Manager.authArea);
+        authRequired ? store.subscribe(() => this.initialise(Manager)) : this.initialise(Manager)
+    }
+
+    private checkforAuth(authArea?: string): boolean{
+        if (authArea){
+            this.displayLogin(authArea);
+            return true;
+        }
+        else return false;
+    }
+
+    @BindThis
+    protected initialise(Manager: ManagerInit){
+        
         const categories = Manager.categories || [];
-        store.dispatch(thunks.fetchData(`${Manager.dataUrl}.json`));
+        store.dispatch(thunks.fetchData(Manager.dataUrl));
         store.dispatch(updateDataUrl(Manager.dataUrl));
         this.areas = categories;
         this.setupAreas();
@@ -26,7 +44,14 @@ class ProfileManager {
         new Form2(Manager.keyMapping);
     }
 
-    setupAreas(){
+    private displayLogin(authArea: string){
+        const login = DOMHelper.create<HTMLUserLoginElement>('user-login');;
+        login.database = DOMHelper.sanitise(authArea);
+        // login.callbackFn = () => store.dispatch(authenticate)
+        DOMHelper.appendChildren(this.app, [login])
+    }
+
+    private setupAreas(){
         //CREATE DRAG AND DROP AREAS
         const areas = this.areas.map((col: Categories) => {
             return new DropArea(col[0], col[1], !!col[2]);
@@ -39,13 +64,14 @@ class ProfileManager {
         
     }
 
-    private buildHtmlTemplate(pageTitle: string): void{
-        const parent = document.getElementById('app')! as HTMLDivElement;
+    private buildHtmlTemplate(pageTitle: string): HTMLElement{
+        let parent = document.getElementById('app')! as HTMLDivElement;
         if (parent){
             const formTags = ['kclsu-modal'];
             
             DOMHelper.renderInnerHTML('#app', `
                 <kclsu-modal show="false"></kclsu-modal>
+                <userl-login show="false"></user-login>
                 <div class="area">
                     <h1>${pageTitle}</h1>
                     <div class="droparea"></div>
@@ -62,6 +88,11 @@ class ProfileManager {
                 </div> `,
                 formTags)
         }
+        else {
+            parent = DOMHelper.createDivHTML();
+            store.dispatch(setError('No Div with parent ID APP displayed'));
+        }
+        return parent;
     }
 
 

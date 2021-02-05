@@ -38,6 +38,7 @@ const filterForPres = (val:any) => {
 
  new ProfileManager({
     pageTitle: 'Elections Results Manager ',
+
     categories: [['Bioscience', 'Bioscience', filterForBioscience], ['President', 'Pres', filterForPres]],
     dataUrl: 'https://varsity-f9a3f.firebaseio.com/163/results',
     labelCardKeys: ['ImageLink', 'Name', ''],

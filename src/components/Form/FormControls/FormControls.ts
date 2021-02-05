@@ -29,7 +29,7 @@ class FormControls {
         this.formButtons.createButton('Update', false, 'updateHandler', 'bottom', this.handleUpdate);
         this.formButtons.createButton('Create New', false, 'addHandler', 'editing-bottom', this.handleAdd);
         this.formButtons.createButton('Delete', true, 'deleteHandler', 'bottom', this.handleDelete);
-        this.formButtons.createButton('Switch To New Entry Form', true, 'switch', 'editing-top', formFns.switch);
+        this.formButtons.createButton('New Entry Form', true, 'switch', 'editing-top', formFns.switch);
         this.formButtons.resetButtons();
 
         //CREATE BUTTON EVENTS AND HANDLERS

@@ -15,5 +15,6 @@ export interface DataState {
     filterid: string,
     filterkey: string,
     filterWithCustomFunction: string,
-    authenticated: boolean
+    authenticated: boolean,
+    token: string
 }
