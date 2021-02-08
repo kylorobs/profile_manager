@@ -15,13 +15,21 @@ class List {
     profiles: Profile[];
     private searchContainer: HTMLKclsuSearchElement;
     private filterControls: ListFilter;
+    private currentFilter: string;
+    private categoryFilterFunctionId: string;
     private cardKeys: [string, string, string];
     
     constructor(filterNames: Categories[], filterKey: string, cardKeys: [string, string, string]){
         this.title = 'All Artists';
         this.filterKey = filterKey; 
         this.cardKeys = cardKeys;
+
         this.profiles = store.getState().data.profiles;
+        this.currentFilter = store.getState().data.filterid;
+        this.categoryFilterFunctionId = store.getState().data.filterWithCustomFunction;
+
+
+        console.log(this.profiles)
         this.searchContainer = DOMHelper.create<HTMLKclsuSearchElement>('kclsu-search');
         this.filterNames = filterNames;
         this.searchContainer.attr = 'cardtitle';
@@ -39,6 +47,18 @@ class List {
         const profiles = await store.getState().data.profiles;
         const currentFilter = await store.getState().data.filterid;
         const categoryFilterFunctionId = await store.getState().data.filterWithCustomFunction;
+
+        //No need to update list if no change in profiles
+        console.log('The 3 tetst')
+        console.log(this.profiles === profiles);
+        console.log(!!currentFilter);
+        console.log(!!categoryFilterFunctionId);
+        if (this.profiles === profiles 
+                && this.currentFilter === currentFilter 
+                && this.categoryFilterFunctionId ===  categoryFilterFunctionId 
+                && this.profiles.length !== 0
+            ) return;
+        
         let filterFunction = null as filterFn;
         let filterName = '';
 
@@ -54,6 +74,11 @@ class List {
         this.clearList();
         this.updateFilter(filterName, this.createCards(profiles, currentFilter, filterFunction));
         // if (!store.getState().data.error) this.createCards(profiles, currentFilter, filterFunction);
+        
+        //Set the fetched profiles to the profiles property 
+        this.profiles = profiles;
+        this.currentFilter = currentFilter;
+        this.categoryFilterFunctionId = categoryFilterFunctionId;
     }
 
     @BindThis
