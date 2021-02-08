@@ -29,7 +29,6 @@ class List {
         this.categoryFilterFunctionId = store.getState().data.filterWithCustomFunction;
 
 
-        console.log(this.profiles)
         this.searchContainer = DOMHelper.create<HTMLKclsuSearchElement>('kclsu-search');
         this.filterNames = filterNames;
         this.searchContainer.attr = 'cardtitle';
@@ -48,11 +47,7 @@ class List {
         const currentFilter = await store.getState().data.filterid;
         const categoryFilterFunctionId = await store.getState().data.filterWithCustomFunction;
 
-        //No need to update list if no change in profiles
-        console.log('The 3 tetst')
-        console.log(this.profiles === profiles);
-        console.log(!!currentFilter);
-        console.log(!!categoryFilterFunctionId);
+        //Do not update list if no changes in these properties
         if (this.profiles === profiles 
                 && this.currentFilter === currentFilter 
                 && this.categoryFilterFunctionId ===  categoryFilterFunctionId 
@@ -68,7 +63,8 @@ class List {
                 filterFunction = category[2];
                 filterName = category[0]; 
             }
-        }
+        };
+
         const matchingFilter = this.filterNames.find(filter => filter[1] === currentFilter);
         if (matchingFilter) filterName = matchingFilter[0];
         this.clearList();

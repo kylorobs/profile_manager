@@ -1,5 +1,7 @@
 
+import { store } from '../../../../app';
 import {BindThis} from '../../../../decorators/bindthis';
+import { setError } from '../../../../state/ProfileSlice';
 import DOMHelper from '../../../DOMHelper/DOMHelper';
 import UploadModal from '../../../Modal/UploadModal/UploadModal';
 
@@ -38,6 +40,11 @@ class ImageForm {
     };
 
 
+    //For the moment, keeping Fetch logic here and not in a reducer. 
+    //By changing redux state to update FileInput component, the whole component will reload
+    //and we might lose user input.
+
+
     @BindThis
     uploadImage(e:Event){
         this.uploadModal.showSpinner();
@@ -47,19 +54,22 @@ class ImageForm {
         .then(result => {
           console.log('IMAHGE UPLOAD RESULT');
           console.log(result)
+
+          //Check if there is a new URL in the result
           if (!result.url){
-            this.uploadModal.showError(result.message? result.message : 'Failed to upload')
+            store.dispatch(setError(result.message? result.message : 'Failed to upload'))
             this.fn(null);
             throw new Error('failed to upload');
           }
+
           this.uploadModal.exitModal();
           this.imageurl = result.url;
           this.fn(result.url) ; 
         })
         .catch(er => {
-          console.log('ERROR : Catch Statement in File Upload' + ' ' + er)
-          // this.uploadModal.showError(er.message? er.message : 'Failed to upload')
           this.fn(null);
+          this.uploadModal.exitModal();
+          store.dispatch(setError('Failed to upload file: ' + er))
           throw new Error(er);
         })
     }

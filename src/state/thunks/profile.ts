@@ -3,7 +3,7 @@ import {
   } from '@reduxjs/toolkit';
 import { store } from '../../app';
 import { resetEditMode } from '../FormSlice';
-  import {setError} from '../ProfileSlice';
+  import {notLoading, setError} from '../ProfileSlice';
 
 
 const createUrl = (dataPackage: any) => {
@@ -28,8 +28,12 @@ const makeRequest = async (type: 'POST' | 'GET' | 'PUT' | 'DELETE' | 'PATCH', ur
         method: type, 
         headers: {'Content-Type': 'application/json'},
     };
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
     if (data) payload.body = JSON.stringify(data);
-    const response = await fetch(url, payload);
+
+    const response = await fetch(url, {...payload, signal: controller.signal});
+    clearTimeout(timer);
     if (type !== 'DELETE'){
         const result =  await response.json();
         if (!result) throw new Error();
@@ -52,7 +56,8 @@ export const fetchData: any = createAsyncThunk(
             }
             return data;
         } catch (e){
-            store.dispatch(setError('error in fetching data: ' + e));
+            store.dispatch(setError('Error in fetching data:... ' + e));
+            store.dispatch(notLoading());
             return ; 
         }
     } 
@@ -68,7 +73,8 @@ export const fetchData: any = createAsyncThunk(
         return {id:dataPackage.id, data: res};
       }
       catch(e) {
-        store.dispatch(setError('error in updating data: ' + e));
+        store.dispatch(setError('Error in updating data:... ' + e));
+        store.dispatch(notLoading());
         return ; 
       }
     }
@@ -85,7 +91,8 @@ export const fetchData: any = createAsyncThunk(
           return newData;
         }
         catch(e) {
-          store.dispatch(setError('error adding new data field: ' + e));
+          store.dispatch(setError('error adding new data field:.... ' + e));
+          store.dispatch(notLoading());
           return ; 
         }
       }
@@ -101,7 +108,8 @@ export const fetchData: any = createAsyncThunk(
         return {id: dataPackage.id};
       }
       catch(e) {
-        store.dispatch(setError('error in deleting data: ' + e));
+        store.dispatch(setError('Error in deleting data: ... ' + e));
+        store.dispatch(notLoading());
         return ; 
       }
     }
@@ -115,7 +123,8 @@ export const fetchData: any = createAsyncThunk(
           return { id:dataPackage.id, value: dataPackage.val, data: res};
         }
         catch(e) {
-          store.dispatch(setError('error in updating data: ' + e));
+          store.dispatch(setError('error in updating category: ' + e));
+          store.dispatch(notLoading());
           return ; 
         }
       } 

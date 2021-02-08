@@ -9,6 +9,7 @@ import { ManagerInit} from '../../models/InputKeys';
 import LoadingModal from '../Modal/LoadingModal/LoadingModal';
 import DOMHelper from '../DOMHelper/DOMHelper';
 import { BindThis } from '../../decorators/bindthis';
+import ErrorModal from '../Modal/ErrorModal/ErrorModal';
 
 class ProfileManager {
 
@@ -19,7 +20,8 @@ class ProfileManager {
         this.app = this.buildHtmlTemplate(Manager.pageTitle);
         this.areas = [];
         const authRequired = this.checkforAuth(Manager.authArea);
-        authRequired ? store.subscribe(() => this.initialise(Manager)) : this.initialise(Manager)
+        authRequired ? store.subscribe(() => this.initialise(Manager)) : this.initialise(Manager);
+        new ErrorModal();
     }
 
     private checkforAuth(authArea?: string): boolean{
@@ -32,7 +34,6 @@ class ProfileManager {
 
     @BindThis
     protected initialise(Manager: ManagerInit){
-        
         const categories = Manager.categories || [];
         store.dispatch(thunks.fetchData(Manager.dataUrl));
         store.dispatch(updateDataUrl(Manager.dataUrl));

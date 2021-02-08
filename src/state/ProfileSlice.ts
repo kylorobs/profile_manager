@@ -64,6 +64,10 @@ const profileSlice = createSlice({
       state.error = true;
       state.errorMessage = action.payload;
     },
+    clearErrors: (state: DataState) => {
+      state.error = false;
+      state.errorMessage = '';
+    },
   },
   extraReducers: {
     // Add reducers for additional action types here, and handle loading state as needed
@@ -112,6 +116,7 @@ export const {
   updateFilterWithCustomFunction,
   updateDataUrl,
   setError,
+  clearErrors
 } = profileSlice.actions;
 
 

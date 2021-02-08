@@ -29,23 +29,17 @@ export type RootState = ReturnType<typeof store.getState>;
 
 })(window);
 
-const filterForBioscience = (val:any) => {
-    return val.Post.includes('Bioscience');
-}
-const filterForPres = (val:any) => {
-    return val.Post.includes('President');
-}
+
 
  new ProfileManager({
-    pageTitle: 'Elections Results Manager ',
-
-    categories: [['Bioscience', 'Bioscience', filterForBioscience], ['President', 'Pres', filterForPres]],
-    dataUrl: 'https://varsity-f9a3f.firebaseio.com/163/results',
-    labelCardKeys: ['ImageLink', 'Name', ''],
-    categoryKeyName: '',
+    pageTitle: 'ProjectX Profile Manager ',
+    categories: [["Coming Up", "upcoming", null], ["Artists", "xhibitArtists", null], ["Creators", "specialActs", null], ["Performers", "performers", null]],
+    labelCardKeys: ['url', 'name', ''],
+    dataUrl: 'https://test-db-1577e.firebaseio.com/artists',
+    categoryKeyName: 'type',
     keyMapping: [
         { 
-            keyName: 'Name',
+            keyName: 'name',
             inputTitle: 'Name',
             inputDefaultText: 'Full name...',
             type: 'input',
@@ -53,46 +47,63 @@ const filterForPres = (val:any) => {
             validationTypes: ['isNotEmpty']
         },
         { 
-            keyName: 'ImageLink',
-            inputTitle: 'Image Link',
+            keyName: 'url',
+            inputTitle: 'Profile Image',
             inputDefaultText: '',
             type: 'image_file',
             thumbnailUrl: 'https://res.cloudinary.com/kclsu-media/image/upload/v1605106869/website_uploads/MISC/EM_u4q3mg.png',
-            validationErrorMsg: 'You have not uploaded a Profile Image!',
+            validationErrorMsg: 'You have not uploaded a profile image!',
             validationTypes: ['isNotEmpty']
         },
         { 
-            keyName: 'ManifestoLink',
-            inputTitle: 'Manifesto Link',
+            keyName: 'description',
+            inputTitle: 'Description',
+            inputDefaultText: 'A short description...',
+            type: 'textarea',
+            validationErrorMsg: 'Please enter a short text description.',
+            validationTypes: ['isNotEmpty']
+        },
+        { 
+            keyName: 'facebook',
+            inputTitle: 'Facebook',
+            inputDefaultText: 'Facebook full url...',
+            type: 'input',
+            validationErrorMsg: 'Please provide a full facebook URL.',
+            validationTypes: ['isNotEmpty', 'isFacebookUrl']
+        },
+        { 
+            keyName: 'twitter',
+            inputTitle: 'Twitter',
+            inputDefaultText: 'Twitter full url...',
+            type: 'input',
+            validationErrorMsg: 'Please provide a full twitter URL for the twitter profile.',
+            validationTypes: ['isNotEmpty']
+        },
+        { 
+            keyName: 'website',
+            inputTitle: 'Website',
             inputDefaultText: '',
             type: 'input',
-            validationErrorMsg: 'You have not added a manifesto link!',
+            validationErrorMsg: 'Please supply a full website URL.',
             validationTypes: ['isNotEmpty']
         },
         { 
-            keyName: 'Post',
-            inputTitle: 'Post Title',
-            inputDefaultText: '',
+            keyName: 'upcomingEvent',
+            inputTitle: 'Upcoming Event',
+            inputDefaultText: 'The kclsu upcoming event url....',
             type: 'input',
-            validationErrorMsg: 'There is no Title!',
-            validationTypes: ['isNotEmpty']
+            validationErrorMsg: 'Please provide an event URL from the kclsu events page.',
+            validationTypes: ['isUrl']
         },
         { 
-            keyName: 'ResultsLink',
-            inputTitle: 'Breakdown Spreadsheet',
-            inputDefaultText: '',
-            type: 'document_file',
-            validationErrorMsg: 'There is no Breakdown Spreadsheet attached',
+            keyName: 'type',
+            inputTitle: 'Category',
+            inputDefaultText: '...',
+            type: 'select',
+            options: [["Coming Up", "upcoming", null], ["Artists (Xhibit)", "xhibitArtists", null], ["Creators (Xtend)", "specialActs", null], ["Performers (Xpress)", "performers", null]],
+            validationErrorMsg: 'Please choose a category',
             validationTypes: ['isNotEmpty']
-        },
-        { 
-            keyName: 'candidateId',
-            inputTitle: 'Candidate Id',
-            inputDefaultText: 'The ID of the candidate',
-            type: 'input',
-            validationErrorMsg: 'There is no candidate ID',
-            validationTypes: ['isNotEmpty']
-        },
+        }
     ]
     
     });

@@ -198,7 +198,7 @@ h6 {
         background-color: white;
         overflow: scroll;
         width: auto;
-        max-height: 30em;
+        max-height: 40em;
 
         & label-card {
             cursor: pointer;
@@ -229,6 +229,7 @@ h6 {
         justify-content: center;
         box-shadow: 7px 8px 7px 0px rgb(0 0 0 / 28%);
         cursor: pointer;
+        text-align: center;
     }
 
     .dropNeutral{
