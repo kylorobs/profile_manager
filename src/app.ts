@@ -44,7 +44,7 @@ export type RootState = ReturnType<typeof store.getState>;
             inputDefaultText: 'Full name...',
             type: 'input',
             validationErrorMsg: 'Please supply a valid name',
-            validationTypes: ['isNotEmpty']
+            validationTypes: ['isRequired']
         },
         { 
             keyName: 'url',
@@ -53,7 +53,7 @@ export type RootState = ReturnType<typeof store.getState>;
             type: 'image_file',
             thumbnailUrl: 'https://res.cloudinary.com/kclsu-media/image/upload/v1605106869/website_uploads/MISC/EM_u4q3mg.png',
             validationErrorMsg: 'You have not uploaded a profile image!',
-            validationTypes: ['isNotEmpty']
+            validationTypes: []
         },
         { 
             keyName: 'description',
@@ -61,7 +61,7 @@ export type RootState = ReturnType<typeof store.getState>;
             inputDefaultText: 'A short description...',
             type: 'textarea',
             validationErrorMsg: 'Please enter a short text description.',
-            validationTypes: ['isNotEmpty']
+            validationTypes: []
         },
         { 
             keyName: 'facebook',
@@ -69,7 +69,7 @@ export type RootState = ReturnType<typeof store.getState>;
             inputDefaultText: 'Facebook full url...',
             type: 'input',
             validationErrorMsg: 'Please provide a full facebook URL.',
-            validationTypes: ['isNotEmpty', 'isFacebookUrl']
+            validationTypes: ['isFacebookUrl']
         },
         { 
             keyName: 'twitter',
@@ -77,7 +77,7 @@ export type RootState = ReturnType<typeof store.getState>;
             inputDefaultText: 'Twitter full url...',
             type: 'input',
             validationErrorMsg: 'Please provide a full twitter URL for the twitter profile.',
-            validationTypes: ['isNotEmpty']
+            validationTypes: []
         },
         { 
             keyName: 'website',
@@ -85,7 +85,7 @@ export type RootState = ReturnType<typeof store.getState>;
             inputDefaultText: '',
             type: 'input',
             validationErrorMsg: 'Please supply a full website URL.',
-            validationTypes: ['isNotEmpty']
+            validationTypes: []
         },
         { 
             keyName: 'upcomingEvent',
@@ -93,7 +93,7 @@ export type RootState = ReturnType<typeof store.getState>;
             inputDefaultText: 'The kclsu upcoming event url....',
             type: 'input',
             validationErrorMsg: 'Please provide an event URL from the kclsu events page.',
-            validationTypes: ['isUrl']
+            validationTypes: ['isUrl', 'isRequired']
         },
         { 
             keyName: 'type',
@@ -102,7 +102,7 @@ export type RootState = ReturnType<typeof store.getState>;
             type: 'select',
             options: [["Coming Up", "upcoming", null], ["Artists (Xhibit)", "xhibitArtists", null], ["Creators (Xtend)", "specialActs", null], ["Performers (Xpress)", "performers", null]],
             validationErrorMsg: 'Please choose a category',
-            validationTypes: ['isNotEmpty']
+            validationTypes: ['isRequired']
         }
     ]
     

@@ -66,8 +66,8 @@ class FormButtons {
     }
 
     public resetButtons(){
-        this.bottomBtnContainer.innerHTML = DOMHelper.sanitise('');
-        this.topBtnContainer.innerHTML = DOMHelper.sanitise('');
+        this.bottomBtnContainer.innerHTML = '';
+        this.topBtnContainer.innerHTML = '';
         this.renderButtons();
     }
 

@@ -3,7 +3,7 @@ import validator from 'validator';
 
 export function validateInput(val: any, type: validChecks ): boolean {
     switch(type){
-        case 'isNotEmpty':
+        case 'isRequired':
             return !validator.isEmpty(val);
         case  'isUrl':
             return validator.isURL(val);

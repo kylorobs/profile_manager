@@ -10,13 +10,21 @@ class Validator {
     constructor(val: any, keyMap: KeyMap ){
         this.isValid = true;
         this.errorMessages = [];
-        keyMap.validationTypes.forEach(type => this.validate(val, type, keyMap.validationErrorMsg))
+
+        //check for required option in keymap
+        const containsRequired = keyMap.validationTypes.find(type => type === 'isRequired');
+        if (!val){
+            if (containsRequired) 
+                keyMap.validationTypes.forEach(type => this.validate(val, type, keyMap.validationErrorMsg))
+        }
+        else keyMap.validationTypes.forEach(type => this.validate(val, type, keyMap.validationErrorMsg)) 
+        
     }
 
     validate(val: any, type: validChecks, errorMsg: string){
         //WE NEED TO FIRST  CHECK IF FIELD IS REQUIRED - THEN ONLY PROCEED WITH OTHER ERRORS
         switch(type){
-            case 'isNotEmpty':
+            case 'isRequired':
                 this.setErrorHelper(!validator.isEmpty(val), errorMsg);
                 break;
             case 'isFacebookUrl':
