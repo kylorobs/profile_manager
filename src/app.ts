@@ -34,7 +34,7 @@ export type RootState = ReturnType<typeof store.getState>;
  new ProfileManager({
     pageTitle: 'ProjectX Profile Manager ',
     categories: [["Coming Up", "upcoming", null], ["Artists", "xhibitArtists", null], ["Creators", "specialActs", null], ["Performers", "performers", null]],
-    labelCardKeys: ['url', 'name', ''],
+    labelCardKeys: ['', 'name', 'type'],
     dataUrl: 'https://test-db-1577e.firebaseio.com/artists',
     categoryKeyName: 'type',
     keyMapping: [

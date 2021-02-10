@@ -41,7 +41,10 @@ class ProfileManager {
         this.setupAreas();
         store.dispatch(updateFilterKey(Manager.categoryKeyName || ''));
         new LoadingModal();
-        new List(categories, Manager.categoryKeyName, Manager.labelCardKeys);
+
+        //LOOK FOR IMAGE KEY IN LABEL CARD KEYS IN CONFIG TO SET CARD TYPE
+        const cardType = !!Manager.labelCardKeys[0] ? 'label-card' : 'text-card';
+        new List(categories, Manager.categoryKeyName, Manager.labelCardKeys, cardType);
         new Form2(Manager.keyMapping);
     }
 

@@ -199,9 +199,14 @@ h6 {
         overflow: scroll;
         width: auto;
         max-height: 40em;
+        padding: 1em;
 
-        & label-card {
+        & label-card, text-card {
             cursor: pointer;
+        }
+
+        & text-card {
+            margin: 5px;
         }
 
         & kclsu-search {

@@ -18,12 +18,13 @@ class List {
     private currentFilter: string;
     private categoryFilterFunctionId: string;
     private cardKeys: [string, string, string];
+    private cardType: 'text-card' | 'label-card';
     
-    constructor(filterNames: Categories[], filterKey: string, cardKeys: [string, string, string]){
+    constructor(filterNames: Categories[], filterKey: string, cardKeys: [string, string, string], cardType: 'text-card' | 'label-card'){
         this.title = 'All Artists';
         this.filterKey = filterKey; 
         this.cardKeys = cardKeys;
-
+        this.cardType = cardType;
         this.profiles = store.getState().data.profiles;
         this.currentFilter = store.getState().data.filterid;
         this.categoryFilterFunctionId = store.getState().data.filterWithCustomFunction;
@@ -31,8 +32,9 @@ class List {
 
         this.searchContainer = DOMHelper.create<HTMLKclsuSearchElement>('kclsu-search');
         this.filterNames = filterNames;
+        //The search filter searches by the cardtitle attribute
         this.searchContainer.attr = 'cardtitle';
-        this.searchContainer.containerselector = 'label-card';
+        this.searchContainer.containerselector = cardType;
         this.searchContainer.style.overflow = 'scroll';
         this.updateList();
         this.filterControls = new ListFilter(store.getState().data.filterid, store.getState().data.profiles.length);
@@ -93,7 +95,7 @@ class List {
            profiles
                 .filter(customFilter || filterByCategory)
                 .map(prof=> {
-                    return new Card(prof[heading], prof.id, prof[image], prof[subtext]);
+                    return new Card(prof[heading], prof.id, prof[image], prof[subtext], this.cardType);
                 })
                 .forEach(card => {
                     this.searchContainer.appendChild(card.element);
