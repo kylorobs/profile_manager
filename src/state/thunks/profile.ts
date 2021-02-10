@@ -48,6 +48,7 @@ export const fetchData: any = createAsyncThunk(
         try {
             const res = await makeRequest('GET', createUrl({url}), null);
             const data = [];
+            console.log(res)
             for (const key in res){
               if (res[key] !== null) {
                 res[key].id = key;
@@ -69,8 +70,13 @@ export const fetchData: any = createAsyncThunk(
     'profiles/updateData',
     async (dataPackage:any) => {
       try {
-        const res = await makeRequest('PUT', createUrl(dataPackage), dataPackage.data);
-        return {id:dataPackage.id, data: res};
+        //check there is an id before making request
+        if (dataPackage.id){
+          const res = await makeRequest('PUT', createUrl(dataPackage), dataPackage.data);
+          store.dispatch(resetEditMode());
+          return {id:dataPackage.id, data: res};
+        }
+        else throw new Error('No Id for update to proceed');
       }
       catch(e) {
         store.dispatch(setError('Error in updating data:... ' + e));
@@ -103,6 +109,7 @@ export const fetchData: any = createAsyncThunk(
     'profiles/deleteData',
     async (dataPackage:any) => {
       try {
+        if (!dataPackage.id) throw new Error('No Id to make delete request');
         await makeRequest('DELETE', createUrl(dataPackage), null);
         store.dispatch(resetEditMode());
         return {id: dataPackage.id};
@@ -119,6 +126,7 @@ export const fetchData: any = createAsyncThunk(
   export const updateCategory: any = createAsyncThunk(
     'profiles/updateCategory', async (dataPackage:any) => {
         try {
+          if (!dataPackage.id || !dataPackage.category) throw new Error('No Id or Category to make update request');
           const res = await makeRequest('PUT', createUrl(dataPackage), dataPackage.val);
           return { id:dataPackage.id, value: dataPackage.val, data: res};
         }

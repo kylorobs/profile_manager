@@ -7,7 +7,8 @@ import {
 
 
 const initialState: FormState = {
-  editing: false,
+  editing_existing: false,
+  editing_new: true,
   editing_id: '',
 }
 
@@ -16,11 +17,13 @@ const FormSlice = createSlice({
   initialState: initialState as FormState,
   reducers: {
     edit: (state, action) => {
-      state.editing = true;
+      state.editing_existing = true;
+      state.editing_new = false;
       state.editing_id = action.payload;
     },
     resetEditMode: (state) => {
-      state.editing = false;
+      state.editing_existing = false;
+      state.editing_new = true;
       state.editing_id = '';
     }
   }

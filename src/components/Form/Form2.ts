@@ -49,7 +49,7 @@ class Form2 {
             update: () => this.submitForm('update'), 
             add: () => this.submitForm('add'),
             delete: this.deleteData,
-            switch: this.swithToEmptyForm
+            switch: this.handleSwitchToEmptyForm
         })
 
         this.submitModal = new Modal();
@@ -63,15 +63,19 @@ class Form2 {
     private setEditingState(): void{
         const editId = store.getState().form.editing_id;
         const loading = store.getState().data.loading;
+        const editingNew = store.getState().form.editing_new;
+        console.log(editId !== this.editid)
+        console.log(!!editId);
+        const oldId = this.editid;
+        
         if (this.loading !== loading) this.loading = loading;
-        else if (editId !== this.editid){
+        else if (editId !== oldId){
             this.editid = editId;
-            if (editId) {
+            if (!!editId) {
                 this.setValues();
                 this.formControls.toggleEditMode(true);
             }
-            else this.swithToEmptyForm();
-
+            else if (oldId && editingNew) this.swithToEmptyForm();
         }
     }
 
@@ -100,18 +104,23 @@ class Form2 {
             url: store.getState().data.dataUrl,
             id: this.editid,
         }))
-        this.swithToEmptyForm();
+        // this.swithToEmptyForm();
     }
 
+    @BindThis
+    handleSwitchToEmptyForm(){
+        store.dispatch(resetEditMode());
+    }
 
     //We want a blank form, ready for a new entry
     @BindThis
     swithToEmptyForm(): void {
-
+        console.log('I am switching to an empoty form')
         //Reset editing global state
         this.editid = null;
         this.formControls.toggleEditMode(false);
-
+        console.log('reset editing form inside Switch To Empty Form');
+        // store.dispatch(resetEditMode());
         // Clear all form inputs
         this.formInputs
         .forEach((input: Inputs) => {
@@ -121,6 +130,7 @@ class Form2 {
                 console.log('failed to find type of input')
             }
     })
+
 
     }
 
@@ -203,12 +213,11 @@ class Form2 {
                     id: this.editid,
                     data: profpackage
                 }))
-                // store.dispatch(updateProfile({id: this.editid, data: profpackage}));
             break;
             default: console.log('Unknown button type');
         }
 
-        store.dispatch(resetEditMode());
+
     }
 
     @BindThis

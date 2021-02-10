@@ -3,7 +3,8 @@ import {Profile} from './Profile';
 
 export interface FormState {
     editing_id: string,
-    editing:boolean,
+    editing_existing: boolean,
+    editing_new: boolean
 }
 
 export interface DataState {

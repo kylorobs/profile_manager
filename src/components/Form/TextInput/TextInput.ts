@@ -34,7 +34,7 @@ class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement | HTMLSelec
                 keymap.options?.map((optionKey: Categories) => {
                     const option = DOMHelper.create<HTMLOptionElement>('option');
                     option.innerText = optionKey[0];
-                    option.value = optionKey[1];
+                    option.value =  encodeURIComponent(optionKey[1]);
                     return option;
                 })
                 .forEach(option => el.appendChild(option))
