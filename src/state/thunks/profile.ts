@@ -94,6 +94,7 @@ export const fetchData: any = createAsyncThunk(
             const res = await makeRequest('POST', createUrl(dataPackage), dataPackage.data);
             const newData = {...dataPackage.data};
             newData.id = res.name;
+            store.dispatch(resetEditMode());
           return newData;
         }
         catch(e) {

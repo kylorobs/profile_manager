@@ -1,7 +1,7 @@
 
 
 import { store } from '../../app';
-import { resetEditMode } from '../../state/FormSlice';
+import { resetEditMode, startEditingNew } from '../../state/FormSlice';
 // import { updateProfile } from '../../state/ProfileSlice';
 import {BindThis} from '../../decorators/bindthis';
 import {Profile} from '../../models/Profile';
@@ -69,13 +69,15 @@ class Form2 {
         const oldId = this.editid;
         
         if (this.loading !== loading) this.loading = loading;
+        if (editingNew) return;
         else if (editId !== oldId){
             this.editid = editId;
             if (!!editId) {
                 this.setValues();
                 this.formControls.toggleEditMode(true);
             }
-            else if (oldId && editingNew) this.swithToEmptyForm();
+            // if (editingNew) return;
+            else this.swithToEmptyForm();
         }
     }
 
@@ -93,6 +95,7 @@ class Form2 {
     //Submit the form. We could either be adding a new entry, or updating an existing one
     @BindThis
     submitForm(type: 'add' | 'update'){
+        if (type === 'add') store.dispatch(startEditingNew());
         const formErrors = this.validateValues();
         formErrors.length >  0 ? this.errorModal.handleErrors(formErrors) : this.packageData(type);
     }
@@ -104,7 +107,6 @@ class Form2 {
             url: store.getState().data.dataUrl,
             id: this.editid,
         }))
-        // this.swithToEmptyForm();
     }
 
     @BindThis

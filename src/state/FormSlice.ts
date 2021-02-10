@@ -8,7 +8,7 @@ import {
 
 const initialState: FormState = {
   editing_existing: false,
-  editing_new: true,
+  editing_new: false,
   editing_id: '',
 }
 
@@ -23,6 +23,11 @@ const FormSlice = createSlice({
     },
     resetEditMode: (state) => {
       state.editing_existing = false;
+      state.editing_new = false;
+      state.editing_id = '';
+    },
+    startEditingNew: (state) => {
+      state.editing_existing = false;
       state.editing_new = true;
       state.editing_id = '';
     }
@@ -32,6 +37,7 @@ const FormSlice = createSlice({
 export const {
   edit,
   resetEditMode,
+  startEditingNew
 } = FormSlice.actions;
 
 
