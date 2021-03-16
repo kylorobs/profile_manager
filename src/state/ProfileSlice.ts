@@ -116,7 +116,8 @@ export const {
   updateFilterWithCustomFunction,
   updateDataUrl,
   setError,
-  clearErrors
+  clearErrors,
+  setAuthentication
 } = profileSlice.actions;
 
 

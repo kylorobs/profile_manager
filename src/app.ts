@@ -32,14 +32,15 @@ export type RootState = ReturnType<typeof store.getState>;
 
 
  new ProfileManager({
-    pageTitle: 'ProjectX Profile Manager ',
-    categories: [["Coming Up", "upcoming", null], ["Artists", "xhibitArtists", null], ["Creators", "specialActs", null], ["Performers", "performers", null]],
-    labelCardKeys: ['', 'name', 'type'],
-    dataUrl: 'https://test-db-1577e.firebaseio.com/artists',
-    categoryKeyName: 'type',
+     pageTitle: 'Elections Manager',
+    categories: [['Bioscience', 'Bioscience', null], ['President', 'Pres', null]],
+    dataUrl: 'https://elections-b726c.firebaseio.com/163/results',
+    labelCardKeys: ['ImageLink', 'Name', ''],
+    categoryKeyName: '',
+    authArea: 'elections-candidates',
     keyMapping: [
         { 
-            keyName: 'name',
+            keyName: 'Name',
             inputTitle: 'Name',
             inputDefaultText: 'Full name...',
             type: 'input',
@@ -47,63 +48,46 @@ export type RootState = ReturnType<typeof store.getState>;
             validationTypes: ['isRequired']
         },
         { 
-            keyName: 'url',
-            inputTitle: 'Profile Image',
+            keyName: 'ImageLink',
+            inputTitle: 'Image Link',
             inputDefaultText: '',
             type: 'image_file',
             thumbnailUrl: 'https://res.cloudinary.com/kclsu-media/image/upload/v1605106869/website_uploads/MISC/EM_u4q3mg.png',
-            validationErrorMsg: 'You have not uploaded a profile image!',
-            validationTypes: []
+            validationErrorMsg: 'You have not uploaded a Profile Image!',
+            validationTypes: ['isRequired']
         },
         { 
-            keyName: 'description',
-            inputTitle: 'Description',
-            inputDefaultText: 'A short description...',
-            type: 'textarea',
-            validationErrorMsg: 'Please enter a short text description.',
-            validationTypes: []
-        },
-        { 
-            keyName: 'facebook',
-            inputTitle: 'Facebook',
-            inputDefaultText: 'Facebook full url...',
-            type: 'input',
-            validationErrorMsg: 'Please provide a full facebook URL.',
-            validationTypes: ['isFacebookUrl']
-        },
-        { 
-            keyName: 'twitter',
-            inputTitle: 'Twitter',
-            inputDefaultText: 'Twitter full url...',
-            type: 'input',
-            validationErrorMsg: 'Please provide a full twitter URL for the twitter profile.',
-            validationTypes: []
-        },
-        { 
-            keyName: 'website',
-            inputTitle: 'Website',
+            keyName: 'ManifestoLink',
+            inputTitle: 'Manifesto Link',
             inputDefaultText: '',
             type: 'input',
-            validationErrorMsg: 'Please supply a full website URL.',
-            validationTypes: []
-        },
-        { 
-            keyName: 'upcomingEvent',
-            inputTitle: 'Upcoming Event',
-            inputDefaultText: 'The kclsu upcoming event url....',
-            type: 'input',
-            validationErrorMsg: 'Please provide an event URL from the kclsu events page.',
-            validationTypes: ['isUrl', 'isRequired']
-        },
-        { 
-            keyName: 'type',
-            inputTitle: 'Category',
-            inputDefaultText: '...',
-            type: 'select',
-            options: [["Coming Up", "upcoming", null], ["Artists (Xhibit)", "xhibitArtists", null], ["Creators (Xtend)", "specialActs", null], ["Performers (Xpress)", "performers", null]],
-            validationErrorMsg: 'Please choose a category',
+            validationErrorMsg: 'You have not uploaded a manifesto link!',
             validationTypes: ['isRequired']
-        }
+        },
+        { 
+            keyName: 'Post',
+            inputTitle: 'Post Title',
+            inputDefaultText: '',
+            type: 'input',
+            validationErrorMsg: 'There is no Title!',
+            validationTypes: ['isRequired']
+        },
+        { 
+            keyName: 'ResultsLink',
+            inputTitle: 'Breakdown Spreadsheet',
+            inputDefaultText: '',
+            type: 'document_file',
+            validationErrorMsg: 'There is no Breakdown Spreadsheet attached',
+            validationTypes: ['isRequired']
+        },
+        { 
+            keyName: 'candidateId',
+            inputTitle: 'Candidate Id',
+            inputDefaultText: 'The ID of the candidate',
+            type: 'input',
+            validationErrorMsg: 'There is no candidate ID',
+            validationTypes: ['isRequired']
+        },
     ]
     
     });

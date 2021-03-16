@@ -3,7 +3,7 @@ import DropArea from '../DropArea/DropArea'
 import Form2 from '../Form/Form2';
 import { Categories } from '../../types/types';
 import {store} from '../../app';
-import {setError, updateDataUrl, updateFilterKey} from '../../state/ProfileSlice';
+import {setError, updateDataUrl, updateFilterKey, setAuthentication} from '../../state/ProfileSlice';
 import * as thunks from '../../state/thunks/profile';
 import { ManagerInit} from '../../models/InputKeys';
 import LoadingModal from '../Modal/LoadingModal/LoadingModal';
@@ -14,44 +14,47 @@ import ErrorModal from '../Modal/ErrorModal/ErrorModal';
 class ProfileManager {
 
     app: HTMLElement;
+    authenticated: boolean = false;
     public areas: Categories[]
 
     constructor(Manager: ManagerInit){
         this.app = this.buildHtmlTemplate(Manager.pageTitle);
         this.areas = [];
-        const authRequired = this.checkforAuth(Manager.authArea);
-        authRequired ? store.subscribe(() => this.initialise(Manager)) : this.initialise(Manager);
+        Manager.authArea ? this.displayLogin(Manager) : this.initialise(Manager)
         new ErrorModal();
     }
 
-    private checkforAuth(authArea?: string): boolean{
-        if (authArea){
-            this.displayLogin(authArea);
-            return true;
-        }
-        else return false;
-    }
-
     @BindThis
-    protected initialise(Manager: ManagerInit){
+    protected initialise(Manager: ManagerInit, token?:string){
         const categories = Manager.categories || [];
-        store.dispatch(thunks.fetchData(Manager.dataUrl));
-        store.dispatch(updateDataUrl(Manager.dataUrl));
         this.areas = categories;
         this.setupAreas();
-        store.dispatch(updateFilterKey(Manager.categoryKeyName || ''));
         new LoadingModal();
+
 
         //LOOK FOR IMAGE KEY IN LABEL CARD KEYS IN CONFIG TO SET CARD TYPE
         const cardType = !!Manager.labelCardKeys[0] ? 'label-card' : 'text-card';
         new List(categories, Manager.categoryKeyName, Manager.labelCardKeys, cardType);
         new Form2(Manager.keyMapping);
+
+        store.dispatch(thunks.fetchData(Manager.dataUrl));
+        store.dispatch(updateDataUrl(Manager.dataUrl));
+        if (token) store.dispatch(setAuthentication(token))
+        store.dispatch(updateFilterKey(Manager.categoryKeyName || ''));
     }
 
-    private displayLogin(authArea: string){
-        const login = DOMHelper.create<HTMLUserLoginElement>('user-login');;
-        login.database = DOMHelper.sanitise(authArea);
-        // login.callbackFn = () => store.dispatch(authenticate)
+    private displayLogin(Manager: ManagerInit){
+        // const login = DOMHelper.create<HTMLUserLoginElement>('user-login');
+        const login = document.createElement('user-login') as any;
+        if (Manager.authArea) login.database = DOMHelper.sanitise(Manager.authArea);
+        
+        
+        // login.callbackFn = 
+        login.callbackFn = (token:string) => {
+            if (token){
+                this.initialise(Manager, token);
+            }
+        };
         DOMHelper.appendChildren(this.app, [login])
     }
 
@@ -75,7 +78,6 @@ class ProfileManager {
             
             DOMHelper.renderInnerHTML('#app', `
                 <kclsu-modal show="false"></kclsu-modal>
-                <userl-login show="false"></user-login>
                 <div class="area">
                     <h1>${pageTitle}</h1>
                     <div class="droparea"></div>
