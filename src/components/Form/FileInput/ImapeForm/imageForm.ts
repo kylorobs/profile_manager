@@ -49,11 +49,9 @@ class ImageForm {
     uploadImage(e:Event){
         this.uploadModal.showSpinner();
         e.preventDefault();
-      fetch("http://localhost:4000/upload", { method: 'POST', body: new FormData((e.target as any))})
+      fetch("https://kclsu-heroku.herokuapp.com/upload", { method: 'POST', body: new FormData((e.target as any))})
         .then(res => res.json())
         .then(result => {
-          console.log('IMAHGE UPLOAD RESULT');
-          console.log(result)
 
           //Check if there is a new URL in the result
           if (!result.url){
