@@ -25,7 +25,6 @@ class ErrorModal extends Modal {
     showError(): void{
         const error = store.getState().data.error;
         if (!error){
-            console.log('NOOO Errrror');
             if (this.error === true) this.error = false;
             return;
         };

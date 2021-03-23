@@ -39,13 +39,10 @@ class Modal {
 
     @BindThis
     public showModal(el:HTMLDivElement | HTMLLoadingSpinnerElement | HTMLFormElement): void{
-        console.log('showing modal in main class');
         this.modal.innerHTML = DOMHelper.sanitise('');
         this.modal.appendChild(el);
-        console.log(this.modal);
         this.modal.show = true;
         this.active = true;
-        console.log(this.modal)
     }
 
 

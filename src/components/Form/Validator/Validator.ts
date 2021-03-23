@@ -52,10 +52,22 @@ class Validator {
                 this.setErrorHelper(validator.isNumeric(val), errorMsg);
                 break;
             case 'isAKclsuUrl':
-                this.setErrorHelper(validator.isURL && validator.contains(val, 'kclsu.org'), errorMsg);
+                this.setErrorHelper(validator.isURL(val) && validator.contains(val, 'kclsu.org'), errorMsg);
                 break;
             case 'isAKclsuEvent':
-                this.setErrorHelper(validator.isURL && validator.contains(val, 'kclsu.org/ents/event/'), errorMsg);
+                this.setErrorHelper(validator.isURL(val) && validator.contains(val, 'kclsu.org/ents/event/'), errorMsg);
+                break;
+            case 'isDate':
+                this.setErrorHelper(validator.matches(val, /yay/), errorMsg); //hh:mm:ss
+                break;
+            case 'isTime':
+                this.setErrorHelper(validator.matches(val, /^([01][0-9]|2[0-3])[:-][0-6][0-9][:-][0-6][0-9]$/), errorMsg); //hh:mm:ss
+                break;
+            case 'isBoolean': 
+                this.setErrorHelper(validator.isBoolean(val), errorMsg);
+                break;
+            case 'isNotThumbnail':
+                this.setErrorHelper(!validator.contains(val, '/website_uploads/Database_Uploads/thumbnails/'), errorMsg);
                 break;
             default: 
         }

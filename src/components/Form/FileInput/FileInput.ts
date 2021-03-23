@@ -77,7 +77,6 @@ class FileInput {
         if (this.keymap.thumbnailUrl) updatedUrl = this.keymap.thumbnailUrl;
       }
       else updatedUrl =url;
-      console.log(url)
 
       this.imageurl = updatedUrl;
       

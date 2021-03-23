@@ -64,8 +64,6 @@ class Form2 {
         const editId = store.getState().form.editing_id;
         const loading = store.getState().data.loading;
         const editingNew = store.getState().form.editing_new;
-        console.log(editId !== this.editid)
-        console.log(!!editId);
         const oldId = this.editid;
         
         if (this.loading !== loading) this.loading = loading;
@@ -117,11 +115,9 @@ class Form2 {
     //We want a blank form, ready for a new entry
     @BindThis
     swithToEmptyForm(): void {
-        console.log('I am switching to an empoty form')
         //Reset editing global state
         this.editid = null;
         this.formControls.toggleEditMode(false);
-        console.log('reset editing form inside Switch To Empty Form');
         // store.dispatch(resetEditMode());
         // Clear all form inputs
         this.formInputs
@@ -141,7 +137,6 @@ class Form2 {
 
         //Fetch profile with matching ID
         const profile: Profile = data.filter((prof:Profile) => prof.id === this.editid)[0];
-        console.log(profile)
         //Pull all object keys from profile
         const profileKeys: string[] = Object.keys(profile);
         
@@ -188,7 +183,6 @@ class Form2 {
         this.formInputs
             .forEach((input: Inputs) => {
                 if ('el' in input){
-                    console.log(input)
                     profpackage[input.title] = input.el.value;
                 } 
                 else if ('imageurl' in input){
@@ -203,7 +197,6 @@ class Form2 {
         
         switch(type){
             case 'add' : 
-                console.log('ADDING')
                 store.dispatch(thunks.addData({
                     url: store.getState().data.dataUrl,
                     data: profpackage

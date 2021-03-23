@@ -69,8 +69,6 @@ class DOMHelper {
 
     static renderProfiles(ar: Profile[]){
         const parent = fetchParent('.list')!;
-        console.log('RENDERING PROFILES')
-        console.log(ar)
         const cards = ar.map((profile: Profile) => {
             const label: HTMLLabelCardElement = document.createElement('label-card');
             label.cardtitle = profile.name;
@@ -79,13 +77,11 @@ class DOMHelper {
             label.cardwidth = '85%';
             return label;
         });
-        console.log(cards)
        cards.forEach((card:any) => parent.appendChild(card));
     }
     static renderLogin(){}
     static editor(){
-        const form = fetchParent('#form') as HTMLFormElement;
-        console.log(form)
+        fetchParent('#form') as HTMLFormElement;
     }
 }
 
