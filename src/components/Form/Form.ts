@@ -17,7 +17,7 @@ import { loading } from '../../state/ProfileSlice';
 
 type Inputs = TextInput | FileInput;
 
-class Form2 {
+class Form {
     private editid: string | null;
     private formInputs: Inputs[];
     private errorModal: FormErrorModal; 
@@ -228,5 +228,5 @@ class Form2 {
     }
 };
 
-export default Form2;
+export default Form;
 

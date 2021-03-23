@@ -1,6 +1,6 @@
 import List from '../List/List';
 import DropArea from '../DropArea/DropArea'
-import Form2 from '../Form/Form2';
+import Form from '../Form/Form';
 import { Categories } from '../../types/types';
 import {store} from '../../app';
 import {setError, updateDataUrl, updateFilterKey, setAuthentication} from '../../state/ProfileSlice';
@@ -35,7 +35,7 @@ class ProfileManager {
         //LOOK FOR IMAGE KEY IN LABEL CARD KEYS IN CONFIG TO SET CARD TYPE
         const cardType = !!Manager.labelCardKeys[0] ? 'label-card' : 'text-card';
         new List(categories, Manager.categoryKeyName, Manager.labelCardKeys, cardType);
-        new Form2(Manager.keyMapping);
+        new Form(Manager.keyMapping);
 
         store.dispatch(thunks.fetchData(Manager.dataUrl));
         store.dispatch(updateDataUrl(Manager.dataUrl));
