@@ -1,7 +1,7 @@
 {
-  "name": "profile_manager",
+  "name": "kclsu_content_manager",
   "version": "1.0.0",
-  "description": "A class library for creating a gui to manage profile data",
+  "description": "A libray built in typescript, to assist kclsu staff managing content on the kclsu website",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
