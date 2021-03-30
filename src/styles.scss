@@ -235,6 +235,14 @@ h6 {
         box-shadow: 7px 8px 7px 0px rgb(0 0 0 / 28%);
         cursor: pointer;
         text-align: center;
+
+        h3 {
+            line-height: 40px;
+            font-size: 24px;
+            color: white;
+            margin: 0;
+            padding: 1em 0;
+        }
     }
 
     .dropNeutral{
@@ -323,7 +331,7 @@ form {
             }
 
             & select {
-                height: 30px;
+                height: auto;
                 margin-top: 1em;
                 width: 200px;
             }
@@ -350,6 +358,31 @@ form {
 
     }
 }
+
+form input[type=submit] {
+    cursor: pointer;
+    box-sizing: border-box;
+    font-family: "Open Sans", Arial, sans-serif;
+    line-height: 32px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 3px;
+    position: relative;
+    font-size: 14px;
+    box-shadow: rgb(0 0 0 / 30%) 4px 3px 9px -2px;
+    transition-duration: 1s;
+    background-color: white;
+    border: 1px solid #502669;
+    color: #502669;
+    margin-left: 1em;
+
+    &:hover {
+        border: 1px solid #502669;
+        background-color: #502669;
+        color: white;
+    }
+}
+
 
 
 .errorblock {

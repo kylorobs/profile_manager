@@ -5,7 +5,6 @@ import { setError } from '../../../../state/ProfileSlice';
 import DOMHelper from '../../../DOMHelper/DOMHelper';
 import UploadModal from '../../../Modal/UploadModal/UploadModal';
 
-
 class ImageForm {
     public imageurl: string = '';
     public form: HTMLFormElement;

@@ -58,7 +58,7 @@ class Validator {
                 this.setErrorHelper(validator.isURL(val) && validator.contains(val, 'kclsu.org/ents/event/'), errorMsg);
                 break;
             case 'isDate':
-                this.setErrorHelper(validator.matches(val, /yay/), errorMsg); //hh:mm:ss
+                this.setErrorHelper(validator.matches(val, /^202[1-9][:-][0-1][0-9][:-]([0-2][0-9]|3[0-1])$/), errorMsg); //yyy:mm:dd
                 break;
             case 'isTime':
                 this.setErrorHelper(validator.matches(val, /^([01][0-9]|2[0-3])[:-][0-6][0-9][:-][0-6][0-9]$/), errorMsg); //hh:mm:ss

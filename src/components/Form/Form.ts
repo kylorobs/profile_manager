@@ -150,7 +150,6 @@ class Form {
             else if ('imageurl' in input && key) input.updateImageUrl(profile[key]);
             else {
                 console.log('failed to find type of input: ' + input);
-                console.log(input)
                 console.log(key)
                 //We need to show Error Modal. On 'Proceed' we create a NEW input and set state to 'AllowedNewInput'
             }
