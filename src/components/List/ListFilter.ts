@@ -1,9 +1,9 @@
 
-import ButtonHandler from '../../../models/ButtonHandler';
-import {store} from '../../../app'
-import { changeFilter } from '../../../state/ProfileSlice';
-import DropArea from '../../DropArea/DropArea';
-import DOMHelper from '../../../utils/DOMHelper';
+import ButtonHandler from '../../utils/ButtonConfigurer';
+import {store} from '../../app'
+import { changeFilter } from '../../state/ProfileSlice';
+import DropArea from '../../containers/DropArea';
+import DOMHelper from '../../utils/DOMHelper';
 
 class ListFilter {
     public title: string = 'All'; // the name of the filter

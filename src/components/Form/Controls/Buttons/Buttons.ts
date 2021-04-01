@@ -1,5 +1,5 @@
 
-import ButtonHandler from '../../../../models/ButtonHandler';
+import ButtonHandler from '../../../../utils/ButtonConfigurer';
 import DOMHelper from '../../../../utils/DOMHelper';
 
 class FormButtons {

@@ -1,7 +1,7 @@
 
-import FormButtons from './FormButtons/FormButtons';
-import Modal from '../../Modal/Modal';
-import ButtonHandler from '../../../models/ButtonHandler';
+import FormButtons from './Buttons/Buttons';
+import Modal from '../../../models/Modal';
+import ButtonHandler from '../../../utils/ButtonConfigurer';
 import { BindThis } from '../../../decorators/bindthis';
 import {FormFunctions} from '../../../types/types';
 import { store } from '../../../app';

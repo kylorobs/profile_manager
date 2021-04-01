@@ -1,6 +1,6 @@
-import Modal from "../Modal";
-import { BindThis } from '../../../decorators/bindthis';
-import { store } from '../../../app'
+import Modal from "../../models/Modal";
+import { BindThis } from '../../decorators/bindthis';
+import { store } from '../../app'
 
 class LoadingModal extends Modal {
     

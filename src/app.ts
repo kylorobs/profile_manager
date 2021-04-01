@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import ProfileSlice from './state/ProfileSlice';
-import ContentManager from './containers/ContentManager';
+import ContentManager from './containers/App';
 import 'kclsu-components';
 import './styles.scss';
 import FormSlice from './state/FormSlice';

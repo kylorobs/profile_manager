@@ -3,7 +3,7 @@ import { store } from '../../../../app';
 import {BindThis} from '../../../../decorators/bindthis';
 import { setError } from '../../../../state/ProfileSlice';
 import DOMHelper from '../../../../utils/DOMHelper';
-import UploadModal from '../../../Modal/UploadModal/UploadModal';
+import UploadModal from '../../../Modals/UploadModal';
 
 class ImageForm {
     public imageurl: string = '';

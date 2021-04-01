@@ -1,15 +1,15 @@
 import List from './List';
-import DropArea from '../components/DropArea/DropArea'
+import DropArea from './DropArea'
 import Form from './Form';
 import { Categories } from '../types/types';
 import {store} from '../app';
 import {setError, updateDataUrl, updateFilterKey, setAuthentication} from '../state/ProfileSlice';
 import * as thunks from '../state/thunks/profile';
 import { ManagerInit} from '../types/types';
-import LoadingModal from '../components/Modal/LoadingModal/LoadingModal';
+import LoadingModal from '../components/Modals/LoadingModal';
 import DOMHelper from '../utils/DOMHelper';
 import { BindThis } from '../decorators/bindthis';
-import ErrorModal from '../components/Modal/ErrorModal/ErrorModal';
+import ErrorModal from '../components/Modals/ErrorModal';
 
 class ContentManager {
 

@@ -1,4 +1,4 @@
-import {KeyMap, validChecks} from '../../../types/types';
+import {KeyMap, validChecks} from '../types/types';
 import validator from 'validator';
 
 

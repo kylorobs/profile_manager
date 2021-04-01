@@ -1,8 +1,8 @@
 
 
 // import DOMHelper from '../../DOMHelper/DOMHelper';
-import DOMHelper from '../../../utils/DOMHelper';
-import Modal from '../Modal';
+import DOMHelper from '../../utils/DOMHelper';
+import Modal from '../../models/Modal';
 
 
 class UploadModal extends Modal {

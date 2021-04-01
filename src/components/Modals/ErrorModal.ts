@@ -1,12 +1,12 @@
 
 
 // import DOMHelper from '../../DOMHelper/DOMHelper';
-import { store } from '../../../app';
-import { BindThis } from '../../../decorators/bindthis';
-import { clearErrors } from '../../../state/ProfileSlice';
+import { store } from '../../app';
+import { BindThis } from '../../decorators/bindthis';
+import { clearErrors } from '../../state/ProfileSlice';
 // import { clearErrors } from '../../../state/ProfileSlice';
-import DOMHelper from '../../../utils/DOMHelper';
-import Modal from '../Modal';
+import DOMHelper from '../../utils/DOMHelper';
+import Modal from '../../models/Modal';
 
 
 class ErrorModal extends Modal {

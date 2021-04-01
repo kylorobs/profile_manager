@@ -3,7 +3,7 @@ import { Profile } from '../types/types';
 import { store } from '../app';
 import Card from '../components/Card/Card';
 import {BindThis} from '../decorators/bindthis';
-import ListFilter from '../components/List/ListFilter/ListFilter';
+import ListFilter from '../components/List/ListFilter';
 import { Categories, filterFn } from '../types/types';
 import DOMHelper from '../utils/DOMHelper';
 

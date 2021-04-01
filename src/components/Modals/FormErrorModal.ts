@@ -3,9 +3,9 @@
 // import {BindThis} from '../../../decorators/bindthis';
 // import ButtonHandler from '../../../models/ButtonHandler';
 // import { KeyMap } from '../../../models/InputKeys';
-import Modal from '../Modal';
-import Validator from '../../Form/Validator/Validator';
-import DOMHelper from '../../../utils/DOMHelper';
+import Modal from '../../models/Modal';
+import Validator from '../../utils/Validator';
+import DOMHelper from '../../utils/DOMHelper';
 
 
 
