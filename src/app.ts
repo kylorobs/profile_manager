@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import ProfileSlice from './state/ProfileSlice';
-import ProfileManager from './components/ProfileManager/ProfileManager';
+import ContentManager from './containers/ContentManager/ContentManager';
 import 'kclsu-components';
 import './styles.scss';
 import FormSlice from './state/FormSlice';
@@ -20,8 +20,8 @@ export type RootState = ReturnType<typeof store.getState>;
 
     var app;
 
-    global.profileManager = function init(config: any){
-        app = new ProfileManager(config);
+    global.contentManager = function init(config: any){
+        app = new ContentManager(config);
     }
 
     return app;

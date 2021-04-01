@@ -1,17 +1,17 @@
-import List from '../List/List';
-import DropArea from '../DropArea/DropArea'
-import Form from '../Form/Form';
+import List from '../../components/List/List';
+import DropArea from '../../components/DropArea/DropArea'
+import Form from '../../components/Form/Form';
 import { Categories } from '../../types/types';
 import {store} from '../../app';
 import {setError, updateDataUrl, updateFilterKey, setAuthentication} from '../../state/ProfileSlice';
 import * as thunks from '../../state/thunks/profile';
 import { ManagerInit} from '../../types/types';
-import LoadingModal from '../Modal/LoadingModal/LoadingModal';
-import DOMHelper from '../DOMHelper/DOMHelper';
+import LoadingModal from '../../components/Modal/LoadingModal/LoadingModal';
+import DOMHelper from '../../components/DOMHelper/DOMHelper';
 import { BindThis } from '../../decorators/bindthis';
-import ErrorModal from '../Modal/ErrorModal/ErrorModal';
+import ErrorModal from '../../components/Modal/ErrorModal/ErrorModal';
 
-class ProfileManager {
+class ContentManager {
 
     app: HTMLElement;
     authenticated: boolean = false;
@@ -104,4 +104,4 @@ class ProfileManager {
 
 }
 
-export default ProfileManager;
+export default ContentManager;
