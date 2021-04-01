@@ -1,4 +1,26 @@
-import { Profile } from "../models/Profile";
+
+export interface ManagerInit {
+    pageTitle: string,
+    authArea?: string,
+    categories: Categories[],
+    labelCardKeys: [string, string, string], //[Image, Heading, SubText]
+    dataUrl: string,
+    categoryKeyName: string,
+    keyMapping: KeyMap[]
+}
+
+export type validChecks = 'isRequired' |  'isUrl' | 'isEmail' | 'isImage' | 'isPdf' | 'isFacebookUrl' | 'isInstagramUrl' | 'isTwitterUrl' | 'isNumber' | 'isAKclsuUrl' | 'isAKclsuEvent' | 'isDate' | 'isTime' | 'isBoolean' | 'isNotThumbnail'
+
+export interface KeyMap {
+    keyName: string,
+    inputTitle: string,
+    inputDefaultText: string,
+    type: 'input' | 'select' | 'textarea' | 'document_file' | 'image_file',
+    thumbnailUrl?: string,
+    validationTypes: validChecks[],
+    validationErrorMsg: string,
+    options?: Categories[]
+}
 
 export type filterFn = ((val:Profile, Index?:number) => boolean) | null;
 
@@ -21,4 +43,27 @@ export interface FormFunctions {
     update: () => void,
     delete: () => void,
     add: () => void
+}
+
+export interface Profile {
+    [key: string]: any;
+}
+
+export interface FormState {
+    editing_id: string,
+    editing_existing: boolean,
+    editing_new: boolean
+}
+
+export interface DataState {
+    dataUrl: string,
+    error: boolean,
+    loading: boolean,
+    errorMessage: string
+    profiles: Profile[],
+    filterid: string,
+    filterkey: string,
+    filterWithCustomFunction: string,
+    authenticated: boolean,
+    token: string
 }

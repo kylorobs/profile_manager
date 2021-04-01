@@ -5,7 +5,7 @@ import { Categories } from '../../types/types';
 import {store} from '../../app';
 import {setError, updateDataUrl, updateFilterKey, setAuthentication} from '../../state/ProfileSlice';
 import * as thunks from '../../state/thunks/profile';
-import { ManagerInit} from '../../models/InputKeys';
+import { ManagerInit} from '../../types/types';
 import LoadingModal from '../Modal/LoadingModal/LoadingModal';
 import DOMHelper from '../DOMHelper/DOMHelper';
 import { BindThis } from '../../decorators/bindthis';

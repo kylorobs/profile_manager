@@ -2,7 +2,7 @@
 
 import {BindThis} from '../../../decorators/bindthis';
 import ButtonHandler from '../../../models/ButtonHandler';
-import { KeyMap } from '../../../models/InputKeys';
+import { KeyMap } from '../../../types/types';
 import DOMHelper from '../../DOMHelper/DOMHelper';
 import ImageForm from './ImapeForm/imageForm';
 

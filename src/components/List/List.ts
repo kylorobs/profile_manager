@@ -1,5 +1,5 @@
 
-import { Profile } from '../../models/Profile';
+import { Profile } from '../../types/types';
 import { store } from '../../app';
 import Card from '../Card/Card';
 import {BindThis} from '../../decorators/bindthis';

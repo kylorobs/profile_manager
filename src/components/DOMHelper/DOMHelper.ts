@@ -1,5 +1,5 @@
 
-import {Profile} from '../../models/Profile';
+import {Profile} from '../../types/types';
 import DOMPurify from 'dompurify';
 
 function fetchParent(classname: string){

@@ -1,12 +1,9 @@
 import { Input } from '../../../models/Input';
-import { KeyMap } from '../../../models/InputKeys';
+import { KeyMap } from '../../../types/types';
 import {BindThis} from '../../../decorators/bindthis';
 import { Categories } from '../../../types/types';
 import DOMHelper from '../../DOMHelper/DOMHelper';
 
-//  interface IIndexable {
-//     [key: string]: any;
-//   }
 
 class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> {
 

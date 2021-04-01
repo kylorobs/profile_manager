@@ -1,10 +1,11 @@
 import {
   createSlice
 } from '@reduxjs/toolkit';
-import {Profile} from '../models/Profile';
+
 import {
-  DataState
-} from '../models/State';
+  DataState, 
+  Profile
+} from '../types/types';
 import * as thunks from './thunks/profile';
 
 const initialState: DataState = {

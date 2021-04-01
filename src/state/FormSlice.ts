@@ -3,7 +3,7 @@ import {
 } from '@reduxjs/toolkit';
 import {
   FormState
-} from '../models/State'
+} from '../types/types';
 
 
 const initialState: FormState = {

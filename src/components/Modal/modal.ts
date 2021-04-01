@@ -1,9 +1,8 @@
 
 
-
 import { BindThis } from "../../decorators/bindthis";
 import DOMHelper from "../DOMHelper/DOMHelper";
-// import { notLoading } from "../../state/ProfileSlice";
+
 
 class Modal {
 
