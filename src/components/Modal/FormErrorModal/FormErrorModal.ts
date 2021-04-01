@@ -5,7 +5,7 @@
 // import { KeyMap } from '../../../models/InputKeys';
 import Modal from '../Modal';
 import Validator from '../../Form/Validator/Validator';
-import DOMHelper from '../../DOMHelper/DOMHelper';
+import DOMHelper from '../../../utils/DOMHelper';
 
 
 

@@ -2,7 +2,7 @@ import { Input } from '../../../models/Input';
 import { KeyMap } from '../../../types/types';
 import {BindThis} from '../../../decorators/bindthis';
 import { Categories } from '../../../types/types';
-import DOMHelper from '../../DOMHelper/DOMHelper';
+import DOMHelper from '../../../utils/DOMHelper';
 
 
 class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> {

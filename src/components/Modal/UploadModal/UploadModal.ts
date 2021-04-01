@@ -1,7 +1,7 @@
 
 
 // import DOMHelper from '../../DOMHelper/DOMHelper';
-import DOMHelper from '../../DOMHelper/DOMHelper';
+import DOMHelper from '../../../utils/DOMHelper';
 import Modal from '../Modal';
 
 

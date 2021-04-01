@@ -1,18 +1,18 @@
 
 
-import { store } from '../../app';
-import { resetEditMode, startEditingNew } from '../../state/FormSlice';
+import { store } from '../app';
+import { resetEditMode, startEditingNew } from '../state/FormSlice';
 // import { updateProfile } from '../../state/ProfileSlice';
-import {BindThis} from '../../decorators/bindthis';
-import {Profile, KeyMap} from '../../types/types';
-import TextInput from './TextInput/TextInput';
-import FileInput from './FileInput/FileInput';
-import FormControls from './FormControls/FormControls';
-import Validator from './Validator/Validator';
-import FormErrorModal from '../Modal/FormErrorModal/FormErrorModal';
-import * as thunks from '../../state/thunks/profile';
-import Modal from '../Modal/Modal';
-import { loading } from '../../state/ProfileSlice';
+import {BindThis} from '../decorators/bindthis';
+import {Profile, KeyMap} from '../types/types';
+import TextInput from '../components/Form/TextInput/TextInput';
+import FileInput from '../components/Form/FileInput/FileInput';
+import FormControls from '../components/Form/FormControls/FormControls';
+import Validator from '../components/Form/Validator/Validator';
+import FormErrorModal from '../components/Modal/FormErrorModal/FormErrorModal';
+import * as thunks from '../state/thunks/profile';
+import Modal from '../components/Modal/Modal';
+import { loading } from '../state/ProfileSlice';
 
 type Inputs = TextInput | FileInput;
 

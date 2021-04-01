@@ -3,14 +3,15 @@ import ButtonHandler from '../../../models/ButtonHandler';
 import {store} from '../../../app'
 import { changeFilter } from '../../../state/ProfileSlice';
 import DropArea from '../../DropArea/DropArea';
-import DOMHelper from '../../DOMHelper/DOMHelper';
+import DOMHelper from '../../../utils/DOMHelper';
 
 class ListFilter {
     public title: string = 'All'; // the name of the filter
+    public el: any;
     private titleElement: any;
     private cardCount: HTMLSpanElement;
     private resetFilterElement: HTMLKclsuButtonElement;
-    el: any;
+
 
     constructor(title: string, count: number){
         this.title = title;

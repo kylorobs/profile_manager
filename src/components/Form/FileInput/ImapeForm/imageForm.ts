@@ -2,7 +2,7 @@
 import { store } from '../../../../app';
 import {BindThis} from '../../../../decorators/bindthis';
 import { setError } from '../../../../state/ProfileSlice';
-import DOMHelper from '../../../DOMHelper/DOMHelper';
+import DOMHelper from '../../../../utils/DOMHelper';
 import UploadModal from '../../../Modal/UploadModal/UploadModal';
 
 class ImageForm {

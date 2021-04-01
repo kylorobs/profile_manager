@@ -6,7 +6,7 @@ import { BindThis } from '../../../decorators/bindthis';
 import {FormFunctions} from '../../../types/types';
 import { store } from '../../../app';
 import { notLoading } from '../../../state/ProfileSlice';
-import DOMHelper from '../../DOMHelper/DOMHelper';
+import DOMHelper from '../../../utils/DOMHelper';
 
 class FormControls {
 

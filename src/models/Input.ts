@@ -1,4 +1,4 @@
-import DOMHelper from "../components/DOMHelper/DOMHelper";
+import DOMHelper from "../utils/DOMHelper";
 
 
 export abstract class Input<T extends HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement > {

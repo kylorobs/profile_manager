@@ -2,7 +2,7 @@ import {store} from '../../app';
 import { BindThis } from '../../decorators/bindthis';
 import { edit } from '../../state/FormSlice';
 import { Draggable } from '../../types/types';
-import DOMHelper from '../DOMHelper/DOMHelper';
+import DOMHelper from '../../utils/DOMHelper';
 
 
 class Card implements Draggable {

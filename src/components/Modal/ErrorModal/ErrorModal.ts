@@ -5,7 +5,7 @@ import { store } from '../../../app';
 import { BindThis } from '../../../decorators/bindthis';
 import { clearErrors } from '../../../state/ProfileSlice';
 // import { clearErrors } from '../../../state/ProfileSlice';
-import DOMHelper from '../../DOMHelper/DOMHelper';
+import DOMHelper from '../../../utils/DOMHelper';
 import Modal from '../Modal';
 
 

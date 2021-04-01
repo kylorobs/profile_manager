@@ -1,11 +1,11 @@
 
-import { Profile } from '../../types/types';
-import { store } from '../../app';
-import Card from '../Card/Card';
-import {BindThis} from '../../decorators/bindthis';
-import ListFilter from './ListFilter/ListFilter';
-import { Categories, filterFn } from '../../types/types';
-import DOMHelper from '../DOMHelper/DOMHelper';
+import { Profile } from '../types/types';
+import { store } from '../app';
+import Card from '../components/Card/Card';
+import {BindThis} from '../decorators/bindthis';
+import ListFilter from '../components/List/ListFilter/ListFilter';
+import { Categories, filterFn } from '../types/types';
+import DOMHelper from '../utils/DOMHelper';
 
 
 class List {

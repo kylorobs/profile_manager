@@ -3,7 +3,7 @@ import { BindThis } from "../../decorators/bindthis";
 import { changeFilter, updateFilterWithCustomFunction} from "../../state/ProfileSlice";
 import { DragTarget } from "../../types/types";
 import * as thunks from '../../state/thunks/profile';
-import DOMHelper from "../DOMHelper/DOMHelper";
+import DOMHelper from "../../utils/DOMHelper";
 
 class DropArea implements DragTarget {
     title: string;
