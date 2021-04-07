@@ -4,14 +4,14 @@ import { store } from '../app';
 import Card from '../components/Card/Card';
 import {BindThis} from '../decorators/bindthis';
 import ListFilter from '../components/List/ListFilter';
-import { Categories, filterFn } from '../types/types';
+import { Filter, filterFn } from '../types/types';
 import DOMHelper from '../utils/DOMHelper';
 
 
 class List {
     title: string;
     filterKey: string; 
-    private filterNames: Categories[];
+    private filterNames: Filter[];
     profiles: Profile[];
     private searchContainer: HTMLKclsuSearchElement;
     private filterControls: ListFilter;
@@ -20,7 +20,7 @@ class List {
     private cardKeys: [string, string, string];
     private cardType: 'text-card' | 'label-card';
     
-    constructor(filterNames: Categories[], filterKey: string, cardKeys: [string, string, string], cardType: 'text-card' | 'label-card'){
+    constructor(filterNames: Filter[], filterKey: string, cardKeys: [string, string, string], cardType: 'text-card' | 'label-card'){
         this.title = 'All Artists';
         this.filterKey = filterKey; 
         this.cardKeys = cardKeys;
@@ -60,7 +60,7 @@ class List {
         let filterName = '';
 
         if (categoryFilterFunctionId){
-            const category = this.filterNames.find((category: Categories) => category[1] === categoryFilterFunctionId);
+            const category = this.filterNames.find((category: Filter) => category[1] === categoryFilterFunctionId);
             if (category) {
                 filterFunction = category[2];
                 filterName = category[0]; 

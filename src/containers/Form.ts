@@ -12,6 +12,7 @@ import FormErrorModal from '../components/Modals/FormErrorModal';
 import * as thunks from '../state/thunks/profile';
 import Modal from '../models/Modal';
 import { loading } from '../state/ProfileSlice';
+import { html_ids } from '../utils/htmlIds';
 
 type Inputs = TextInput | FileInput;
 
@@ -27,9 +28,11 @@ class Form {
         this.editid = store.getState().form.editing_id || null;
         this.errorModal = new FormErrorModal();
         this.loading = false;
+
+        //Find out if there are Image or Document input maps
         const containsFileInputs = keyMappings.find(map => map.type === 'document_file' || map.type === 'image_file' );
         
-        // If there are no Image or Document file types, adjust layout
+        // If there are no Image or Document input maps, adjust layout
         if (!containsFileInputs){
             this.adjustFormLayout();
         }
@@ -53,6 +56,30 @@ class Form {
         this.submitModal = new Modal();
         this.setEditingState();
         store.subscribe(this.setEditingState);
+    }
+
+    setValues(): void{
+        const data = store.getState().data.profiles;
+
+        //Fetch profile with matching ID
+        const profile: Profile = data.filter((prof:Profile) => prof.id === this.editid)[0];
+        //Pull all object keys from profile
+        const profileKeys: string[] = Object.keys(profile);
+        
+        // For each input, find matching key name
+        // If a text / select input, set the value property
+        // If a file input, invoke the update function for that component
+        this.formInputs
+            .forEach((input: Inputs) => {
+            const key = profileKeys.find((key: string) => key === input.title);
+            if ('el' in input && key) input.el.value = profile[key];
+            else if ('imageurl' in input && key) input.updateImageUrl(profile[key]);
+            else {
+                console.log('failed to find type of input: ' + input);
+                console.log(key)
+                //We need to show Error Modal. On 'Proceed' we create a NEW input and set state to 'AllowedNewInput'
+            }
+        })
     }
 
     // Check for an editID or Loading boolean in global state. 
@@ -79,8 +106,8 @@ class Form {
 
     // Adjust styles of Div Elements contained within form
     private adjustFormLayout(): void{
-        const filesColumn = document.querySelector('#fileinputs')! as HTMLDivElement;
-        const textColumn = document.querySelector('#textinputs')! as HTMLDivElement;
+        const filesColumn = document.getElementById(html_ids.fileinputs)! as HTMLDivElement;
+        const textColumn = document.getElementById(html_ids.textinputs)! as HTMLDivElement;
         filesColumn.style.display = 'none';
         // Make column full width
         textColumn.style.width = '100%';
@@ -88,6 +115,7 @@ class Form {
         textColumn.style.margin = 'auto';
     }
 
+    // Submit Handler Function
     //Submit the form. We could either be adding a new entry, or updating an existing one
     @BindThis
     submitForm(type: 'add' | 'update'){
@@ -96,6 +124,7 @@ class Form {
         formErrors.length >  0 ? this.errorModal.handleErrors(formErrors) : this.packageData(type);
     }
 
+    // Delete Handler Function
     @BindThis
     deleteData(){
         this.proceedWithConfirmation();
@@ -105,6 +134,7 @@ class Form {
         }))
     }
 
+    // New Form Handler Function
     @BindThis
     handleSwitchToEmptyForm(){
         store.dispatch(resetEditMode());
@@ -125,34 +155,10 @@ class Form {
             else {
                 console.log('failed to find type of input')
             }
-    })
-
-
-    }
-
-    setValues(): void{
-        const data = store.getState().data.profiles;
-
-        //Fetch profile with matching ID
-        const profile: Profile = data.filter((prof:Profile) => prof.id === this.editid)[0];
-        //Pull all object keys from profile
-        const profileKeys: string[] = Object.keys(profile);
-        
-        // For each input, find matching key name
-        // If a text / select input, set the value property
-        // If a file input, invoke the update function for that component
-        this.formInputs
-            .forEach((input: Inputs) => {
-            const key = profileKeys.find((key: string) => key === input.title);
-            if ('el' in input && key) input.el.value = profile[key];
-            else if ('imageurl' in input && key) input.updateImageUrl(profile[key]);
-            else {
-                console.log('failed to find type of input: ' + input);
-                console.log(key)
-                //We need to show Error Modal. On 'Proceed' we create a NEW input and set state to 'AllowedNewInput'
-            }
         })
     }
+
+
 
 
     @BindThis
@@ -219,7 +225,7 @@ class Form {
         else if (!loadingState && this.submitModal.active) this.submitModal.exitModal()
     }
 
-    //FIRE 
+    //SET LOADING STATE
     proceedWithConfirmation(){
         store.dispatch(loading())
     }

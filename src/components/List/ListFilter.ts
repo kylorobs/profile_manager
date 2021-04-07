@@ -2,7 +2,7 @@
 import ButtonHandler from '../../utils/ButtonConfigurer';
 import {store} from '../../app'
 import { changeFilter } from '../../state/ProfileSlice';
-import DropArea from '../../containers/DropArea';
+import DropArea from '../FilterButton/FilterButton';
 import DOMHelper from '../../utils/DOMHelper';
 
 class ListFilter {

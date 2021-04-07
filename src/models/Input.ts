@@ -8,7 +8,7 @@ export abstract class Input<T extends HTMLInputElement | HTMLTextAreaElement | H
         const label = DOMHelper.create('label', inputTitle)
         const div = DOMHelper.createDivHTML(undefined, label);
         div.appendChild(el);
-        DOMHelper.renderInnerHTML(`#${parentID}`, div)
+        DOMHelper.appendChild(`#${parentID}`, div)
     }
 
     abstract createElement(): T;

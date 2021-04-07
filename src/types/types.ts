@@ -2,7 +2,7 @@
 export interface ManagerInit {
     pageTitle: string,
     authArea?: string,
-    categories: Categories[],
+    filters: Filter[],
     labelCardKeys: [string, string, string], //[Image, Heading, SubText]
     dataUrl: string,
     categoryKeyName: string,
@@ -19,12 +19,12 @@ export interface KeyMap {
     thumbnailUrl?: string,
     validationTypes: validChecks[],
     validationErrorMsg: string,
-    options?: Categories[]
+    options?: Filter[]
 }
 
 export type filterFn = ((val:Profile, Index?:number) => boolean) | null;
 
-export type Categories = [string, string, filterFn];
+export type Filter = [string, string, filterFn];
 
 
 export interface Draggable {

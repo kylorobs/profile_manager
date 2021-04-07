@@ -14,7 +14,7 @@ class DOMHelper {
     }
 
     //Render HTML strings / elements to a parent node
-    static renderInnerHTML(parentId: string|HTMLElement, el: string|HTMLElement, allowedTags: string[] = [], allowedAttr: string[] = []){
+    static appendChild(parentId: string|HTMLElement, el: string|HTMLElement, allowedTags: string[] = [], allowedAttr: string[] = []){
         const parent =  typeof parentId ==='string' ? 
             document.querySelector(parentId)!
             :
