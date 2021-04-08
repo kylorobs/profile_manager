@@ -22,12 +22,10 @@ class Form {
     private errorModal: FormErrorModal; 
     private formControls: FormControls;
     private submitModal: Modal;
-    private loading: boolean;
 
     constructor(keyMappings: KeyMap[]){
         this.editid = store.getState().form.editing_id || null;
         this.errorModal = new FormErrorModal();
-        this.loading = false;
 
         //Find out if there are Image or Document input maps
         const containsFileInputs = keyMappings.find(map => map.type === 'document_file' || map.type === 'image_file' );
@@ -87,11 +85,10 @@ class Form {
     @BindThis
     private setEditingState(): void{
         const editId = store.getState().form.editing_id;
-        const loading = store.getState().data.loading;
+        // const loadingInState = store.getState().data.loading;
         const editingNew = store.getState().form.editing_new;
         const oldId = this.editid;
-        
-        if (this.loading !== loading) this.loading = loading;
+
         if (editingNew) return;
         else if (editId !== oldId){
             this.editid = editId;

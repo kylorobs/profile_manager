@@ -5,7 +5,6 @@ import DOMHelper from "../../utils/DOMHelper";
 import { html_ids } from "../../utils/htmlIds";
 
 
-
 class AppHTML extends Component<HTMLDivElement>{
     title: string;
     el: HTMLDivElement;
