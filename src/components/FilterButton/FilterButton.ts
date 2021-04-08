@@ -1,6 +1,6 @@
 import { store } from "../../app";
 import { BindThis } from "../../decorators/bindthis";
-import { changeFilter, updateFilterWithCustomFunction} from "../../state/ProfileSlice";
+// import { changeFilter, updateFilterWithCustomFunction} from "../../state/ProfileSlice";
 import { DragTarget } from "../../types/types";
 import * as thunks from '../../state/thunks/profile';
 import DOMHelper from "../../utils/DOMHelper";
@@ -28,7 +28,7 @@ class FilterButton implements DragTarget {
 
         //IF NO CUSTOM FILTER FUNCTION SPECIFIED, APPLY DRAG N DROP EVENT LISTENERS
         if (!this.filterFn){
-            block.addEventListener('drop', this.dropHandler);
+            block.addEventListener('drop', (evt: DragEvent) => this.dropHandler(evt, () => clickedHandler(this.id)));
             block.addEventListener('dragover', this.dragOverHandler);
             block.addEventListener('dragleave', this.dragLeaveHandler);
         }
@@ -57,10 +57,10 @@ class FilterButton implements DragTarget {
     }
 
     @BindThis
-    dropHandler(evt: DragEvent){
+    dropHandler(evt: DragEvent, cb: (id:string) => void){
         const id = evt.dataTransfer!.getData('text/plain');
         const val = this.id;
-        this.filterList();
+        cb(id);
         //UPDATE CATEGORY TYPE
         store.dispatch(thunks.updateCategory({
             url: store.getState().data.dataUrl,

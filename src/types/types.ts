@@ -34,7 +34,7 @@ export interface Draggable {
 
 export interface DragTarget {
     dragOverHandler(evt: DragEvent): void;
-    dropHandler(evt: DragEvent): void;
+    dropHandler(evt: DragEvent, cb: (id:string) => void): void;
     dragLeaveHandler(evt: DragEvent): void;
 }
 

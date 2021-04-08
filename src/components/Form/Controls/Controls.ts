@@ -80,7 +80,7 @@ class FormControls {
                 <kclsu-button emitid="${type}">Proceed</kclsu-button>
                 <kclsu-button purple emitid="cancel">Cancel</kclsu-button>
             </flex-container>`;
-        DOMHelper.renderInnerHTML(div, content, ['flex-container', 'kclsu-button'], ['alignx', 'emitid', 'purple'])
+        DOMHelper.appendChild(div, content, ['flex-container', 'kclsu-button'], ['alignx', 'emitid', 'purple'])
         return div;
     }
 

@@ -1,7 +1,6 @@
 import { Input } from '../../../models/Input';
 import { KeyMap } from '../../../types/types';
 import {BindThis} from '../../../decorators/bindthis';
-import { Categories } from '../../../types/types';
 import DOMHelper from '../../../utils/DOMHelper';
 
 
@@ -28,7 +27,7 @@ class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement | HTMLSelec
             break;
             case 'select':
                 el =  DOMHelper.create<HTMLSelectElement>('select');
-                keymap.options?.map((optionKey: Categories) => {
+                keymap.options?.map(optionKey => {
                     const option = DOMHelper.create<HTMLOptionElement>('option');
                     option.innerText = optionKey[0];
                     option.value =  encodeURIComponent(optionKey[1]);

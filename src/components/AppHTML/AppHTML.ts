@@ -5,9 +5,11 @@ import DOMHelper from "../../utils/DOMHelper";
 import { html_ids } from "../../utils/htmlIds";
 
 
+
 class AppHTML extends Component<HTMLDivElement>{
     title: string;
     el: HTMLDivElement;
+    
     constructor(pageTitle:string){
         super();
         this.title = pageTitle;
@@ -18,7 +20,7 @@ class AppHTML extends Component<HTMLDivElement>{
     createElement():HTMLDivElement{
         if (this.el){
             const formTags = ['kclsu-modal'];
-            DOMHelper.appendChild( html_ids.app, `
+            DOMHelper.appendChild(this.el, `
                 <kclsu-modal show="false"></kclsu-modal>
                 <div class="area">
                     <h1>${this.title}</h1>

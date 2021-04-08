@@ -22,8 +22,8 @@ class DOMHelper {
         const options = {} as { ADD_TAGS?: string[], ALLOWED_ATTR: string[] };
         if (allowedTags.length > 0) options.ADD_TAGS = allowedTags; 
         if (allowedAttr.length >0) options.ALLOWED_ATTR = allowedAttr
-        if ( el && typeof el !== 'string') parent.appendChild(el);    
-        else {
+        if ( typeof el !== 'string') parent.appendChild(el);    
+        else { 
             parent.innerHTML = DOMPurify.sanitize(
             el,
             options

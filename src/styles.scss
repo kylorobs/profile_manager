@@ -142,7 +142,7 @@ h6 {
   }
 }
 
-.grid {
+#app {
     display: grid;
     max-width: 100%;
     grid-template-columns: 70% 1fr;
@@ -173,11 +173,12 @@ h6 {
     }
 		
 	& .area {
-    background-color: white;
-    grid-area: area;
-    overflow: hidden;
-    overflow-x: scroll;
-        & .droparea{
+        grid-area: area;
+        background-color: white;
+        overflow: hidden;
+        overflow-x: scroll;
+
+        & #filters {
             width: 100%;
             height: auto;
             display: flex;
@@ -186,6 +187,35 @@ h6 {
             @media (max-width: 600px){
                 display: none;
             }
+            .droppable {
+                height: 100%;
+                width: 300px;
+                margin: 1em;
+                padding: 0 15px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 7px 8px 7px 0px rgb(0 0 0 / 28%);
+                cursor: pointer;
+                text-align: center;
+        
+                h3 {
+                    line-height: 40px;
+                    font-size: 24px;
+                    color: white;
+                    margin: 0;
+                    padding: 1em 0;
+                }
+            }
+        
+            .dropNeutral{
+                background-color: #36454f;
+                color: white;
+            }
+        
+            .dropActive{
+                background-color: #502669;
+            }
         }
 
         & h1 {
@@ -193,7 +223,7 @@ h6 {
         }
 	};
 	
-	& .list {
+	& #list {
 		grid-area: list;
         background-color: white;
         overflow: scroll;
@@ -218,41 +248,12 @@ h6 {
         }
 	};
 		
-	& .editor {
-	grid-area: editor;
-    background-color: white;
-    overflow: scroll;
+	& #editor {
+        grid-area: editor;
+        background-color: white;
+        overflow: scroll;
     };
     
-    .droppable {
-        height: 100%;
-        width: 300px;
-        margin: 1em;
-        padding: 0 15px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 7px 8px 7px 0px rgb(0 0 0 / 28%);
-        cursor: pointer;
-        text-align: center;
-
-        h3 {
-            line-height: 40px;
-            font-size: 24px;
-            color: white;
-            margin: 0;
-            padding: 1em 0;
-        }
-    }
-
-    .dropNeutral{
-        background-color: #36454f;
-        color: white;
-    }
-
-    .dropActive{
-        background-color: #502669;
-    }
 };
 
 form {

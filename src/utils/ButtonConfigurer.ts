@@ -9,6 +9,7 @@ class ButtonHandler {
     private emitFunctions: EmitFunction[];
     static instance: ButtonHandler;
 
+
     private constructor(){
         this.emitFunctions = [];
         document.addEventListener('emitClick', (e:any) => this.clickHandler(e));

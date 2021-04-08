@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    <div class="grid" id="app"></div>
+    <div id="app"></div>
 </body>
 
 <script>
@@ -32,7 +32,7 @@ function filterTotum(ad){
     return ad.category === "totum"
 }
 
-profileManager({
+contentManager({
 pageTitle: 'Student Deals Manager',
 filters: [["Featured Ad", "featured", filterFeatured], ["Hidden", "notvisible", filterExpired], ["Visible", "visible", filterVisible], ["Totum", "totum", filterTotum]],
 labelCardKeys: ['image', 'advertiser', ''],

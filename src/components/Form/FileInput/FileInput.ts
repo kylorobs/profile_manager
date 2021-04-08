@@ -65,7 +65,7 @@ class FileInput {
       DOMHelper.appendChildren(this.uploadcontainer, [this.thumbnailcontainer, div])
 
       //Render upload controls
-      DOMHelper.renderInnerHTML(`#${this.parentId}`, this.uploadcontainer)
+      DOMHelper.appendChild(`#${this.parentId}`, this.uploadcontainer)
       // document.getElementById(this.parentId)!.appendChild(this.uploadcontainer)
       this.setThumbnail();
     }
@@ -93,7 +93,7 @@ class FileInput {
       else if (this.keymap.type === 'document_file') url = 'https://res.cloudinary.com/kclsu-media/image/upload/f_auto,fl_any_format/v1611323576/website_uploads/MISC/newtick_lo6g5p.png'
       
       //SET THE THUMBNAIL URL
-      DOMHelper.renderInnerHTML(this.thumbnailcontainer, `
+      DOMHelper.appendChild(this.thumbnailcontainer, `
         <lazy-image image=${url}></lazy-image>
       `, ['lazy-image'], ['image'])
 

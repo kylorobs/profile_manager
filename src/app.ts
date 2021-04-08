@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 import ProfileSlice from './state/ProfileSlice';
+import FormSlice from './state/FormSlice';
 import ContentManager from './containers/ContentManager';
 import 'kclsu-components';
 import './styles.scss';
-import FormSlice from './state/FormSlice';
 
 
 export const store = configureStore({
@@ -28,6 +28,7 @@ export type RootState = ReturnType<typeof store.getState>;
 
 
 })(window);
+
 
 
 

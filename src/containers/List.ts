@@ -6,6 +6,7 @@ import {BindThis} from '../decorators/bindthis';
 import ListFilter from '../components/List/ListFilter';
 import { Filter, filterFn } from '../types/types';
 import DOMHelper from '../utils/DOMHelper';
+import { html_ids } from '../utils/htmlIds';
 
 
 class List {
@@ -38,8 +39,7 @@ class List {
         this.searchContainer.style.overflow = 'scroll';
         this.updateList();
         this.filterControls = new ListFilter(store.getState().data.filterid, store.getState().data.profiles.length);
-        document.querySelector('.list')!.appendChild(this.filterControls.el);
-
+        document.getElementById(html_ids.list)!.appendChild(this.filterControls.el);
         store.subscribe(this.updateList);
     }
 
@@ -81,7 +81,7 @@ class List {
 
     @BindThis
     createCards(profiles: Profile[], currentFilter: string, customFilter: filterFn ):number{
-        document.querySelector('.list')!.appendChild(this.searchContainer);
+        document.getElementById(html_ids.list)!.appendChild(this.searchContainer);
         const [image, heading, subtext] = this.cardKeys;
         let count = 0;
 

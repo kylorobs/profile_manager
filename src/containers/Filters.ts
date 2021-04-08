@@ -12,6 +12,7 @@ class Filters {
 
     constructor(filterConfig: Filter[]){
         this.filterButtons = this.createFilterButtons(filterConfig);
+        this.appendButtons();
     }
 
     private createFilterButtons(config: Filter[]): FilterButton[]{
@@ -36,11 +37,10 @@ class Filters {
 
      private appendButtons(){
         //CREATE DRAG AND DROP AREAS
-        const parent = document.querySelector('.droparea')!;
         if (this.filterButtons.length > 0)
-            this.filterButtons.forEach((btn: FilterButton) => DOMHelper.appendChild('.droparea', btn.el));
+            this.filterButtons.forEach((btn: FilterButton) => DOMHelper.appendChild('#filters', btn.el));
         else 
-            DOMHelper.appendChild('.droparea', '<p> You currently have no filters set up </p>');
+            DOMHelper.appendChild('.filters', '<p> You currently have no filters set up </p>');
         
     }
 }
