@@ -11,7 +11,7 @@ import Validator from '../utils/Validator';
 import FormErrorModal from '../components/Modals/FormErrorModal';
 import * as thunks from '../state/thunks/profile';
 import Modal from '../models/Modal';
-import { loading } from '../state/ProfileSlice';
+import { loading, setError } from '../state/ProfileSlice';
 import { html_ids } from '../utils/htmlIds';
 
 type Inputs = TextInput | FileInput;
@@ -72,11 +72,7 @@ class Form {
             const key = profileKeys.find((key: string) => key === input.title);
             if ('el' in input && key) input.el.value = profile[key];
             else if ('imageurl' in input && key) input.updateImageUrl(profile[key]);
-            else {
-                console.log('failed to find type of input: ' + input);
-                console.log(key)
-                //We need to show Error Modal. On 'Proceed' we create a NEW input and set state to 'AllowedNewInput'
-            }
+            else store.dispatch(setError('Input typed not able to map to a class '));
         })
     }
 
@@ -85,18 +81,16 @@ class Form {
     @BindThis
     private setEditingState(): void{
         const editId = store.getState().form.editing_id;
-        // const loadingInState = store.getState().data.loading;
         const editingNew = store.getState().form.editing_new;
         const oldId = this.editid;
 
-        if (editingNew) return;
+        if (editingNew) return; //If we are currently adding a new entry, return to entry
         else if (editId !== oldId){
             this.editid = editId;
             if (!!editId) {
                 this.setValues();
                 this.formControls.toggleEditMode(true);
             }
-            // if (editingNew) return;
             else this.swithToEmptyForm();
         }
     }
@@ -154,8 +148,6 @@ class Form {
             }
         })
     }
-
-
 
 
     @BindThis
