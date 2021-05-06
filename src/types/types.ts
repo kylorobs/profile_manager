@@ -15,7 +15,7 @@ export interface KeyMap {
     keyName: string,
     inputTitle: string,
     inputDefaultText: string,
-    type: 'input' | 'select' | 'textarea' | 'document_file' | 'image_file',
+    type: 'input' | 'datetime' | 'select' | 'textarea' | 'document_file' | 'image_file',
     thumbnailUrl?: string,
     validationTypes: validChecks[],
     validationErrorMsg: string,

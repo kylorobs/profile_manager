@@ -20,6 +20,10 @@ class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement | HTMLSelec
             case 'input' :
                 el = DOMHelper.create<HTMLInputElement>('input');
             break;
+            case 'datetime' :
+                el = DOMHelper.create<HTMLInputElement>('input');
+                el.type = "datetime-local";
+            break;
             case 'textarea':
                 el = DOMHelper.create<HTMLTextAreaElement>('textarea');
                 el.cols = 22;
