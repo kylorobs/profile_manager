@@ -71,6 +71,7 @@ class Form {
             .forEach((input: Inputs) => {
             const key = profileKeys.find((key: string) => key === input.title);
             if ('el' in input && key) input.el.value = profile[key];
+            else if ('el' in input) input.el.value = '';
             else if ('imageurl' in input && key) input.updateImageUrl(profile[key]);
             else store.dispatch(setError('Input typed not able to map to a class '));
         })
