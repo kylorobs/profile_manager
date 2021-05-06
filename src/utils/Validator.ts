@@ -6,11 +6,13 @@ class Validator {
 
     isValid: boolean;
     errorMessages: string[];
+    inputTitle: string;
 
     constructor(val: any, keyMap: KeyMap ){
         this.isValid = true;
         this.errorMessages = [];
-
+        this.inputTitle = keyMap.keyName;
+        
         //check for required option in keymap
         const containsRequired = keyMap.validationTypes.find(type => type === 'isRequired');
         if (!val){
@@ -57,10 +59,10 @@ class Validator {
             case 'isAKclsuEvent':
                 this.setErrorHelper(validator.isURL(val) && validator.contains(val, 'kclsu.org/ents/event/'), errorMsg);
                 break;
-            case 'isDate':
+            case 'isDateString':
                 this.setErrorHelper(validator.matches(val, /^202[1-9][:-][0-1][0-9][:-]([0-2][0-9]|3[0-1])$/), errorMsg); //yyy:mm:dd
                 break;
-            case 'isTime':
+            case 'isTimeString':
                 this.setErrorHelper(validator.matches(val, /^([01][0-9]|2[0-3])[:-][0-6][0-9][:-][0-6][0-9]$/), errorMsg); //hh:mm:ss
                 break;
             case 'isBoolean': 

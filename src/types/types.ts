@@ -9,7 +9,9 @@ export interface ManagerInit {
     keyMapping: KeyMap[]
 }
 
-export type validChecks = 'isRequired' |  'isUrl' | 'isEmail' | 'isImage' | 'isPdf' | 'isFacebookUrl' | 'isInstagramUrl' | 'isTwitterUrl' | 'isNumber' | 'isAKclsuUrl' | 'isAKclsuEvent' | 'isDate' | 'isTime' | 'isBoolean' | 'isNotThumbnail'
+export type FormElements = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement; 
+
+export type validChecks = 'isRequired' |  'isUrl' | 'isEmail' | 'isImage' | 'isPdf' | 'isFacebookUrl' | 'isInstagramUrl' | 'isTwitterUrl' | 'isNumber' | 'isAKclsuUrl' | 'isAKclsuEvent' | 'isDateString' | 'isTimeString' | 'isBoolean' | 'isNotThumbnail'
 
 export interface KeyMap {
     keyName: string,

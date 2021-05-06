@@ -13,6 +13,7 @@ import * as thunks from '../state/thunks/profile';
 import Modal from '../models/Modal';
 import { loading, setError } from '../state/ProfileSlice';
 import { html_ids } from '../utils/htmlIds';
+// import DOMHelper from '../utils/DOMHelper';
 
 type Inputs = TextInput | FileInput;
 
@@ -69,11 +70,14 @@ class Form {
         // If a file input, invoke the update function for that component
         this.formInputs
             .forEach((input: Inputs) => {
-            const key = profileKeys.find((key: string) => key === input.title);
-            if ('el' in input && key) input.el.value = profile[key];
-            else if ('el' in input) input.el.value = '';
-            else if ('imageurl' in input && key) input.updateImageUrl(profile[key]);
-            else store.dispatch(setError('Input typed not able to map to a class '));
+                const key = profileKeys.find((key: string) => key === input.title);
+                if ('el' in input && key) {
+                    input.el.value = profile[key];
+                    input.el.style.border = '';
+                }
+                else if ('el' in input) input.el.value = '';
+                else if ('imageurl' in input && key) input.updateImageUrl(profile[key]);
+                else store.dispatch(setError('Input typed not able to map to a class '));
         })
     }
 
@@ -113,7 +117,19 @@ class Form {
     submitForm(type: 'add' | 'update'){
         if (type === 'add') store.dispatch(startEditingNew());
         const formErrors = this.validateValues();
-        formErrors.length >  0 ? this.errorModal.handleErrors(formErrors) : this.packageData(type);
+        formErrors.length >  0 ? this.handleFormErrors(formErrors) : this.packageData(type);
+    }
+
+    handleFormErrors(errors: Validator[]){
+        errors.forEach((er: Validator) => {
+            console.log(er)
+            const input = this.formInputs.find((input: Inputs) => input.title === er.inputTitle);
+            if (input && 'el' in input) {
+                input.el.classList.add('validationerror');
+                input.el.style.border = '2px solid red'
+            }
+            this.errorModal.handleErrors(errors)
+        })
     }
 
     // Delete Handler Function
@@ -142,7 +158,10 @@ class Form {
         // Clear all form inputs
         this.formInputs
         .forEach((input: Inputs) => {
-            if ('el' in input) input.el.value = '';
+            if ('el' in input){
+                input.el.value = '';
+                input.el.style.border = '';
+            } 
             else if ('imageurl' in input) input.updateImageUrl('');
             else {
                 console.log('failed to find type of input')
@@ -182,8 +201,8 @@ class Form {
                     profpackage[input.title] = input.imageurl;
                 } 
                 else {
-                    console.log(input)
                     console.log('failed to find type of input')
+                    console.log(input)
                 }
                 
             })

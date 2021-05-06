@@ -35,7 +35,7 @@ function filterTotum(ad){
 contentManager({
 pageTitle: 'Student Deals Manager',
 filters: [["Featured Ad", "featured", filterFeatured], ["Hidden", "notvisible", filterExpired], ["Visible", "visible", filterVisible], ["Totum", "totum", filterTotum]],
-labelCardKeys: ['image', 'advertiser', ''],
+labelCardKeys: ['image', 'advertiser', 'expiryDateTime'],
 dataUrl: 'https://student-deals-4362e-default-rtdb.firebaseio.com/',
 categoryKeyName: 'category',
 keyMapping: [
@@ -44,7 +44,7 @@ keyMapping: [
         inputTitle: 'Name',
         inputDefaultText: "The name of the advertiser's business...",
         type: 'input',
-        validationErrorMsg: 'Please supply a valid name',
+        validationErrorMsg: 'Supply a valid name',
         validationTypes: ['isRequired']
     },
     { 
@@ -52,7 +52,7 @@ keyMapping: [
         inputTitle: 'Ad URL',
         inputDefaultText: 'The website URL for the ad...',
         type: 'input',
-        validationErrorMsg: 'Please supply a valid URL for the ad',
+        validationErrorMsg: 'Supply a valid URL for the ad',
         validationTypes: ['isUrl']
     },
     { 
@@ -69,7 +69,7 @@ keyMapping: [
         inputTitle: 'Short Text',
         inputDefaultText: 'A short description less than 80 character',
         type: 'input',
-        validationErrorMsg: 'Please enter a short text description, with the correct length.',
+        validationErrorMsg: 'Enter a short text description, with the correct length.',
         validationTypes: ['isRequired']
     },
     { 
@@ -77,32 +77,16 @@ keyMapping: [
         inputTitle: 'Long Text',
         inputDefaultText: 'A longer description...',
         type: 'textarea',
-        validationErrorMsg: 'Please provide a full facebook URL.',
+        validationErrorMsg: 'Provide a full facebook URL.',
         validationTypes: ['isRequired']
     },
     { 
         keyName: 'expiryDateTime',
-        inputTitle: 'Expiry DateTime',
+        inputTitle: 'Expiry Date',
         inputDefaultText: '',
         type: 'datetime',
-        validationErrorMsg: '',
-        validationTypes: []
-    },
-    { 
-        keyName: 'expiryDate',
-        inputTitle: 'Expiry Date',
-        inputDefaultText: 'yyyy-mm-dd',
-        type: 'input',
-        validationErrorMsg: 'The expirey date must be in the correct format: YYYY-MM-DD',
-        validationTypes: ['isDate']
-    },
-    { 
-        keyName: 'expiryTime',
-        inputTitle: 'Expiry Time',
-        inputDefaultText: 'hh-mm-ss. Example: 14:00:00',
-        type: 'input',
-        validationErrorMsg: 'Please supply the expirey time in the correct format. Example 14:00:00.',
-        validationTypes: ['isTime']
+        validationErrorMsg: 'Enter an expiry date and time',
+        validationTypes: ['isRequired']
     },
     { 
         keyName: 'featured',
@@ -119,7 +103,7 @@ keyMapping: [
         inputDefaultText: '...',
         type: 'select',
         options: [["External", "external", null], ["Totum", "totum", null], ["Union Shop", "unionShop", null], ["Guy's Bar", "guysBar", null], ["The Shack", "theShack", null], ["The Shed", "theShed", null], ["The Vault", "theVault", null]],
-        validationErrorMsg: 'Please choose a category',
+        validationErrorMsg: 'Choose a category',
         validationTypes: ['isRequired']
     },
     { 

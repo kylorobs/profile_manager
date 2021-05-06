@@ -320,6 +320,10 @@ form {
                 width: 70%;
                 border: none;
                 border-bottom: 2px solid teal;
+
+                .validationerror {
+                    border: 2px solid red;
+                }
             }
 
             & textarea {

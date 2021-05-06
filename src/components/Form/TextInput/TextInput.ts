@@ -1,21 +1,18 @@
 import { Input } from '../../../models/Input';
-import { KeyMap } from '../../../types/types';
+import { KeyMap, FormElements } from '../../../types/types';
 import {BindThis} from '../../../decorators/bindthis';
-import DOMHelper from '../../../utils/DOMHelper';
+import DOMHelper from '../../../utils/DOMHelper'; 
 
-
-class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> {
+class TextInput extends Input {
 
     constructor(public parentId: string, public keymap: KeyMap, protected valid: boolean = false, public title: any = ''){
-        super('', { value: 'unset' });
+        super('', keymap, keymap.validationTypes.includes('isRequired'));
         this.title = keymap.keyName;
-        this.keymap = keymap;
-        this.appendToDOM(this.createElement(), this.keymap.inputTitle, parentId);
+        this.appendToDOM(this.el, this.keymap.inputTitle, parentId);
     }
 
-    createElement(){
+    createElement(keymap: KeyMap): FormElements{
         let el:any;
-        const keymap = this.keymap;
         switch(keymap.type){
             case 'input' :
                 el = DOMHelper.create<HTMLInputElement>('input');
@@ -39,20 +36,21 @@ class TextInput extends Input<HTMLInputElement | HTMLTextAreaElement | HTMLSelec
                 })
                 .forEach(option => el.appendChild(option))
             break;
-            default: el = DOMHelper.create<HTMLInputElement>('input');
+            default: el = DOMHelper.create<HTMLInputElement>('input');    
         }
 
         el.id = keymap.keyName;
         el.placeholder = keymap.inputDefaultText;
         el.addEventListener('change', this.changeHandler);
-        this.el = el;
+        if (keymap.validationTypes.includes('isRequired')){
+            el.required = true;
+        }
         return el;
     }
 
     @BindThis
     changeHandler(): void{
-
-        
+       this.el.style.border = '';
     }
 
 
