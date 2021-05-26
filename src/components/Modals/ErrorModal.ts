@@ -22,7 +22,7 @@ class ErrorModal extends Modal {
 
 
     @BindThis
-    showError(): void{
+    public showError(): void {
         const error = store.getState().data.error;
         if (!error){
             if (this.error === true) this.error = false;

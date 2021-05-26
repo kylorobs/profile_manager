@@ -7,12 +7,14 @@ import DOMHelper from "../utils/DOMHelper";
 class Modal {
 
     protected modal: HTMLKclsuModalElement;
-    private spinner: HTMLLoadingSpinnerElement;
+    protected spinner: HTMLLoadingSpinnerElement;
     public active: boolean;
+    // public spinneractive: boolean;
 
    constructor(){
         this.modal = this.fetchModalElement();
         this.active = false;
+        // this.spinneractive = false;
         this.spinner = document.createElement('loading-spinner');
     }
 
@@ -38,9 +40,9 @@ class Modal {
 
     @BindThis
     public showModal(el:HTMLDivElement | HTMLLoadingSpinnerElement | HTMLFormElement): void{
-        this.modal.innerHTML = DOMHelper.sanitise('');
-        this.modal.appendChild(el);
         this.modal.show = true;
+        this.modal.innerHTML = DOMHelper.sanitise('');
+        DOMHelper.appendChild(this.modal, el)
         this.active = true;
     }
 
@@ -56,8 +58,8 @@ class Modal {
         this.modal.innerHTML = '';
         this.spinner.show = false;
         this.modal.show = false;
+        // this.spinneractive = false;
         this.active = false;
-        // store.dispatch(notLoading());
     }
 
 

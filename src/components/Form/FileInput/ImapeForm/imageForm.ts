@@ -1,6 +1,6 @@
 
 import { store } from '../../../../app';
-import {BindThis} from '../../../../decorators/bindthis';
+import { BindThis } from '../../../../decorators/bindthis';
 import { setError } from '../../../../state/ProfileSlice';
 import DOMHelper from '../../../../utils/DOMHelper';
 import UploadModal from '../../../Modals/UploadModal';
@@ -39,11 +39,6 @@ class ImageForm {
     };
 
 
-    //For the moment, keeping Fetch logic here and not in a reducer. 
-    //By changing redux state to update FileInput component, the whole component will reload
-    //and we might lose user input.
-
-
     @BindThis
     uploadImage(e:Event){
         this.uploadModal.showSpinner();
@@ -51,23 +46,18 @@ class ImageForm {
       fetch("https://kclsu-heroku.herokuapp.com/upload", { method: 'POST', body: new FormData((e.target as any))})
         .then(res => res.json())
         .then(result => {
-
           //Check if there is a new URL in the result
-          if (!result.url){
-            store.dispatch(setError(result.message? result.message : 'Failed to upload'))
-            this.fn(null);
-            throw new Error('failed to upload');
+          if (result.error){
+            throw new Error(result.message);
           }
-
           this.uploadModal.exitModal();
           this.imageurl = result.url;
           this.fn(result.url) ; 
         })
         .catch(er => {
           this.fn(null);
-          this.uploadModal.exitModal();
+          // this.uploadModal.exitModal();
           store.dispatch(setError('Failed to upload file: ' + er))
-          throw new Error(er);
         })
     }
 

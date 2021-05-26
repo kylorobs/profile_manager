@@ -20,7 +20,6 @@ class ContentManager {
     app: HTMLElement;
     authenticated: boolean = false;
 
-
     constructor(Config: ManagerInit){
         //Create the boiler plate html for the application
         this.app = new AppHTML(Config.pageTitle).el;

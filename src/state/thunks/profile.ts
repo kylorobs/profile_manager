@@ -74,6 +74,7 @@ export const fetchData: any = createAsyncThunk(
         if (dataPackage.id){
           const res = await makeRequest('PUT', createUrl(dataPackage), dataPackage.data);
           store.dispatch(resetEditMode());
+          store.dispatch(notLoading());
           return {id:dataPackage.id, data: res};
         }
         else throw new Error('No Id for update to proceed');
