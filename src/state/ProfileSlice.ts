@@ -87,7 +87,6 @@ const profileSlice = createSlice({
     },
     [thunks.updateCategory.fulfilled]: (state, action) => {
       const profileIndex = state.profiles.findIndex((prof:Profile) => prof.id === action.payload.id);
-      console.log(profileIndex)
       if (profileIndex > -1){
         state.profiles[profileIndex][state.filterkey] = action.payload.value;
       }

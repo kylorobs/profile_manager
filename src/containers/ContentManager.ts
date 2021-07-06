@@ -4,7 +4,8 @@ import { store } from '../app';
 import {  
     updateDataUrl, 
     updateFilterKey,
-    setAuthentication
+    setAuthentication,
+    setError
 } from '../state/ProfileSlice';
 import * as thunks from '../state/thunks/profile';
 import { ManagerInit} from '../types/types';
@@ -23,8 +24,8 @@ class ContentManager {
     constructor(Config: ManagerInit){
         //Create the boiler plate html for the application
         this.app = new AppHTML(Config.pageTitle).el;
-        //Check if the config supplied contains authentication
-        Config.authArea ? this.displayLogin(Config) : this.initialise(Config)
+        //Check if the config supplied requires authentication
+        Config.authRequired ? this.authenticate(Config) : this.initialise(Config)
         //register an error modal with redux state listeners
         new ErrorModal();
         //register a loading modal with redux state listeners
@@ -54,19 +55,23 @@ class ContentManager {
         if (token) store.dispatch(setAuthentication(token))
         store.dispatch(updateFilterKey(Config.categoryKeyName || ''));
     }
+  
     
+    private async authenticate(Config: ManagerInit){
 
-    private displayLogin(Config: ManagerInit){
-
-        const login = document.createElement('user-login') as any;
-        if (Config.authArea) login.database = DOMHelper.sanitise(Config.authArea);
-        
-        login.callbackFn = (token:string) => {
-            if (token){
-                this.initialise(Config, token);
+        try {
+            await fetch('http://localhost:4000/serverToken', {credentials: 'include'});
+            const fetchFirebaseToken = await fetch(`http://localhost:4000/protectedauth/${Config.secret}`, { method: 'POST', credentials: 'include' });
+            const result = await fetchFirebaseToken.json();
+            console.log(result);
+            if (result.token){
+                DOMHelper.appendChildren(this.app)
+                this.initialise(Config, result.token);
             }
-        };
-        DOMHelper.appendChildren(this.app, [login])
+        } catch(e) {
+            DOMHelper.appendChildren(this.app)
+            store.dispatch(setError(e));
+        }
     }
 
 }

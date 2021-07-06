@@ -1,7 +1,8 @@
 
 export interface ManagerInit {
     pageTitle: string,
-    authArea?: string,
+    authRequired?: boolean,
+    secret?: string,
     filters: Filter[],
     labelCardKeys: [string, string, string], //[Image, Heading, SubText]
     dataUrl: string,
