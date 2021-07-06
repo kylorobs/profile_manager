@@ -2,7 +2,7 @@
 export interface ManagerInit {
     pageTitle: string,
     authRequired?: boolean,
-    devMode: boolean,
+    devMode?: boolean,
     secret?: string,
     filters: Filter[],
     labelCardKeys: [string, string, string], //[Image, Heading, SubText]

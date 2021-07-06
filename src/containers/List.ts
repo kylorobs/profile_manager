@@ -102,9 +102,7 @@ class List {
                     count++;
                 });
 
-            this.searchContainer!.shadowRoot!.querySelector('div')!.style.height = 'auto';
-            this.searchContainer!.shadowRoot!.querySelector('div')!.style.width = '90%';
-            this.searchContainer!.shadowRoot!.querySelector('div')!.style.margin = 'auto';
+
         }
 
         return count;
