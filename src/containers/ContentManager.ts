@@ -15,6 +15,7 @@ import { BindThis } from '../decorators/bindthis';
 import ErrorModal from '../components/Modals/ErrorModal';
 import Filters from './Filters';
 import AppHTML from '../components/AppHTML/AppHTML';
+import { SERVER_ENDPOINT, DEV_ENDPOINT } from '../utils/constants';
 
 class ContentManager {
 
@@ -59,9 +60,11 @@ class ContentManager {
     
     private async authenticate(Config: ManagerInit){
 
+        const endpoint = Config.devMode ? DEV_ENDPOINT : SERVER_ENDPOINT;
+
         try {
-            await fetch('http://localhost:4000/serverToken', {credentials: 'include'});
-            const fetchFirebaseToken = await fetch(`http://localhost:4000/protectedauth/${Config.secret}`, { method: 'POST', credentials: 'include' });
+            await fetch(`${endpoint}/serverToken`, {credentials: 'include'});
+            const fetchFirebaseToken = await fetch(`${endpoint}/protectedauth/${Config.secret}`, { method: 'POST', credentials: 'include' });
             const result = await fetchFirebaseToken.json();
             console.log(result);
             if (result.token){
