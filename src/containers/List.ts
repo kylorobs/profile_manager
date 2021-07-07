@@ -2,11 +2,12 @@
 import { Profile } from '../types/types';
 import { store } from '../app';
 import Card from '../components/Card/Card';
-import {BindThis} from '../decorators/bindthis';
+import { BindThis } from '../decorators/bindthis';
 import ListFilter from '../components/List/ListFilter';
 import { Filter, filterFn } from '../types/types';
 import DOMHelper from '../utils/DOMHelper';
 import { html_ids } from '../utils/htmlIds';
+import { createDateString } from '../utils/functions'
 
 
 class List {
@@ -95,14 +96,16 @@ class List {
            profiles
                 .filter(customFilter || filterByCategory)
                 .map(prof=> {
-                    return new Card(prof[heading], prof.id, prof[image], prof[subtext], this.cardType);
+                    // Check if the property is a date or time stamp. If so, convert to a string.
+                    let containsDateTime = subtext.toLowerCase().includes('date') || subtext.toLowerCase().includes('time');
+                    let text = containsDateTime ? createDateString(prof[subtext]) : prof[subtext];
+                    
+                    return new Card(prof[heading], prof.id, prof[image], text, this.cardType);
                 })
                 .forEach(card => {
                     this.searchContainer.appendChild(card.element);
                     count++;
                 });
-
-
         }
 
         return count;

@@ -2,7 +2,8 @@ import List from './List';
 import Form from './Form';
 import { store } from '../app';
 import {  
-    updateDataUrl, 
+    updateDataUrl,
+    loading, 
     updateFilterKey,
     setAuthentication,
     setError
@@ -50,6 +51,7 @@ class ContentManager {
     private updateStore(Config: ManagerInit, token?:string){
         //fetch data from database
         store.dispatch(thunks.fetchData(Config.dataUrl));
+        store.dispatch(loading())
         //Provide the cloud database url
         store.dispatch(updateDataUrl(Config.dataUrl));
         // if there is an authentication token, add it to the redux store
@@ -62,7 +64,7 @@ class ContentManager {
 
         const endpoint = Config.devMode ? DEV_ENDPOINT : SERVER_ENDPOINT;
         const secret = Config.devMode ? devConfig.DEVSERVER_TOKEN : Config.secret;
-        console.log('AUTHENTICATE')
+
         try {
             await fetch(`${endpoint}/serverToken`, {credentials: 'include'});
             const fetchFirebaseToken = await fetch(`${endpoint}/protectedauth/${secret}`, { method: 'POST', credentials: 'include' });
