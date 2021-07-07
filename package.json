@@ -1,6 +1,6 @@
 {
   "name": "kclsu_content_manager",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A libray built in typescript, to assist kclsu staff managing content on the kclsu website",
   "main": "app.js",
   "unpkg": "dist/bundle.js",
