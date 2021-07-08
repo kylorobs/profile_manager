@@ -4,6 +4,7 @@ export interface ManagerInit {
     authRequired?: boolean,
     devMode?: boolean,
     secret?: string,
+    apiKey?: string,
     filters: Filter[],
     labelCardKeys: [string, string, string], //[Image, Heading, SubText]
     dataUrl: string,
@@ -70,4 +71,25 @@ export interface DataState {
     filterWithCustomFunction: string,
     authenticated: boolean,
     token: string
+}
+
+export type serverCustomToken = {
+    token: string;
+}
+
+export type fireBaseResponse = {
+    kind: string;
+    idToken: string;
+    refreshToken: string;
+    expiresIn: string;
+    isNewUser: boolean;
+    error? : {
+        message: string;
+    }
+}
+
+
+export type localStorage = {
+    token: string,
+    expiresIn: string
 }
