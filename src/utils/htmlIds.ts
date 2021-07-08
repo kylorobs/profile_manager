@@ -1,7 +1,7 @@
 
 export const html_ids = {
     app: 'app',
-    form: 'editorForm',
+    formsection: 'formsection',
     filters: 'filters',
     editor: 'editor',
     list: 'list',

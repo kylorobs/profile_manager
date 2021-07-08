@@ -27,12 +27,12 @@ class AppHTML extends Component<HTMLDivElement>{
                 </div>
                 <div id="${html_ids.list}"></div>
                 <div id="${html_ids.editor}">
-                    <form id="${html_ids.form}">
+                    <section id="${html_ids.formsection}">
                         <div id="${html_ids.fileinputs}"></div>
                         <div id="${html_ids.textinputs}">
                             <div id="${html_ids.formControls}"></div>
                         </div>
-                    </form>
+                    </section>
                 </div> `,
                 formTags)
         }
