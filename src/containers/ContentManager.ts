@@ -66,8 +66,8 @@ class ContentManager {
         const secret = Config.devMode ? devConfig.DEVSERVER_TOKEN : Config.secret;
 
         try {
-            await fetch(`${endpoint}/serverToken`, {credentials: 'include'});
-            const fetchFirebaseToken = await fetch(`${endpoint}/protectedauth/${secret}`, { method: 'POST', credentials: 'include' });
+            // await fetch(`${endpoint}/serverToken`, { credentials: 'include' });
+            const fetchFirebaseToken = await fetch(`${endpoint}/protectedauth/${secret}`, { method: 'POST'});
             const result = await fetchFirebaseToken.json();
             if (result.token){
                 DOMHelper.appendChildren(this.app)
