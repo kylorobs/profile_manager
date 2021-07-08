@@ -254,8 +254,8 @@ h6 {
 
 #formsection {
     display: flex;
-    align-items: flex-start;
     align-items: stretch;
+    width: 100%;
 
     @media (max-width: 800px){
         flex-wrap: wrap;
