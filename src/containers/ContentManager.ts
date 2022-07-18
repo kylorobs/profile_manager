@@ -1,9 +1,9 @@
 import List from './List';
 import Form from './Form';
 import { store } from '../app';
-import {  
+import {
     updateDataUrl,
-    loading, 
+    loading,
     updateFilterKey,
     setAuthentication,
     setError
@@ -17,14 +17,14 @@ import ErrorModal from '../components/Modals/ErrorModal';
 import Filters from './Filters';
 import AppHTML from '../components/AppHTML/AppHTML';
 import { SERVER_ENDPOINT, DEV_ENDPOINT, devConfig } from '../utils/constants';
-import {locallyStoreToken, checkForValidToken } from '../utils/functions';
+import { locallyStoreToken, checkForValidToken } from '../utils/functions';
 
 class ContentManager {
 
     app: HTMLElement;
     authenticated: boolean = false;
 
-    constructor(Config: ManagerInit){
+    constructor(Config: ManagerInit) {
         //Create the boiler plate html for the application
         this.app = new AppHTML(Config.pageTitle).el;
         //Check if the config supplied requires authentication
@@ -32,26 +32,26 @@ class ContentManager {
         //register an error modal with redux state listeners
         new ErrorModal();
         //register a loading modal with redux state listeners
-        new LoadingModal(); 
+        new LoadingModal();
     }
 
     @BindThis
-    protected initialise(Config: ManagerInit, token:string = ''){
+    protected initialise(Config: ManagerInit, token: string = '') {
         DOMHelper.appendChildren(this.app);
-       
+
         const filterConfigs = Config.filters || [];
         const cardType = !!Config.labelCardKeys[0] ? 'label-card' : 'text-card'; //LOOK FOR IMAGE KEY IN LABEL CARD KEYS IN CONFIG TO SET CARD TYPE
-        
+
         //Create the container areas inside the app
         new Filters(filterConfigs) // create filters container container
         new List(filterConfigs, Config.categoryKeyName, Config.labelCardKeys, cardType); // create the list container
-        new Form(Config.keyMapping); // create the form container
+        new Form(Config.keyMapping, Config.updateOnly); // create the form container
 
         // update redux store
         this.updateStore(Config, token)
     }
 
-    private updateStore(Config: ManagerInit, token?:string){
+    private updateStore(Config: ManagerInit, token?: string) {
         //fetch data from database
         store.dispatch(thunks.fetchData(Config.dataUrl));
         store.dispatch(loading())
@@ -61,9 +61,9 @@ class ContentManager {
         if (token) store.dispatch(setAuthentication(token))
         store.dispatch(updateFilterKey(Config.categoryKeyName || ''));
     }
-  
-    
-    private async authenticate(Config: ManagerInit){
+
+
+    private async authenticate(Config: ManagerInit) {
 
         const existingToken: string = checkForValidToken();
         if (existingToken) this.initialise(Config, existingToken);
@@ -75,16 +75,16 @@ class ContentManager {
 
             try {
                 // COLLECT CUSTOM TOKEN FROM SERVER
-                const customToken: serverCustomToken = await (await fetch(`${endpoint}/protectedauth/${secret}`, { method: 'POST'})).json();
-                const pkg = { token: customToken.token, returnSecureToken: true}
-                const firebaseIdToken: fireBaseResponse = await (await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=${apiKey}`, { method: 'POST', body: JSON.stringify(pkg)})).json();
-                
+                const customToken: serverCustomToken = await (await fetch(`${endpoint}/protectedauth/${secret}`, { method: 'POST' })).json();
+                const pkg = { token: customToken.token, returnSecureToken: true }
+                const firebaseIdToken: fireBaseResponse = await (await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=${apiKey}`, { method: 'POST', body: JSON.stringify(pkg) })).json();
+
                 if (!firebaseIdToken.idToken || !customToken.token) throw new Error('issue with token retrieval and validation. You may not have the right permissions. Please ask for developer assistance');
-                
+
                 locallyStoreToken(firebaseIdToken)
                 this.initialise(Config, firebaseIdToken.idToken);
-                
-            } catch(e){
+
+            } catch (e) {
                 DOMHelper.appendChildren(this.app)
                 store.dispatch(setError(e.toString()));
             }

@@ -5,6 +5,7 @@ export interface ManagerInit {
     devMode?: boolean,
     secret?: string,
     apiKey?: string,
+    updateOnly?: boolean,
     filters: Filter[],
     labelCardKeys: [string, string, string], //[Image, Heading, SubText]
     dataUrl: string,
@@ -12,9 +13,9 @@ export interface ManagerInit {
     keyMapping: KeyMap[]
 }
 
-export type FormElements = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement; 
+export type FormElements = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 
-export type validChecks = 'isRequired' |  'isUrl' | 'isEmail' | 'isImage' | 'isPdf' | 'isFacebookUrl' | 'isInstagramUrl' | 'isTwitterUrl' | 'isNumber' | 'isAKclsuUrl' | 'isAKclsuEvent' | 'isDateString' | 'isTimeString' | 'isBoolean' | 'isNotThumbnail'
+export type validChecks = 'isRequired' | 'isUrl' | 'isEmail' | 'isImage' | 'isPdf' | 'isFacebookUrl' | 'isInstagramUrl' | 'isTwitterUrl' | 'isNumber' | 'isAKclsuUrl' | 'isAKclsuEvent' | 'isDateString' | 'isTimeString' | 'isBoolean' | 'isNotThumbnail'
 
 export interface KeyMap {
     keyName: string,
@@ -27,7 +28,7 @@ export interface KeyMap {
     options?: Filter[]
 }
 
-export type filterFn = ((val:Profile, Index?:number) => boolean) | null;
+export type filterFn = ((val: Profile, Index?: number) => boolean) | null;
 
 export type Filter = [string, string, filterFn];
 
@@ -39,15 +40,15 @@ export interface Draggable {
 
 export interface DragTarget {
     dragOverHandler(evt: DragEvent): void;
-    dropHandler(evt: DragEvent, cb: (id:string) => void): void;
+    dropHandler(evt: DragEvent, cb: (id: string) => void): void;
     dragLeaveHandler(evt: DragEvent): void;
 }
 
 export interface FormFunctions {
-    switch: () => void,
     update: () => void,
-    delete: () => void,
-    add: () => void
+    switch?: () => void,
+    delete?: () => void,
+    add?: () => void
 }
 
 export interface Profile {
@@ -83,7 +84,7 @@ export type fireBaseResponse = {
     refreshToken: string;
     expiresIn: string;
     isNewUser: boolean;
-    error? : {
+    error?: {
         message: string;
     }
 }

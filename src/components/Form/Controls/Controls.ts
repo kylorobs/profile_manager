@@ -3,7 +3,7 @@ import FormButtons from './Buttons/Buttons';
 import Modal from '../../../models/Modal';
 import ButtonHandler from '../../../utils/ButtonConfigurer';
 import { BindThis } from '../../../decorators/bindthis';
-import {FormFunctions} from '../../../types/types';
+import { FormFunctions } from '../../../types/types';
 import { store } from '../../../app';
 import { notLoading } from '../../../state/ProfileSlice';
 import DOMHelper from '../../../utils/DOMHelper';
@@ -14,65 +14,65 @@ class FormControls {
     private formButtons: any;
     private contentModal: Modal;
 
-    constructor(editMode: boolean, formFunctions: FormFunctions){
+    constructor(editMode: boolean, formFunctions: FormFunctions) {
         this.formButtons = new FormButtons(editMode);
         this.contentModal = new Modal();
         this.configureButtons(formFunctions);
     }
 
-    public toggleEditMode(val: boolean){
+    public toggleEditMode(val: boolean) {
         this.formButtons.toggleEditMode(val);
     }
 
-    private configureButtons(formFns:FormFunctions){
+    private configureButtons(formFns: FormFunctions) {
         //CREATE BUTTONS ON FORM 
         this.formButtons.createButton('Update', false, 'updateHandler', 'bottom', this.handleUpdate);
-        this.formButtons.createButton('Create New', false, 'addHandler', 'editing-bottom', this.handleAdd);
-        this.formButtons.createButton('Delete', true, 'deleteHandler', 'bottom', this.handleDelete);
-        this.formButtons.createButton('New Entry Form', true, 'switch', 'editing-top', formFns.switch);
+        if (formFns.add) this.formButtons.createButton('Create New', false, 'addHandler', 'editing-bottom', this.handleAdd);
+        if (formFns.delete) this.formButtons.createButton('Delete', true, 'deleteHandler', 'bottom', this.handleDelete);
+        if (formFns.switch) this.formButtons.createButton('New Entry Form', true, 'switch', 'editing-top', formFns.switch);
         this.formButtons.resetButtons();
 
         //CREATE BUTTON EVENTS AND HANDLERS
         // BUTTON ELEMENTS CREATED DYNAMICALLY
-        const modalButtons= ButtonHandler.getInstance();
+        const modalButtons = ButtonHandler.getInstance();
         modalButtons.addEmitter('update', formFns.update);
-        modalButtons.addEmitter('add', formFns.add);
-        modalButtons.addEmitter('delete', formFns.delete);
+        if (formFns.add) modalButtons.addEmitter('add', formFns.add);
+        if (formFns.delete) modalButtons.addEmitter('delete', formFns.delete);
         modalButtons.addEmitter('cancel', this.cancelConfirm);
         // modalButtons.addEmitter('switch', formFns.switch);
     }
 
     @BindThis
-    handleUpdate(){
+    handleUpdate() {
         const modalMessage = this.buildModalContent('update', 'Are you sure you want to make an update? Double check before proceeding.')
         this.contentModal.showModal(modalMessage);
     }
 
     @BindThis
-    handleDelete(){
+    handleDelete() {
         const modalMessage = this.buildModalContent('delete', 'Are you sure you want to DELETE? Double check before proceeding.')
         this.contentModal.showModal(modalMessage);
     }
 
     @BindThis
-    handleAdd(){
+    handleAdd() {
         const modalMessage = this.buildModalContent('add', 'You are about to submit a new entry. Double check before proceeding.')
         this.contentModal.showModal(modalMessage);
     }
 
     @BindThis
-    handleSwitch(){
+    handleSwitch() {
         const modalMessage = this.buildModalContent('switch', 'You are switching to an empty template. Any changes will be lost.')
         this.contentModal.showModal(modalMessage);
     }
 
     @BindThis
-    cancelConfirm(){
+    cancelConfirm() {
         this.contentModal.exitModal();
         store.dispatch(notLoading());
     }
 
-    buildModalContent(type: string, text: string): HTMLDivElement{
+    buildModalContent(type: string, text: string): HTMLDivElement {
         const div = DOMHelper.createDivHTML();
         const content = `
             <p>${text}</p>
