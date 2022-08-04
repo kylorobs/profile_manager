@@ -248,6 +248,22 @@ h6 {
         overflow: scroll;
         display: flex;
         flex-wrap: wrap;
+
+        & .alertbox {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin: 0.5rem;
+
+            & p {
+                font-size: 0.9rem;
+                padding: 0.1rem 0.3rem;
+            }
+        }
+        & .warning p {
+            background-color: #fffbe6;
+            border: 1px solid #ffe58f;
+        }
     };
     
 };

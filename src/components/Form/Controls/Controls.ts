@@ -14,22 +14,22 @@ class FormControls {
     private formButtons: any;
     private contentModal: Modal;
 
-    constructor(editMode: boolean, formFunctions: FormFunctions) {
+    constructor(editMode: boolean, formFunctions: FormFunctions, updateOnly: boolean) {
         this.formButtons = new FormButtons(editMode);
         this.contentModal = new Modal();
-        this.configureButtons(formFunctions);
+        this.configureButtons(formFunctions, updateOnly);
     }
 
     public toggleEditMode(val: boolean) {
         this.formButtons.toggleEditMode(val);
     }
 
-    private configureButtons(formFns: FormFunctions) {
+    private configureButtons(formFns: FormFunctions, updateOnly: boolean) {
         //CREATE BUTTONS ON FORM 
         this.formButtons.createButton('Update', false, 'updateHandler', 'bottom', this.handleUpdate);
         if (formFns.add) this.formButtons.createButton('Create New', false, 'addHandler', 'editing-bottom', this.handleAdd);
         if (formFns.delete) this.formButtons.createButton('Delete', true, 'deleteHandler', 'bottom', this.handleDelete);
-        if (formFns.switch) this.formButtons.createButton('New Entry Form', true, 'switch', 'editing-top', formFns.switch);
+        if (formFns.switch) this.formButtons.createButton(updateOnly ? 'Stop Editing' : 'New Entry Form', true, 'switch', 'editing-top', formFns.switch);
         this.formButtons.resetButtons();
 
         //CREATE BUTTON EVENTS AND HANDLERS

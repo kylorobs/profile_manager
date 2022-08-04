@@ -4,6 +4,7 @@ import { store } from '../app';
 import { resetEditMode, startEditingNew } from '../state/FormSlice';
 import { BindThis } from '../decorators/bindthis';
 import { Profile, KeyMap } from '../types/types';
+import Alert from '../components/Alert/Alert';
 import TextInput from '../components/Form/TextInput/TextInput';
 import FileInput from '../components/Form/FileInput/FileInput';
 import FormControls from '../components/Form/Controls/Controls';
@@ -23,10 +24,17 @@ class Form {
     private errorModal: FormErrorModal;
     private formControls: FormControls;
     private submitModal: Modal;
+    private updateOnly: boolean;
+    private alertBox: Alert;
 
     constructor(keyMappings: KeyMap[], updateOnly?: boolean) {
         this.editid = store.getState().form.editing_id || null;
         this.errorModal = new FormErrorModal();
+        this.updateOnly = !!updateOnly;
+        this.alertBox = new Alert('editor');
+
+        // If updateOnly show alert
+        if (updateOnly) this.showEditOnlyAlert();
 
         //Find out if there are Image or Document input maps
         const containsFileInputs = keyMappings.find(map => map.type === 'document_file' || map.type === 'image_file');
@@ -38,6 +46,7 @@ class Form {
 
         // Create input classes, separating file inputs and text/select inputs
         const inputs = keyMappings.map((map: KeyMap) => {
+            if (updateOnly) map.updateOnly = updateOnly;
             if (map.type === 'document_file' || map.type === 'image_file') return new FileInput('fileinputs', false, map, map.keyName);
             else return new TextInput('textinputs', map);
         });
@@ -50,11 +59,15 @@ class Form {
             add: updateOnly ? undefined : () => this.submitForm('add'),
             delete: updateOnly ? undefined : this.deleteData,
             switch: this.handleSwitchToEmptyForm
-        })
+        }, !!updateOnly)
 
         this.submitModal = new Modal();
         this.setEditingState();
         store.subscribe(this.setEditingState);
+    }
+
+    showEditOnlyAlert() {
+        this.alertBox.showAlert('warning', 'This form is update only. You cannot create new entries.');
     }
 
     setValues(): void {
@@ -65,12 +78,16 @@ class Form {
         //Pull all object keys from profile
         const profileKeys: string[] = Object.keys(profile);
 
+        console.log('Update Only?')
+        console.log(this.updateOnly)
+
         // For each input, find matching key name
         // If a text / select input, set the value property
         // If a file input, invoke the update function for that component
         this.formInputs
             .forEach((input: Inputs) => {
                 const key = profileKeys.find((key: string) => key === input.title);
+                if (this.updateOnly && 'el' in input) input.el.disabled = false;
                 if ('el' in input && key) {
                     input.el.value = profile[key];
                     input.el.style.border = '';
@@ -85,6 +102,7 @@ class Form {
     // Set values if editId exists
     @BindThis
     private setEditingState(): void {
+        if (this.updateOnly) this.showEditOnlyAlert();
         const editId = store.getState().form.editing_id;
         const editingNew = store.getState().form.editing_new;
         const oldId = this.editid;
@@ -184,7 +202,6 @@ class Form {
             })
             .filter((er: Validator) => !er.isValid)
     }
-
 
 
     private packageData(type: 'add' | 'update'): void {

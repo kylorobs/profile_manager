@@ -26,6 +26,7 @@ export interface KeyMap {
     validationTypes: validChecks[],
     validationErrorMsg: string,
     options?: Filter[]
+    updateOnly?: boolean;
 }
 
 export type filterFn = ((val: Profile, Index?: number) => boolean) | null;

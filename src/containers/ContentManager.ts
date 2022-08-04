@@ -52,11 +52,12 @@ class ContentManager {
     }
 
     private updateStore(Config: ManagerInit, token?: string) {
+        const databaseUri = Config.devMode ? `${devConfig.DEV_BACKEND_DOMAIN}${Config.dataUrl}` : Config.dataUrl;
         //fetch data from database
-        store.dispatch(thunks.fetchData(Config.dataUrl));
+        store.dispatch(thunks.fetchData(databaseUri));
         store.dispatch(loading())
         //Provide the cloud database url
-        store.dispatch(updateDataUrl(Config.dataUrl));
+        store.dispatch(updateDataUrl(databaseUri));
         // if there is an authentication token, add it to the redux store
         if (token) store.dispatch(setAuthentication(token))
         store.dispatch(updateFilterKey(Config.categoryKeyName || ''));
