@@ -14,7 +14,6 @@ import LoadingModal from '../components/Modals/LoadingModal';
 import DOMHelper from '../utils/DOMHelper';
 import { BindThis } from '../decorators/bindthis';
 import ErrorModal from '../components/Modals/ErrorModal';
-import Filters from './Filters';
 import AppHTML from '../components/AppHTML/AppHTML';
 import { SERVER_ENDPOINT, DEV_ENDPOINT, devConfig } from '../utils/constants';
 import { locallyStoreToken, checkForValidToken } from '../utils/functions';
@@ -43,8 +42,6 @@ class ContentManager {
         const filterConfigs = Config.filters || [];
         const cardType = !!Config.labelCardKeys[0] ? 'label-card' : 'text-card'; //LOOK FOR IMAGE KEY IN LABEL CARD KEYS IN CONFIG TO SET CARD TYPE
 
-        //Create the container areas inside the app
-        new Filters(filterConfigs) // create filters container container
         new List(filterConfigs, Config.categoryKeyName, Config.labelCardKeys, cardType); // create the list container
         new Form(Config.keyMapping, Config.updateOnly); // create the form container
         // update redux store

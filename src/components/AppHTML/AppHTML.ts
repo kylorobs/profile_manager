@@ -8,22 +8,21 @@ import { html_ids } from "../../utils/htmlIds";
 class AppHTML extends Component<HTMLDivElement>{
     title: string;
     el: HTMLDivElement;
-    
-    constructor(pageTitle:string){
+
+    constructor(pageTitle: string) {
         super();
         this.title = pageTitle;
         this.el = document.getElementById(html_ids.app)! as HTMLDivElement;
         this.createElement();
     }
 
-    createElement():HTMLDivElement{
-        if (this.el){
+    createElement(): HTMLDivElement {
+        if (this.el) {
             const formTags = ['kclsu-modal'];
             DOMHelper.appendChild(this.el, `
                 <kclsu-modal show="false"></kclsu-modal>
                 <div class="area">
-                    <h1>${this.title}</h1>
-                    <div id="${html_ids.filters}"></div>
+                    <div class="apptitle"><h1>${this.title}</h1></div>
                 </div>
                 <div id="${html_ids.list}"></div>
                 <div id="${html_ids.editor}">

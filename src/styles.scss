@@ -53,12 +53,6 @@ p a:hover {
   text-decoration: none
 }
 
-/* p {
-font-family: "Open Sans", Arial, sans-serif;
-font-size: 18px;
-line-height: 32px;
-color: #444;
-} */
 
 em {
   background: #cce9e6;
@@ -138,12 +132,12 @@ h6 {
 #app {
     display: grid;
     max-width: 100%;
-    grid-template-columns: 70% 1fr;
-    grid-gap: 30px;
-    padding: 60px;
+    grid-template-columns: 60% 1fr;
+    grid-gap: 15px;
+    padding: 30px;
     background-color: #36454f;
 	grid-template-rows:
-    30vh
+    4rem
     auto;
 	// 70vh;
 	grid-template-areas:
@@ -159,7 +153,7 @@ h6 {
         grid-template-columns: 100%;
         grid-gap: 15px;
         padding: 30px;
-        grid-template-rows: 15vh 60vh auto;
+        grid-template-rows: 10vh 60vh auto;
         grid-template-areas:
         "area"
         "list"
@@ -168,63 +162,31 @@ h6 {
 		
 	& .area {
         grid-area: area;
+        position: relative;
         background-color: white;
-        overflow: hidden;
-        overflow-x: scroll;
-
-        & #filters {
-            width: 100%;
-            height: auto;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            @media (max-width: 800px){
-                display: none;
-            }
-            .droppable {
-                height: 100%;
-                width: 300px;
-                margin: 1em;
-                padding: 0 15px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                box-shadow: 7px 8px 7px 0px rgb(0 0 0 / 28%);
-                cursor: pointer;
-                text-align: center;
-        
-                h3 {
-                    line-height: 40px;
-                    font-size: 24px;
-                    color: white;
-                    margin: 0;
-                    padding: 1em 0;
-                }
-            }
-        
-            .dropNeutral{
-                background-color: #36454f;
-                color: white;
-            }
-        
-            .dropActive{
-                background-color: #502669;
-            }
-        }
-
-        & h1 {
+        width: fit-content;
+        border-radius: 1rem;
+        & .apptitle {
             text-align: center;
+            padding: 0.8rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            & h1 {
+                margin: 0;
+            } 
         }
 	};
 	
 	& #list {
 		grid-area: list;
         background-color: white;
-        overflow: scroll;
         width: auto;
-        max-height: 40em;
         padding: 1em;
-
+        overflow: scroll;
+        border-radius: 1rem;
         & select {
             width: 100%;
             min-width: 15em;
@@ -263,7 +225,8 @@ h6 {
         overflow: scroll;
         display: flex;
         flex-wrap: wrap;
-
+        height: fit-content;
+        border-radius: 1rem;
         & .alertbox {
             width: 100%;
             display: flex;
