@@ -19,6 +19,7 @@ import AppHTML from '../components/AppHTML/AppHTML';
 import { SERVER_ENDPOINT, DEV_ENDPOINT, devConfig } from '../utils/constants';
 import { locallyStoreToken, checkForValidToken } from '../utils/functions';
 
+
 class ContentManager {
 
     app: HTMLElement;
@@ -46,7 +47,6 @@ class ContentManager {
         new Filters(filterConfigs) // create filters container container
         new List(filterConfigs, Config.categoryKeyName, Config.labelCardKeys, cardType); // create the list container
         new Form(Config.keyMapping, Config.updateOnly); // create the form container
-
         // update redux store
         this.updateStore(Config, token)
     }

@@ -1,36 +1,39 @@
 
 import ButtonHandler from '../../utils/ButtonConfigurer';
-import {store} from '../../app'
+import { store } from '../../app'
 import { changeFilter } from '../../state/ProfileSlice';
 import DOMHelper from '../../utils/DOMHelper';
+import type { Filter } from '../../types/types';
+import FilterSelect from '../FilterSelect/FilterSelect';
+import { BindThis } from '../../decorators/bindthis';
 
-class ListFilter {
+
+class ListControls {
     public title: string = 'All'; // the name of the filter
     public el: any;
-    private titleElement: any;
+    private FilterSelect: FilterSelect;
     private cardCount: HTMLSpanElement;
     private resetFilterElement: HTMLKclsuButtonElement;
 
 
-    constructor(title: string, count: number){
+    constructor(filterConfig: Filter[], title: string, count: number) {
         this.title = title;
         this.resetFilterElement = this.createButton();
         this.cardCount = DOMHelper.create<HTMLSpanElement>('span');
-        this.titleElement = DOMHelper.create<HTMLTitleElement>('h4');
-
-        this.titleElement.innerText = `View: ${this.title}`;
-        this.titleElement.style.margin = '15px';
+        this.FilterSelect = new FilterSelect(filterConfig)
+        // this.FilterSelect.style.margin = '15px';
         this.cardCount.innerText = `Count: ${count}`;
         // this.cardCount.style.fontSize = '0.9em';
         this.el = this.createContainer();
     }
 
-    clearFilter(){
-        // DropArea.removeClickedClass();
+    @BindThis
+    clearFilter() {
+        this.FilterSelect.clearFilter();
         store.dispatch(changeFilter(''));
     }
 
-    private createButton(): HTMLKclsuButtonElement{
+    private createButton(): HTMLKclsuButtonElement {
         const button = DOMHelper.create<HTMLKclsuButtonElement>('kclsu-button');
         button.text = 'reset';
         button.verysmall = true;
@@ -43,18 +46,21 @@ class ListFilter {
     }
 
 
-    private createContainer(){
+    private createContainer() {
+        const container = DOMHelper.create<HTMLDivElement>('div');
         const flexC = DOMHelper.createFlexContainer('space-around', 'center', true);
-        DOMHelper.appendChildren(flexC, [this.titleElement, this.cardCount, this.resetFilterElement])
-        return flexC;
+        const flexFilters = DOMHelper.createFlexContainer('center', 'center', true);
+        DOMHelper.appendChild(flexFilters, this.FilterSelect.el)
+        DOMHelper.appendChild(container, flexFilters)
+        DOMHelper.appendChildren(flexC, [this.cardCount, this.resetFilterElement])
+        DOMHelper.appendChild(container, flexC)
+        return container;
     }
 
-    public updateFilter(title: string, count: number){
+    public updateFilter(title: string, count: number) {
         this.title = title;
-        const text = !title ? 'View: All' : title;
-        this.titleElement.innerText = `${text}`;
         this.cardCount.innerText = `Count: ${count}`
     }
 }
 
-export default ListFilter;
+export default ListControls;
