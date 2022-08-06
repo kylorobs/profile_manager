@@ -1,7 +1,7 @@
 
 
 import { store } from '../app';
-import { resetEditMode, startEditingNew } from '../state/FormSlice';
+import { startEditingNew } from '../state/FormSlice';
 import { BindThis } from '../decorators/bindthis';
 import { Profile, KeyMap } from '../types/types';
 import Alert from '../components/Alert/Alert';
@@ -14,7 +14,7 @@ import * as thunks from '../state/thunks/profile';
 import Modal from '../models/Modal';
 import { loading, setError } from '../state/ProfileSlice';
 import { html_ids } from '../utils/htmlIds';
-// import DOMHelper from '../utils/DOMHelper';
+
 
 type Inputs = TextInput | FileInput;
 
@@ -57,8 +57,7 @@ class Form {
         this.formControls = new FormControls(!!this.editid, {
             update: () => this.submitForm('update'),
             add: updateOnly ? undefined : () => this.submitForm('add'),
-            delete: updateOnly ? undefined : this.deleteData,
-            switch: this.handleSwitchToEmptyForm
+            delete: updateOnly ? undefined : this.deleteData
         }, !!updateOnly)
 
         this.submitModal = new Modal();
@@ -161,10 +160,7 @@ class Form {
     }
 
     // New Form Handler Function
-    @BindThis
-    handleSwitchToEmptyForm() {
-        store.dispatch(resetEditMode());
-    }
+
 
     //We want a blank form, ready for a new entry
     @BindThis
@@ -172,7 +168,6 @@ class Form {
         //Reset editing global state
         this.editid = null;
         this.formControls.toggleEditMode(false);
-        // store.dispatch(resetEditMode());
         // Clear all form inputs
         this.formInputs
             .forEach((input: Inputs) => {

@@ -43,6 +43,13 @@ class Actions {
         else this.resetBtn.style.display = "none";
     }
 
+    // Upload Spreadsheet
+    // @BindThis
+    // handleSwitch() {
+    //     const modalMessage = this.buildModalContent('switch', 'You are switching to an empty template. Any changes will be lost.')
+    //     this.contentModal.showModal(modalMessage);
+    // }
+
 
 }
 
