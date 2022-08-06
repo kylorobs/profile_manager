@@ -2,7 +2,7 @@ $base-teal: #1ba39c;
 $base-purple: #502669;
 
 body {
-    background-color: #36454f;
+    background-color: #1a2441;
     font-size: 16px;
 }
 
@@ -135,7 +135,7 @@ h6 {
     grid-template-columns: 60% 1fr;
     grid-gap: 15px;
     padding: 30px;
-    background-color: #36454f;
+    background-color: #1a2441;
 	grid-template-rows:
     4rem
     auto;
@@ -163,9 +163,10 @@ h6 {
 	& .area {
         grid-area: area;
         position: relative;
-        background-color: white;
-        width: fit-content;
         border-radius: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         & .apptitle {
             text-align: center;
             padding: 0.8rem;
@@ -173,9 +174,30 @@ h6 {
             display: flex;
             align-items: center;
             justify-content: center;
+            background-color: white;
+            width: fit-content;
 
             & h1 {
                 margin: 0;
+            } 
+        }
+
+        & .appmenu {
+            padding: 5px;
+            margin-top:1rem;
+            display: flex;
+            & .menuIcon {
+                width: 50px;
+                fill: white;
+                margin-left: 1rem;
+                cursor: pointer;
+                :hover {
+                    transform: scale(1.02)
+                }
+            }
+
+            & #add {
+
             } 
         }
 	};

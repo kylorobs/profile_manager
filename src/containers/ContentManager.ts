@@ -17,6 +17,7 @@ import ErrorModal from '../components/Modals/ErrorModal';
 import AppHTML from '../components/AppHTML/AppHTML';
 import { SERVER_ENDPOINT, DEV_ENDPOINT, devConfig } from '../utils/constants';
 import { locallyStoreToken, checkForValidToken } from '../utils/functions';
+import Actions from './Actions';
 
 
 class ContentManager {
@@ -42,8 +43,10 @@ class ContentManager {
         const filterConfigs = Config.filters || [];
         const cardType = !!Config.labelCardKeys[0] ? 'label-card' : 'text-card'; //LOOK FOR IMAGE KEY IN LABEL CARD KEYS IN CONFIG TO SET CARD TYPE
 
+
         new List(filterConfigs, Config.categoryKeyName, Config.labelCardKeys, cardType); // create the list container
         new Form(Config.keyMapping, Config.updateOnly); // create the form container
+        new Actions(!!Config.updateOnly);
         // update redux store
         this.updateStore(Config, token)
     }
