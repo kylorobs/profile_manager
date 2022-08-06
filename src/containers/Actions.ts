@@ -1,4 +1,5 @@
 import { store } from "../app";
+import SpreadsheetForm from "../components/Form/FileInput/SpreadsheetForm/SpreadsheetForm";
 import { BindThis } from "../decorators/bindthis";
 import { resetEditMode } from "../state/FormSlice";
 
@@ -19,6 +20,7 @@ class Actions {
         else this.addBtn.style.display = 'none';
 
         this.attachClickListener(this.resetBtn, this.switchToEmptyForm)
+        this.attachClickListener(this.uploadBtn, this.showSpreadSheetUploader)
 
         store.subscribe(this.setEditingState);
     }
@@ -41,6 +43,12 @@ class Actions {
         const editId = store.getState().form.editing_id;
         if (editId) this.resetBtn.style.display = "block";
         else this.resetBtn.style.display = "none";
+    }
+
+
+    @BindThis
+    showSpreadSheetUploader() {
+        new SpreadsheetForm();
     }
 
     // Upload Spreadsheet

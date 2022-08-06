@@ -15,7 +15,7 @@ class ImageForm {
     this.uploader = new FileUploader(true, this.uploadImage)
     this.imageurl = '';
     this.uploadModal = new UploadModal();
-    this.uploadModal.showForm(this.uploader.form);
+    this.uploadModal.showForm('<h2> Upload image </h2>', this.uploader.form);
   }
 
 

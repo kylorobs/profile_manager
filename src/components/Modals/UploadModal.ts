@@ -6,16 +6,16 @@ import Modal from '../../models/Modal';
 
 
 class UploadModal extends Modal {
-    
+
     public imageurl: string;
 
-    constructor(){
-      super();
-      this.imageurl = '';
+    constructor() {
+        super();
+        this.imageurl = '';
     }
 
 
-    showError(msg:string){
+    showError(msg: string) {
         const message = `
             <h3> Whoah! Upload Error... </h3>
             <p> ${msg}!</p>`
@@ -23,8 +23,10 @@ class UploadModal extends Modal {
         this.showModal(div);
     }
 
-    showForm(form: HTMLFormElement){
-        this.showModal(form);
+    public showForm(header: string, form: HTMLFormElement) {
+        const container = DOMHelper.createDivHTML(undefined, form);
+        container.insertAdjacentHTML('afterbegin', header || '')
+        this.showModal(container);
     }
 
 }
@@ -32,4 +34,3 @@ class UploadModal extends Modal {
 export default UploadModal;
 
 
- 

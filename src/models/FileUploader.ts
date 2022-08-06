@@ -2,6 +2,7 @@
 import { BindThis } from '../decorators/bindthis';
 import DOMHelper from '../utils/DOMHelper';
 
+
 class FileUploader {
     public form: HTMLFormElement;
     private submitCallback: (e: Event) => void;
@@ -22,14 +23,25 @@ class FileUploader {
         el.name = 'file_upload'
         el.type = 'file';
 
+        el.addEventListener('change', this.enableButton);
+
         const submit = DOMHelper.create<HTMLInputElement>('input');
         submit.type = 'submit';
+        submit.value = "Upload File";
+        submit.disabled = true;
         form.addEventListener('submit', this.uploadImage);
+
 
         DOMHelper.appendChildren(form, [el, submit])
 
         return form;
     };
+
+    @BindThis
+    enableButton() {
+        const input = this.form.querySelector('input[type=submit]')! as HTMLInputElement;
+        input.disabled = false;
+    }
 
 
     @BindThis

@@ -400,6 +400,11 @@ form input[type=submit] {
         background-color: $base-purple;
         color: white;
     }
+
+    &:disabled {
+        border: 1px solid gray;
+        color: gray;
+    }
 }
 
 

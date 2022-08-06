@@ -11,7 +11,7 @@ class Modal {
     public active: boolean;
     // public spinneractive: boolean;
 
-   constructor(){
+    constructor() {
         this.modal = this.fetchModalElement();
         this.active = false;
         // this.spinneractive = false;
@@ -19,7 +19,7 @@ class Modal {
     }
 
 
-    private fetchModalElement(){
+    private fetchModalElement() {
         let modal = document.querySelector('kclsu-modal');
         modal!.autoexit = true;
         if (!modal) {
@@ -30,7 +30,7 @@ class Modal {
         return modal;
     }
 
-    private createModalElement(): HTMLKclsuModalElement{
+    private createModalElement(): HTMLKclsuModalElement {
         const modal = document.createElement('kclsu-modal') as HTMLKclsuModalElement;
         modal.autoexit = true;
         modal.show = this.active;
@@ -39,7 +39,7 @@ class Modal {
 
 
     @BindThis
-    public showModal(el:HTMLDivElement | HTMLLoadingSpinnerElement | HTMLFormElement): void{
+    public showModal(el: HTMLDivElement | HTMLLoadingSpinnerElement | HTMLFormElement): void {
         this.modal.show = true;
         this.modal.innerHTML = DOMHelper.sanitise('');
         DOMHelper.appendChild(this.modal, el)
@@ -48,13 +48,13 @@ class Modal {
 
 
     @BindThis
-    public showSpinner(): void{
+    public showSpinner(): void {
         this.spinner.show = true;
         this.showModal(this.spinner)
     }
 
     @BindThis
-    public exitModal(){
+    public exitModal() {
         this.modal.innerHTML = '';
         this.spinner.show = false;
         this.modal.show = false;
