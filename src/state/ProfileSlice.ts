@@ -3,13 +3,13 @@ import {
 } from '@reduxjs/toolkit';
 
 import {
-  DataState, 
+  DataState,
   Profile
 } from '../types/types';
 import * as thunks from './thunks/profile';
 
 const initialState: DataState = {
-  dataUrl:'',
+  dataUrl: '',
   error: false,
   loading: false,
   errorMessage: '',
@@ -41,9 +41,9 @@ const profileSlice = createSlice({
       state.authenticated = true;
       state.token = action.payload;
     },
-    updateCategory: <T extends {payload: {id: string, value: string}}> (state: DataState, action: T) => {
-      const profileIndex = state.profiles.findIndex((prof:Profile) => prof.id === action.payload.id);
-      if (profileIndex > -1){
+    updateCategory: <T extends { payload: { id: string, value: string } }>(state: DataState, action: T) => {
+      const profileIndex = state.profiles.findIndex((prof: Profile) => prof.id === action.payload.id);
+      if (profileIndex > -1) {
         state.profiles[profileIndex][state.filterkey] = action.payload.value;
       }
     },
@@ -80,29 +80,32 @@ const profileSlice = createSlice({
       state.profiles.unshift(action.payload);
       state.loading = false;
     },
+    [thunks.uploadData.fulfilled]: (state) => {
+      state.loading = false;
+    },
     [thunks.deleteData.fulfilled]: (state, action) => {
       const removeIndex = state.profiles.findIndex(prof => prof.id === action.payload.id);
       if (removeIndex >= 0) state.profiles.splice(removeIndex, 1);
       state.loading = false;
     },
     [thunks.updateCategory.fulfilled]: (state, action) => {
-      const profileIndex = state.profiles.findIndex((prof:Profile) => prof.id === action.payload.id);
-      if (profileIndex > -1){
+      const profileIndex = state.profiles.findIndex((prof: Profile) => prof.id === action.payload.id);
+      if (profileIndex > -1) {
         state.profiles[profileIndex][state.filterkey] = action.payload.value;
       }
       state.loading = false;
     },
     [thunks.updateData.fulfilled]: (state, action) => {
-      if (action.payload.id){
-        const profileIndex = state.profiles.findIndex((prof:Profile) => prof.id === action.payload.id);
-        if (profileIndex > -1){
-          state.profiles[profileIndex] = {...action.payload.data, id: action.payload.id};
+      if (action.payload.id) {
+        const profileIndex = state.profiles.findIndex((prof: Profile) => prof.id === action.payload.id);
+        if (profileIndex > -1) {
+          state.profiles[profileIndex] = { ...action.payload.data, id: action.payload.id };
         }
         else console.log(action.payload.ID)
       }
       state.loading = false;
     }
-    
+
   }
 });
 

@@ -2,10 +2,11 @@
 import { store } from '../../../../app';
 import { BindThis } from '../../../../decorators/bindthis';
 import FileUploader from '../../../../models/FileUploader';
-import { setError } from '../../../../state/ProfileSlice';
+import { loading, setError } from '../../../../state/ProfileSlice';
 import ButtonHandler from '../../../../utils/ButtonConfigurer';
 import DOMHelper from '../../../../utils/DOMHelper';
 import UploadModal from '../../../Modals/UploadModal';
+import * as thunks from '../../../../state/thunks/profile';
 
 
 class SpreadsheetForm {
@@ -54,10 +55,18 @@ class SpreadsheetForm {
         return div;
     }
 
+    @BindThis
+    showLoadingState() {
+        const loadingState = store.getState().data.loading;
+        if (loadingState) this.uploadModal.showSpinner();
+        else this.uploadModal.exitModal();
+    }
+
 
     @BindThis
     uploadImage(selectedFile: Blob) {
-        this.uploadModal.showSpinner();
+        // this.uploadModal.showSpinner();
+        store.dispatch(loading());
         try {
 
             const reader = new FileReader();
@@ -75,8 +84,9 @@ class SpreadsheetForm {
                         const uid = `-${(Math.random() + 1).toString(36).substring(2)}`;
                         data[uid] = entry;
                     })
-                    // upload data
 
+                    // upload data
+                    store.dispatch(thunks.uploadData(data));
                 })
             }
 
