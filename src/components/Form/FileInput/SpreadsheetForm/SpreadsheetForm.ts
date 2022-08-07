@@ -19,8 +19,6 @@ class SpreadsheetForm {
         this.imageurl = '';
         this.uploadModal = new UploadModal();
         // BUTTON ELEMENTS CREATED DYNAMICALLY
-        const modalButtons = ButtonHandler.getInstance();
-        modalButtons.addEmitter('upload', this.uploadImage);
         const modalHeading = `
             <h2> Upload a spreadsheet</h2>
             <p> Upload a spreadsheet to import data into this database, overwriting any existing data.<p>
@@ -31,8 +29,14 @@ class SpreadsheetForm {
     }
 
     @BindThis
-    confirmUpload() {
-        console.log('UPPPLOAD')
+    confirmUpload(e: Event) {
+        const target = e.target as HTMLFormElement;
+        const selected = target.querySelector('#upload') as HTMLInputElement
+
+        const selectedFile = selected.files![0];
+        const modalButtons = ButtonHandler.getInstance();
+        modalButtons.addEmitter('upload', () => this.uploadImage(selectedFile));
+
         const modalMessage = this.buildModalContent('upload', 'Warning! You are about to overwrite any existing data.')
         this.uploadModal.showModal(modalMessage);
     }
@@ -52,11 +56,35 @@ class SpreadsheetForm {
 
 
     @BindThis
-    uploadImage(e: Event) {
+    uploadImage(selectedFile: Blob) {
         this.uploadModal.showSpinner();
-        console.log('WE ARE UPLOADING')
-        console.log(e);
         try {
+
+            const reader = new FileReader();
+
+            reader.onload = (e: ProgressEvent<FileReader>) => {
+                const data = e.target!.result;
+                const workbook = (<any>window).XLSX.read(data, {
+                    type: 'binary'
+                })
+                workbook.SheetNames.forEach((sheetname: string) => {
+                    const XL_row_object = (<any>window).XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetname]);
+                    var json_object = JSON.stringify(XL_row_object);
+                    const data = {} as { [key: string]: any };
+                    JSON.parse(json_object).forEach((entry: any) => {
+                        const uid = `-${(Math.random() + 1).toString(36).substring(2)}`;
+                        data[uid] = entry;
+                    })
+                    // upload data
+
+                })
+            }
+
+            reader.onerror = e => {
+                throw new Error(e.type);
+            }
+
+            reader.readAsBinaryString(selectedFile);
 
         } catch (er) {
 

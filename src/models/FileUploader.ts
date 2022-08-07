@@ -47,6 +47,8 @@ class FileUploader {
     @BindThis
     uploadImage(e: Event) {
         e.preventDefault();
+        console.log('submit captured')
+        console.log(e);
         this.submitCallback(e)
     }
 
