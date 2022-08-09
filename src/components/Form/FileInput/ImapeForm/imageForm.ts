@@ -12,7 +12,7 @@ class ImageForm {
   private uploader: FileUploader
 
   constructor(private fn: (url: string | null) => void) {
-    this.uploader = new FileUploader(true, this.uploadImage)
+    this.uploader = new FileUploader({ multipart: true, acceptedTypes: '.jpg, .png, .webp' }, this.uploadImage)
     this.imageurl = '';
     this.uploadModal = new UploadModal();
     this.uploadModal.showForm('<h2> Upload image </h2>', this.uploader.form);

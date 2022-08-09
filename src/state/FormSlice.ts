@@ -10,6 +10,7 @@ const initialState: FormState = {
   editing_existing: false,
   editing_new: false,
   editing_id: '',
+  keymap: [],
 }
 
 const FormSlice = createSlice({
@@ -30,6 +31,9 @@ const FormSlice = createSlice({
       state.editing_existing = false;
       state.editing_new = true;
       state.editing_id = '';
+    },
+    setKeyMap: (state, action) => {
+      state.keymap = action.payload
     }
   }
 });
@@ -37,7 +41,8 @@ const FormSlice = createSlice({
 export const {
   edit,
   resetEditMode,
-  startEditingNew
+  startEditingNew,
+  setKeyMap
 } = FormSlice.actions;
 
 

@@ -107,6 +107,10 @@ h6 {
   color: $base-purple;
 }
 
+text-card, label-card {
+    cursor: pointer;
+}
+
 @media (max-width:600px) {
   h1 {
       font-size: 32px
@@ -176,9 +180,11 @@ h6 {
             justify-content: center;
             background-color: white;
             width: fit-content;
-
+            border-radius: 1rem;
             & h1 {
                 margin: 0;
+                padding:0;
+                padding-bottom: 0.4rem;
             } 
         }
 
@@ -191,8 +197,13 @@ h6 {
                 fill: white;
                 margin-left: 1rem;
                 cursor: pointer;
+                z-index: 500000;
                 :hover {
-                    transform: scale(1.02)
+                    transform: scale(1.01)
+                }
+                svg {
+                    cursor: pointer;
+                    z-index: 5000000;
                 }
             }
 

@@ -18,6 +18,7 @@ import AppHTML from '../components/AppHTML/AppHTML';
 import { SERVER_ENDPOINT, DEV_ENDPOINT, devConfig } from '../utils/constants';
 import { locallyStoreToken, checkForValidToken } from '../utils/functions';
 import Actions from './Actions';
+import { setKeyMap } from '../state/FormSlice';
 
 
 class ContentManager {
@@ -61,6 +62,7 @@ class ContentManager {
         // if there is an authentication token, add it to the redux store
         if (token) store.dispatch(setAuthentication(token))
         store.dispatch(updateFilterKey(Config.categoryKeyName || ''));
+        store.dispatch(setKeyMap(Config.keyMapping));
     }
 
 

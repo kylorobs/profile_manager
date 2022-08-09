@@ -2,26 +2,30 @@
 import { BindThis } from '../decorators/bindthis';
 import DOMHelper from '../utils/DOMHelper';
 
+export type FileOptions = {
+    multipart?: boolean,
+    acceptedTypes?: string
+}
 
 class FileUploader {
     public form: HTMLFormElement;
     private submitCallback: (e: Event) => void;
 
-    constructor(multipart: boolean, fn: (e: Event) => void) {
-        this.form = this.createForm(multipart);
+    constructor(options: FileOptions, fn: (e: Event) => void) {
+        this.form = this.createForm(options);
         this.submitCallback = fn;
     }
 
-    createForm(multipart: boolean) {
+    createForm(options: FileOptions) {
         const form = DOMHelper.create<HTMLFormElement>('form');
-        if (multipart) form.enctype = "multipart/form-data";
+        if (options.multipart) form.enctype = "multipart/form-data";
         form.method = 'post';
-
 
         const el = DOMHelper.create<HTMLInputElement>('input');
         el.id = 'upload';
         el.name = 'file_upload'
         el.type = 'file';
+        if (options.acceptedTypes) el.accept = options.acceptedTypes;
 
         el.addEventListener('change', this.enableButton);
 

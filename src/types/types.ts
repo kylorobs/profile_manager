@@ -60,6 +60,7 @@ export interface FormState {
     editing_id: string,
     editing_existing: boolean,
     editing_new: boolean
+    keymap: KeyMap[]
 }
 
 export interface DataState {

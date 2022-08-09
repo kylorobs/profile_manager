@@ -36,6 +36,7 @@ const makeRequest = async (type: 'POST' | 'GET' | 'PUT' | 'DELETE' | 'PATCH', ur
   clearTimeout(timer);
   if (type !== 'DELETE') {
     const result = await response.json();
+    if (response.ok && !result) throw new Error('Empty');
     if (!result) throw new Error();
     return result
   }
@@ -48,7 +49,6 @@ export const fetchData: any = createAsyncThunk(
     try {
       const res = await makeRequest('GET', createUrl({ url }), null);
       const data = [];
-      console.log(res)
       for (const key in res) {
         if (res[key] !== null) {
           res[key].id = key;
@@ -57,7 +57,9 @@ export const fetchData: any = createAsyncThunk(
       }
       return data;
     } catch (e) {
-      store.dispatch(setError('Error in fetching data:... ' + e));
+      console.log(e)
+      if (`${e}`.includes('Empty')) store.dispatch(setError('This could be because there is no data in the database. Do you want to upload a spreadsheet?'));
+      else store.dispatch(setError('Error in fetching data:... ' + e));
       store.dispatch(notLoading());
       return;
     }

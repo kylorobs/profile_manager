@@ -2,11 +2,12 @@
 import { store } from '../../../../app';
 import { BindThis } from '../../../../decorators/bindthis';
 import FileUploader from '../../../../models/FileUploader';
-import { loading, setError } from '../../../../state/ProfileSlice';
+import { loading, notLoading, setError } from '../../../../state/ProfileSlice';
 import ButtonHandler from '../../../../utils/ButtonConfigurer';
 import DOMHelper from '../../../../utils/DOMHelper';
 import UploadModal from '../../../Modals/UploadModal';
 import * as thunks from '../../../../state/thunks/profile';
+import { KeyMap } from '../../../../types/types';
 
 
 class SpreadsheetForm {
@@ -16,7 +17,7 @@ class SpreadsheetForm {
     private uploader: FileUploader
 
     constructor() {
-        this.uploader = new FileUploader(false, this.confirmUpload)
+        this.uploader = new FileUploader({ acceptedTypes: '.xls,.xlsx' }, this.confirmUpload)
         this.imageurl = '';
         this.uploadModal = new UploadModal();
         // BUTTON ELEMENTS CREATED DYNAMICALLY
@@ -27,6 +28,7 @@ class SpreadsheetForm {
             <p>You can use this template.</p>
         `
         this.uploadModal.showForm(modalHeading, this.uploader.form);
+        console.log(store.getState().form.keymap)
     }
 
     @BindThis
@@ -62,13 +64,25 @@ class SpreadsheetForm {
         else this.uploadModal.exitModal();
     }
 
+    verifyKeyName(obj: any, keymap: KeyMap[]) {
+        return keymap.find((key) => obj[key.keyName])
+    };
+
+    hasCorrectColumnCount(uploadedObj: any, keymap: KeyMap[]) {
+        return Object.keys(uploadedObj).length === Object.keys(keymap).length
+    }
+
+    uploadErrorHandler(msg: string) {
+        store.dispatch(notLoading());
+        store.dispatch(setError(msg))
+    }
+
 
     @BindThis
     uploadImage(selectedFile: Blob) {
         // this.uploadModal.showSpinner();
         store.dispatch(loading());
         try {
-
             const reader = new FileReader();
 
             reader.onload = (e: ProgressEvent<FileReader>) => {
@@ -78,27 +92,29 @@ class SpreadsheetForm {
                 })
                 workbook.SheetNames.forEach((sheetname: string) => {
                     const XL_row_object = (<any>window).XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetname]);
-                    var json_object = JSON.stringify(XL_row_object);
+                    var result = JSON.parse(JSON.stringify(XL_row_object));
                     const data = {} as { [key: string]: any };
-                    JSON.parse(json_object).forEach((entry: any) => {
-                        const uid = `-${(Math.random() + 1).toString(36).substring(2)}`;
-                        data[uid] = entry;
-                    })
-
+                    const keyConfiguration = store.getState().form.keymap;
+                    let valid = result.length > 0 && this.hasCorrectColumnCount(result[0], keyConfiguration);
+                    if (result.length < 1 || this.verifyKeyName)
+                        result.forEach((entry: any) => {
+                            if (!this.verifyKeyName(entry, keyConfiguration)) valid = false;
+                            const uid = `-${(Math.random() + 1).toString(36).substring(2)}`;
+                            data[uid] = entry;
+                        })
+                    if (!valid) this.uploadErrorHandler('Spreadsheet column names do not match provided configuration. Make sure your spreadsheet has the exact same column headings as the keynames specified in the configuration.');
                     // upload data
                     store.dispatch(thunks.uploadData(data));
                 })
             }
 
-            reader.onerror = e => {
-                throw new Error(e.type);
+            reader.onerror = _ => {
+                this.uploadErrorHandler('Error converting file. Only Excel file types accepted')
             }
 
             reader.readAsBinaryString(selectedFile);
 
         } catch (er) {
-
-            // this.uploadModal.exitModal();
             store.dispatch(setError('Failed to upload file: ' + er))
         }
     }
