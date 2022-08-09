@@ -198,12 +198,12 @@ text-card, label-card {
                 margin-left: 1rem;
                 cursor: pointer;
                 z-index: 500000;
-                :hover {
-                    transform: scale(1.01)
-                }
-                svg {
+                &:hover {
+                    transform: brightness(0.1);
                     cursor: pointer;
-                    z-index: 5000000;
+                }
+                & svg {
+                    cursor: pointer;
                 }
             }
         }
@@ -360,6 +360,9 @@ text-card, label-card {
                 border-right: none;
                 border: 2px solid $base-teal;
                 margin-top: 0.5em;
+                &:disabled {
+                    border: 2px solid rgb(153, 153, 153);
+                }
             }
 
             & select {
