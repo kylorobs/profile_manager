@@ -46,7 +46,7 @@ class Form {
 
         // Create input classes, separating file inputs and text/select inputs
         const inputs = keyMappings.map((map: KeyMap) => {
-            if (updateOnly) map.updateOnly = updateOnly;
+            if (updateOnly) map.disabled = true;
             if (map.type === 'document_file' || map.type === 'image_file') return new FileInput('fileinputs', false, map, map.keyName);
             else return new TextInput('textinputs', map);
         });
@@ -77,16 +77,13 @@ class Form {
         //Pull all object keys from profile
         const profileKeys: string[] = Object.keys(profile);
 
-        console.log('Update Only?')
-        console.log(this.updateOnly)
-
         // For each input, find matching key name
         // If a text / select input, set the value property
         // If a file input, invoke the update function for that component
         this.formInputs
             .forEach((input: Inputs) => {
                 const key = profileKeys.find((key: string) => key === input.title);
-                if (this.updateOnly && 'el' in input) input.el.disabled = false;
+                if ('el' in input && input.el.dataset.updateOnly === 'true') input.el.disabled = false;
                 if ('el' in input && key) {
                     input.el.value = profile[key];
                     input.el.style.border = '';
@@ -171,7 +168,12 @@ class Form {
         // Clear all form inputs
         this.formInputs
             .forEach((input: Inputs) => {
-                if ('el' in input) {
+                if ('el' in input && input.el.dataset.updateOnly === 'true') {
+                    input.el.value = '';
+                    input.el.disabled = true;
+                    input.el.style.border = '';
+                }
+                else if ('el' in input) {
                     input.el.value = '';
                     input.el.style.border = '';
                 }

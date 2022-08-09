@@ -206,10 +206,6 @@ text-card, label-card {
                     z-index: 5000000;
                 }
             }
-
-            & #add {
-
-            } 
         }
 	};
 	
@@ -349,6 +345,12 @@ text-card, label-card {
                 .validationerror {
                     border: 2px solid red;
                 }
+
+                &:disabled {
+                    border-bottom: 2px solid rgb(153, 153, 153);
+                }
+
+
             }
 
             & textarea {

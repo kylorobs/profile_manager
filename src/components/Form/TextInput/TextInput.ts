@@ -6,13 +6,13 @@ import DOMHelper from '../../../utils/DOMHelper';
 
 class TextInput extends Input {
 
-    constructor(public parentId: string, public keymap: KeyMap & { updateOnly?: boolean }, protected valid: boolean = false, public title: any = '') {
+    constructor(public parentId: string, public keymap: KeyMap, protected valid: boolean = false, public title: any = '') {
         super('', keymap, keymap.validationTypes.includes('isRequired'));
         this.title = keymap.keyName;
         this.appendToDOM(this.el, this.keymap.inputTitle, parentId);
     }
 
-    createElement(keymap: KeyMap & { updateOnly?: boolean }): FormElements {
+    createElement(keymap: KeyMap): FormElements {
         let el: any;
 
         switch (keymap.type) {
@@ -40,10 +40,8 @@ class TextInput extends Input {
                 break;
             default: el = DOMHelper.create<HTMLInputElement>('input');
         }
-        console.log(keymap.updateOnly)
 
-        if (keymap.updateOnly) {
-            console.log('disabling input')
+        if (keymap.disabled) {
             el.disabled = true;
             el.dataset.updateOnly = 'true';
         }

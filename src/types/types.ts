@@ -23,6 +23,7 @@ export interface KeyMap {
     inputDefaultText: string,
     type: 'input' | 'datetime' | 'select' | 'textarea' | 'document_file' | 'image_file',
     thumbnailUrl?: string,
+    disabled?: boolean,
     validationTypes: validChecks[],
     validationErrorMsg: string,
     options?: Filter[]
