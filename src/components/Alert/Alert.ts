@@ -14,7 +14,7 @@ class Alert extends Component<HTMLDivElement> {
         super();
         this.currentType = 'success';
         this.el = this.createElement();
-        this.el.classList.add('alertbox')
+        this.el.classList.add('manager-alertbox')
         const p = DOMHelper.create('p');
         this.msgEl = p;
         DOMHelper.appendChild(this.el, p);
@@ -28,7 +28,7 @@ class Alert extends Component<HTMLDivElement> {
 
     setType(type: AlertTypes) {
         this.el.classList.remove(this.currentType);
-        this.el.classList.add(type);
+        this.el.classList.add(`manager-${type}`);
         this.currentType = type;
     }
 

@@ -1,6 +1,6 @@
 {
   "name": "kclsu_content_manager",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "A libray built in typescript, to assist kclsu staff managing content on the kclsu website",
   "main": "app.js",
   "unpkg": "dist/bundle.js",
@@ -10,7 +10,7 @@
   "scripts": {
     "test": "jest",
     "start": "webpack serve",
-    "build": "webpack"
+    "build": "webpack --config webpack.prod.config.js"
   },
   "author": "Kylo Robinson",
   "license": "ISC",

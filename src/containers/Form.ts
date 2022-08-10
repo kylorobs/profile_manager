@@ -66,7 +66,7 @@ class Form {
     }
 
     showEditOnlyAlert() {
-        this.alertBox.showAlert('warning', 'This form is update only. You cannot create new entries.');
+        this.alertBox.showAlert('warning', 'This form is update only. You can edit the existing entries.');
     }
 
     setValues(): void {

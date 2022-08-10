@@ -173,7 +173,7 @@ text-card, label-card {
         align-items: center;
         & .apptitle {
             text-align: center;
-            padding: 0.8rem;
+            padding: 0rem 0.8rem; // necessary for kclsu style ovverides
             margin: 0;
             display: flex;
             align-items: center;
@@ -184,7 +184,7 @@ text-card, label-card {
             & h1 {
                 margin: 0;
                 padding:0;
-                padding-bottom: 0.4rem;
+                // padding-bottom: 0.4rem; // removed for kclsu overrides
             } 
         }
 
@@ -197,7 +197,6 @@ text-card, label-card {
                 fill: white;
                 margin-left: 1rem;
                 cursor: pointer;
-                z-index: 500000;
                 &:hover {
                     transform: brightness(0.1);
                     cursor: pointer;
@@ -224,11 +223,10 @@ text-card, label-card {
             border: 2px solid #502669;
             border-radius: 0.25em;
             padding: 0.25em 0.5em;
-            font-size: 1.15rem;
+            font-size: inherit; // kclsu site
             cursor: pointer;
             line-height: 1.1;
             background-color: #fff;
-            background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
         }
 
         & label-card, text-card {
@@ -256,18 +254,17 @@ text-card, label-card {
         flex-wrap: wrap;
         height: fit-content;
         border-radius: 1rem;
-        & .alertbox {
+        & .manager-alertbox {
             width: 100%;
             display: flex;
             justify-content: center;
             margin: 0.5rem;
 
             & p {
-                font-size: 0.9rem;
                 padding: 0.1rem 0.3rem;
             }
         }
-        & .warning p {
+        & .manager-warning p {
             background-color: #fffbe6;
             border: 1px solid #ffe58f;
         }
