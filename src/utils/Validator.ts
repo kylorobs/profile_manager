@@ -1,7 +1,7 @@
-import { isEmail } from 'class-validator';
 import { KeyMap, validChecks } from '../types/types';
-import isEmpty from 'validator/es/lib/util/isEmpty';
-
+import isEmail from 'validator/es/lib/isEmail';
+import isURL from 'validator/es/lib/isURL';
+import isBoolean from 'validator/es/lib/isBoolean';
 
 class Validator {
 
@@ -24,17 +24,17 @@ class Validator {
 
     }
 
-    validate(val: any, type: validChecks, errorMsg: string) {
+    validate(val: string, type: validChecks, errorMsg: string) {
         //WE NEED TO FIRST  CHECK IF FIELD IS REQUIRED - THEN ONLY PROCEED WITH OTHER ERRORS
         switch (type) {
             case 'isRequired':
-                this.setErrorHelper(!isEmpty(val), errorMsg);
+                this.setErrorHelper(val !== '', errorMsg);
                 break;
             case 'isFacebookUrl':
-                this.setErrorHelper(contains(val, 'facebook.com'), errorMsg);
+                this.setErrorHelper(val.includes('facebook.com'), errorMsg);
                 break;
             case 'isInstagramUrl':
-                this.setErrorHelper(contains(val, 'instagram.com'), errorMsg);
+                this.setErrorHelper(val.includes('instagram.com'), errorMsg);
                 break;
             case 'isUrl':
                 this.setErrorHelper(isURL(val), errorMsg);
@@ -43,34 +43,25 @@ class Validator {
                 this.setErrorHelper(isEmail(val), errorMsg);
                 break;
             case 'isImage':
-                this.setErrorHelper(contains(val, '.jpg'), errorMsg);
+                this.setErrorHelper(val.includes('.jpg'), errorMsg);
                 break;
             case 'isPdf':
-                this.setErrorHelper(contains(val, '.pdf'), errorMsg);
+                this.setErrorHelper(val.includes('.pdf'), errorMsg);
                 break;
             case 'isTwitterUrl':
-                this.setErrorHelper(contains(val, 'twitter.com'), errorMsg);
-                break;
-            case 'isNumber':
-                this.setErrorHelper(isNumeric(val), errorMsg);
+                this.setErrorHelper(val.includes('twitter.com'), errorMsg);
                 break;
             case 'isAKclsuUrl':
-                this.setErrorHelper(isURL(val) && contains(val, 'kclsu.org'), errorMsg);
+                this.setErrorHelper(isURL(val) && val.includes('kclsu.org'), errorMsg);
                 break;
             case 'isAKclsuEvent':
-                this.setErrorHelper(isURL(val) && contains(val, 'kclsu.org/ents/event/'), errorMsg);
-                break;
-            case 'isDateString':
-                this.setErrorHelper(matches(val, /^202[1-9][:-][0-1][0-9][:-]([0-2][0-9]|3[0-1])$/), errorMsg); //yyy:mm:dd
-                break;
-            case 'isTimeString':
-                this.setErrorHelper(matches(val, /^([01][0-9]|2[0-3])[:-][0-6][0-9][:-][0-6][0-9]$/), errorMsg); //hh:mm:ss
+                this.setErrorHelper(isURL(val) && val.includes('kclsu.org/ents/event/'), errorMsg);
                 break;
             case 'isBoolean':
                 this.setErrorHelper(isBoolean(val), errorMsg);
                 break;
             case 'isNotThumbnail':
-                this.setErrorHelper(!contains(val, '/website_uploads/Database_Uploads/thumbnails/'), errorMsg);
+                this.setErrorHelper(!val.includes('/website_uploads/Database_Uploads/thumbnails/'), errorMsg);
                 break;
             default:
         }
