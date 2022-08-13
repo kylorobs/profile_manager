@@ -184,6 +184,7 @@ text-card, label-card {
             & h1 {
                 margin: 0;
                 padding:0;
+                line-height: 48px;
                 // padding-bottom: 0.4rem; // removed for kclsu overrides
             } 
         }
@@ -408,7 +409,7 @@ form input[type=submit] {
     color: $base-purple;
     margin-left: 1em;
 
-    &:hover {
+    &:hover:not(:disabled) {
         border: 1px solid $base-purple;
         background-color: $base-purple;
         color: white;
@@ -417,6 +418,9 @@ form input[type=submit] {
     &:disabled {
         border: 1px solid gray;
         color: gray;
+        &:hover {
+            cursor: initial;
+        }
     }
 }
 
@@ -437,4 +441,15 @@ form input[type=submit] {
 
 .hide {
     display: none;
+}
+
+.urlInsert {
+    width:80%;
+    min-width: 380px;
+    margin: 1em 0;
+    display: block;
+    font-size: 17px;
+    padding: 1em;
+    border: none;
+    border-bottom: 2px solid $base-teal;
 }

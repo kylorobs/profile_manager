@@ -11,13 +11,14 @@ class FileUploader {
     public form: HTMLFormElement;
     private submitCallback: (e: Event) => void;
 
-    constructor(options: FileOptions, fn: (e: Event) => void) {
+    constructor(options: FileOptions, fn: (e: Event) => void, private fileInput?: HTMLInputElement) {
         this.form = this.createForm(options);
         this.submitCallback = fn;
     }
 
     createForm(options: FileOptions) {
         const form = DOMHelper.create<HTMLFormElement>('form');
+        form.style.display = 'flex';
         if (options.multipart) form.enctype = "multipart/form-data";
         form.method = 'post';
 
@@ -25,7 +26,9 @@ class FileUploader {
         el.id = 'upload';
         el.name = 'file_upload'
         el.type = 'file';
+        el.style.margin = '1rem';
         if (options.acceptedTypes) el.accept = options.acceptedTypes;
+        this.fileInput = el;
 
         el.addEventListener('change', this.enableButton);
 
@@ -33,6 +36,7 @@ class FileUploader {
         submit.type = 'submit';
         submit.value = "Upload File";
         submit.disabled = true;
+        submit.style.margin = '1rem';
         form.addEventListener('submit', this.uploadImage);
 
 
@@ -40,6 +44,10 @@ class FileUploader {
 
         return form;
     };
+
+    public clearUploadedFile() {
+        this.fileInput!.value = '';
+    }
 
     @BindThis
     enableButton() {
@@ -51,8 +59,6 @@ class FileUploader {
     @BindThis
     uploadImage(e: Event) {
         e.preventDefault();
-        console.log('submit captured')
-        console.log(e);
         this.submitCallback(e)
     }
 

@@ -10,6 +10,9 @@ import * as thunks from '../../../../state/thunks/profile';
 import { KeyMap } from '../../../../types/types';
 
 
+type UnknownInput = { [key: string]: any };
+
+
 class SpreadsheetForm {
 
     private uploadModal: UploadModal;
@@ -24,11 +27,10 @@ class SpreadsheetForm {
         const modalHeading = `
             <h2> Upload a spreadsheet</h2>
             <p> Upload a spreadsheet to import data into this database, overwriting any existing data.<p>
-            <p>⚠️BE ADVISED⚠️ - the spreadsheet column headings must precisely match the input key names specified in this Manager's configuration. Do not create extra columns.</p>
-            <p>You can use this template.</p>
+            <p> Warning - the spreadsheet column headings must precisely match the input key names specified in this Manager's configuration. Do not create extra columns.</p>
+
         `
         this.uploadModal.showForm(modalHeading, this.uploader.form);
-        console.log(store.getState().form.keymap)
     }
 
     @BindThis
@@ -64,17 +66,51 @@ class SpreadsheetForm {
         else this.uploadModal.exitModal();
     }
 
-    verifyKeyName(obj: any, keymap: KeyMap[]) {
+    verifyKeyName(obj: UnknownInput, keymap: KeyMap[]) {
         return keymap.find((key) => obj[key.keyName])
     };
 
-    hasCorrectColumnCount(uploadedObj: any, keymap: KeyMap[]) {
-        return Object.keys(uploadedObj).length === Object.keys(keymap).length
+    fillInMissingKeyNames(entries: UnknownInput[], keymap: KeyMap[]) {
+        return entries.map((entry: any) => {
+            const updatedObj = { ...entry };
+            keymap.forEach(map => {
+                if (updatedObj[map.keyName] && map.keyName.includes('date')) {
+                    updatedObj[map.keyName] = this.excelDateToJSDate(updatedObj[map.keyName]);
+                    console.log('handled_date')
+                    return;
+                }
+                if (updatedObj[map.keyName]) return;
+                updatedObj[map.keyName] = '';
+            })
+            return updatedObj;
+        })
+    }
+
+
+    hasCorrectColumnCount(uploadedObj: UnknownInput, keymap: KeyMap[]) {
+        return Object.keys(uploadedObj).length === keymap.length
     }
 
     uploadErrorHandler(msg: string) {
         store.dispatch(notLoading());
         store.dispatch(setError(msg))
+    }
+
+    excelDateToJSDate(serial: any) {
+        var utc_days = Math.floor(serial - 25569);
+        var utc_value = utc_days * 86400;
+        var date_info = new Date(utc_value * 1000);
+
+        var fractional_day = serial - Math.floor(serial) + 0.0000001;
+
+        var total_seconds = Math.floor(86400 * fractional_day);
+        var seconds = total_seconds % 60;
+        total_seconds -= seconds;
+
+        var hours = Math.floor(total_seconds / (60 * 60));
+        var minutes = Math.floor(total_seconds / 60) % 60;
+
+        return new Date(date_info.getFullYear(), date_info.getMonth(), date_info.getDate(), hours, minutes, seconds);
     }
 
 
@@ -92,19 +128,28 @@ class SpreadsheetForm {
                 })
                 workbook.SheetNames.forEach((sheetname: string) => {
                     const XL_row_object = (<any>window).XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetname]);
-                    var result = JSON.parse(JSON.stringify(XL_row_object));
+                    console.log(XL_row_object)
+                    console.log(JSON.stringify(XL_row_object))
+                    let parsedSpreadsheet = JSON.parse(JSON.stringify(XL_row_object));
+                    console.log('----Parsed---');
+                    console.log(parsedSpreadsheet)
+                    console.log('-------');
                     const data = {} as { [key: string]: any };
                     const keyConfiguration = store.getState().form.keymap;
+                    const result = this.fillInMissingKeyNames(parsedSpreadsheet, keyConfiguration);
+                    console.log('----Result---');
+                    console.log(result)
+                    console.log('-------');
                     let valid = result.length > 0 && this.hasCorrectColumnCount(result[0], keyConfiguration);
                     if (result.length < 1 || this.verifyKeyName)
-                        result.forEach((entry: any) => {
+                        result.forEach((entry: UnknownInput) => {
                             if (!this.verifyKeyName(entry, keyConfiguration)) valid = false;
                             const uid = `-${(Math.random() + 1).toString(36).substring(2)}`;
                             data[uid] = entry;
                         })
                     if (!valid) this.uploadErrorHandler('Spreadsheet column names do not match provided configuration. Make sure your spreadsheet has the exact same column headings as the keynames specified in the configuration.');
                     // upload data
-                    store.dispatch(thunks.uploadData(data));
+                    else store.dispatch(thunks.uploadData(result));
                 })
             }
 

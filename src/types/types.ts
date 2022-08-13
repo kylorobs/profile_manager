@@ -15,7 +15,7 @@ export interface ManagerInit {
 
 export type FormElements = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 
-export type validChecks = 'isRequired' | 'isUrl' | 'isEmail' | 'isImage' | 'isPdf' | 'isFacebookUrl' | 'isInstagramUrl' | 'isTwitterUrl' | 'isNumber' | 'isAKclsuUrl' | 'isAKclsuEvent' | 'isDateString' | 'isTimeString' | 'isBoolean' | 'isNotThumbnail'
+export type validChecks = 'isRequired' | 'isUrl' | 'isEmail' | 'isImage' | 'isPdf' | 'isFacebookUrl' | 'isInstagramUrl' | 'isTwitterUrl' | 'isNumber' | 'isAKclsuUrl' | 'isAKclsuEvent' | 'isDateString' | 'isTimeString' | 'isBoolean' | 'isNotThumbnail' | 'isACloudinaryUrl'
 
 export interface KeyMap {
     keyName: string,

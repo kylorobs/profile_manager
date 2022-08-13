@@ -9,7 +9,7 @@ class TextInput extends Input {
     constructor(public parentId: string, public keymap: KeyMap, protected valid: boolean = false, public title: any = '') {
         super('', keymap, keymap.validationTypes.includes('isRequired'));
         this.title = keymap.keyName;
-        this.appendToDOM(this.el, this.keymap.inputTitle, parentId);
+        if (document.getElementById(parentId)) this.appendToDOM(this.el, this.keymap.inputTitle, parentId);
     }
 
     createElement(keymap: KeyMap): FormElements {

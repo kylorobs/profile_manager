@@ -52,7 +52,10 @@ class Validator {
                 this.setErrorHelper(val.includes('twitter.com'), errorMsg);
                 break;
             case 'isAKclsuUrl':
-                this.setErrorHelper(isURL(val) && val.includes('kclsu.org'), errorMsg);
+                this.setErrorHelper(isURL(val) && (val.includes('kclsu.org') || val.includes('cloudinary.com/kclsu-media')), errorMsg);
+                break;
+            case 'isACloudinaryUrl':
+                this.setErrorHelper(isURL(val) && val.includes('cloudinary.com/kclsu-media'), errorMsg);
                 break;
             case 'isAKclsuEvent':
                 this.setErrorHelper(isURL(val) && val.includes('kclsu.org/ents/event/'), errorMsg);
