@@ -66,24 +66,36 @@ class SpreadsheetForm {
         else this.uploadModal.exitModal();
     }
 
-    verifyKeyName(obj: UnknownInput, keymap: KeyMap[]) {
-        return keymap.find((key) => obj[key.keyName])
+    checkColumnsMatchConfig(obj: UnknownInput, keymap: KeyMap[]) {
+        const columnNames = Object.keys(obj);
+        const eachColumnFoundInConfig = columnNames.every(name => keymap.find(map => map.keyName === name));
+        const eachKeyNameHasAColumn = keymap.every((key) => obj[key.keyName]);
+        return eachColumnFoundInConfig && eachKeyNameHasAColumn;
     };
 
+    getRequiredFields(keymap: KeyMap[]) {
+        return keymap.filter(map => map.validationTypes.includes('isRequired')).map(required => required.keyName)
+    }
+
+    meetsRequiredData(obj: UnknownInput, keymap: KeyMap[]) {
+        const requiredKeys = this.getRequiredFields(keymap);
+        return requiredKeys.every((required) => obj[required]);
+    }
+
     fillInMissingKeyNames(entries: UnknownInput[], keymap: KeyMap[]) {
-        return entries.map((entry: any) => {
-            const updatedObj = { ...entry };
-            keymap.forEach(map => {
-                if (updatedObj[map.keyName] && map.keyName.includes('date')) {
-                    updatedObj[map.keyName] = this.excelDateToJSDate(updatedObj[map.keyName]);
-                    console.log('handled_date')
-                    return;
-                }
-                if (updatedObj[map.keyName]) return;
-                updatedObj[map.keyName] = '';
+        return entries
+            .map((entry: any) => {
+                const updatedObj = { ...entry };
+                keymap.forEach(map => {
+                    if (updatedObj[map.keyName] && map.keyName.includes('date_time')) {
+                        updatedObj[map.keyName] = this.excelDateToJSDate(updatedObj[map.keyName]);
+                        return;
+                    }
+                    if (updatedObj[map.keyName]) return;
+                    updatedObj[map.keyName] = '';
+                })
+                return updatedObj;
             })
-            return updatedObj;
-        })
     }
 
 
@@ -109,8 +121,8 @@ class SpreadsheetForm {
 
         var hours = Math.floor(total_seconds / (60 * 60));
         var minutes = Math.floor(total_seconds / 60) % 60;
-
-        return new Date(date_info.getFullYear(), date_info.getMonth(), date_info.getDate(), hours, minutes, seconds);
+        const jsDate = new Date(date_info.getFullYear(), date_info.getMonth(), date_info.getDate(), hours, minutes, seconds);
+        return new Date(jsDate.getTime() - (jsDate.getTimezoneOffset() * 60000)).toISOString().slice(0, -1);
     }
 
 
@@ -127,29 +139,27 @@ class SpreadsheetForm {
                     type: 'binary'
                 })
                 workbook.SheetNames.forEach((sheetname: string) => {
-                    const XL_row_object = (<any>window).XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetname]);
-                    console.log(XL_row_object)
-                    console.log(JSON.stringify(XL_row_object))
-                    let parsedSpreadsheet = JSON.parse(JSON.stringify(XL_row_object));
-                    console.log('----Parsed---');
-                    console.log(parsedSpreadsheet)
-                    console.log('-------');
-                    const data = {} as { [key: string]: any };
-                    const keyConfiguration = store.getState().form.keymap;
-                    const result = this.fillInMissingKeyNames(parsedSpreadsheet, keyConfiguration);
-                    console.log('----Result---');
-                    console.log(result)
-                    console.log('-------');
-                    let valid = result.length > 0 && this.hasCorrectColumnCount(result[0], keyConfiguration);
-                    if (result.length < 1 || this.verifyKeyName)
+
+                    try {
+                        const XL_row_object = (<any>window).XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetname]);
+                        let parsedSpreadsheet = JSON.parse(JSON.stringify(XL_row_object));
+                        const data = {} as { [key: string]: any };
+                        const keyConfiguration = store.getState().form.keymap;
+                        const result = this.fillInMissingKeyNames(parsedSpreadsheet, keyConfiguration);
+                        if (result.length < 1) throw new Error('You uploaded an empty spreadsheet!');
+                        if (!this.checkColumnsMatchConfig(result[0], keyConfiguration)) throw new Error(`Spreadsheet column names do not match provided configuration. Make sure your spreadsheet has the exact same column headings as the keynames specified in the configuration.*************************  The column names found are: ${Object.keys(parsedSpreadsheet[0]).join(', ')} ************************* The required keys are: ${keyConfiguration.map(key => key.keyName).join(', ')}`);
+                        let valid = true;
                         result.forEach((entry: UnknownInput) => {
-                            if (!this.verifyKeyName(entry, keyConfiguration)) valid = false;
+                            if (!this.meetsRequiredData(entry, keyConfiguration)) valid = false;
                             const uid = `-${(Math.random() + 1).toString(36).substring(2)}`;
                             data[uid] = entry;
-                        })
-                    if (!valid) this.uploadErrorHandler('Spreadsheet column names do not match provided configuration. Make sure your spreadsheet has the exact same column headings as the keynames specified in the configuration.');
-                    // upload data
-                    else store.dispatch(thunks.uploadData(result));
+                        });
+                        if (!valid) throw new Error('Empty rows have been uploaded. OR there is a missing value for a required column. The required columns include: *********   ' + this.getRequiredFields(keyConfiguration).join(',') + '********. SUGGESTION: If your spreadsheet contains a empty rows with RED or ORANGE highlighted cells, delete all empty rows with a highlighted cell.')
+                        else store.dispatch(thunks.uploadData(data));  // upload data
+
+                    } catch (e) {
+                        this.uploadErrorHandler(`${e}`);
+                    }
                 })
             }
 

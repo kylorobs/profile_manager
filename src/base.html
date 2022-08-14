@@ -26,6 +26,7 @@
         categoryKeyName: 'group_name',
         dataUrl: '/welcome_group_sessions',
         devMode: true,
+        authRequired: true,
         keyMapping: [
             { 
                 keyName: 'group_name',
@@ -33,7 +34,7 @@
                 inputDefaultText: "The name of the student group...",
                 type: 'input',
                 validationErrorMsg: 'You did not supply a student group name.',
-                validationTypes: []
+                validationTypes: ['isRequired']
             },
             { 
                 keyName: 'session_description',
@@ -41,22 +42,6 @@
                 inputDefaultText: 'The description of the session.',
                 type: 'textarea',
                 validationErrorMsg: 'Provide a description',
-                validationTypes: []
-            },
-            { 
-                keyName: 'session_date',
-                inputTitle: 'Session Date',
-                inputDefaultText: 'The date of the session',
-                type: 'input',
-                validationErrorMsg: 'Provide a date',
-                validationTypes: []
-            },
-            { 
-                keyName: 'session_time',
-                inputTitle: 'Session Time',
-                inputDefaultText: 'The time of the session',
-                type: 'input',
-                validationErrorMsg: 'Provide a time',
                 validationTypes: []
             },
             { 
@@ -120,10 +105,28 @@
                 inputTitle: 'Group Logo',
                 inputDefaultText: '',
                 type: 'image_file',
-                thumbnailUrl: 'https://res.cloudinary.com/kclsu-media/image/upload/v1/temporary/logo-placeholder-image_hdt9og',
+                thumbnailUrl: 'https://www.kclsu.org/asset/groupinglogoimage/default/db75df131542437eb3da2415c7f91fc6.jpg',
                 validationErrorMsg: 'You have not uploaded a logo for this student group!',
                 validationTypes: ['isNotThumbnail']
-            }
+            },
+            { 
+                keyName: 'session_date',
+                inputTitle: 'Session Date',
+                inputDefaultText: 'The date of the session',
+                type: 'input',
+                disabled: true,
+                validationErrorMsg: 'Provide a date',
+                validationTypes: []
+            },
+            { 
+                keyName: 'session_time',
+                inputTitle: 'Session Time',
+                inputDefaultText: 'The time of the session',
+                type: 'input',
+                disabled: true,
+                validationErrorMsg: 'Provide a time',
+                validationTypes: []
+            },
         ]
         
         });
